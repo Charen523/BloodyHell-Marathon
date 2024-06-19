@@ -1,9 +1,9 @@
 <br/>
 <br/>
 
-# <p align="center"> **Unity심화 Bloody Hell Marathon**  </p>
+# <p align="center"> **Unity심화: Bloody Hell Marathon**  </p>
 
-##### <p align="center"> <b> 팀 Da-Chall-Op-Da </b>
+##### <p align="center"> <b> Team: Da-Chall-Op-Da </b>
 
 <br/>
 <br/>
@@ -20,7 +20,7 @@
 + [와이어프레임](#와이어프레임)
 + [UML 다이어그램](#UML-다이어그램)
 + [TroubleShooting](#TroubleShooting)
-+ + [결과 보고서](#결과-보고서)
++ [결과 보고서](#결과-보고서)
 + [시연 영상 링크](#시연-영상-링크)
 
 ---
@@ -39,7 +39,9 @@
 
 ### ✨프로젝트 소개
 
- `Info` **...**
+`Project Name` Bloddy Hell Marathon
+
+ `Info` 프로젝트 요약
 
  `Stack` C#, Unity-2022.3.17f, Visual Studio2022-17.9.6   
 
