@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class EntityAnimeHandler
 {
-    private StateMachine _stateMachine;
-    public EntityAnimeHandler(StateMachine stateMachine)
+    private EntityStateMachine _stateMachine;
+    public EntityAnimeHandler(EntityStateMachine stateMachine)
     {
         _stateMachine = stateMachine;
     }
