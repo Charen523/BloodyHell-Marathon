@@ -28,11 +28,11 @@
 ### ✨팀 소개
 | 이름   | 직책 | 직무 |
 |--------|------|------|
-| 이강혁 | 레드 | . |
-| 이상수 | 옐로우 | . |
-| 정승연 | 핑크 | . |
-| 성지윤 | 블루 | . |
-| 이종윤 | 그린 | . |
+| 이강혁 | <span style='background-color:#ffdce0'>레</span> | . |
+| 이상수 | <span style='background-color:#fff5b1'>옐로우</span> | . |
+| 정승연 | <span style='background-color:#FCDDF2'>핑크</span> | . |
+| 성지윤 | <span style='background-color:#D0E4FC'>블루</span> | . |
+| 이종윤 | <span style='background-color:#dcffe4'>그린</span> | . |
 
 
 ---
