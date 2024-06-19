@@ -1,4 +1,4 @@
-using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerWalkState : PlayerGroundState
 {
@@ -7,20 +7,20 @@ public class PlayerWalkState : PlayerGroundState
     public override void Enter()
     {
         base.Enter();
+        _inputHandler.OnRunPerformedEvent += OnRunPerformed;
+        _stateMachine.MovementSpeedModifier = _stateMachine.Player.Stat.CurrentStat.Condition.WalkSpeedModifier;
         _animeHandler.StartAnimation(_stateMachine.Player.AnimeData.IsWalkParameterHash);
     }
 
     public override void Exit()
     {
         base.Exit();
+        _inputHandler.OnRunPerformedEvent -= OnRunPerformed;
         _animeHandler.StopAnimation(_stateMachine.Player.AnimeData.IsWalkParameterHash);
     }
 
-    public override void Update()
+    private void OnRunPerformed(InputAction.CallbackContext context)
     {
-        if (_stateMachine.MovementDir == Vector2.zero)
-        {
-
-        }
+        _stateMachine.ChangeState(_stateMachine.RunState);
     }
 }
