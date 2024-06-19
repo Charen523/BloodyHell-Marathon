@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class EntityMovementHandler
 {
-    protected StateMachine _stateMachine;
+    protected EntityStateMachine _stateMachine;
     private bool _isFacingRight = true;
 
-    public EntityMovementHandler(StateMachine stateMachine)
+    public EntityMovementHandler(EntityStateMachine stateMachine)
     {
         _stateMachine = stateMachine;
     }
@@ -18,8 +18,13 @@ public class EntityMovementHandler
 
     protected virtual void Move(Vector2 dir)
     {
-        float movementSpeed = _stateMachine.Entity.Stat.CurrentStat.Condition.MoveSpeed;
+        float movementSpeed = GetMovementSpeed();
         _stateMachine.Entity.Rigid.velocity = dir * movementSpeed;
+    }
+    private float GetMovementSpeed()
+    {
+        float moveSpeed = _stateMachine.Entity.Stat.CurrentStat.Condition.MoveSpeed * _stateMachine.MovementSpeedModifier;
+        return moveSpeed;
     }
 
     protected virtual void UpdateSpriteDirection(Vector2 direction)
