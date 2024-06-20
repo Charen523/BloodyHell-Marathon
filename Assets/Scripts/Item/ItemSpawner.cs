@@ -1,53 +1,93 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class ItemSpawner : MonoBehaviour
 {
-    public GameObject SpawnRange;
-    private BoxCollider2D rangeCollider;
+    public Tilemap SpawnRange;
 
-    private void Awake()
+    public float SpawnTime = 1f;
+    public int MaxItemsOnMap = 10;
+    private int CurItemsOnMap = 0;
+
+    private List<Vector3Int> validTilePositions = new List<Vector3Int>();
+
+    private void Start()
     {
-        rangeCollider = SpawnRange.GetComponent<BoxCollider2D>();
+        if (SpawnRange == null) Debug.LogWarning("Need an area (Tilemap) to spawn items.");
+        else
+        {
+            FindValidTilePositions();
+            StartCoroutine(SpawnItem());
+        }
     }
 
-    private Vector2 ReturnRandPos()
+    private void FindValidTilePositions()
     {
-        Vector2 min = rangeCollider.bounds.min;
-        Vector2 max = rangeCollider.bounds.max;
+        BoundsInt bounds = SpawnRange.cellBounds;
 
-        float randomX = Random.Range(min.x, max.x);
-        float randomY = Random.Range(min.y, max.y);
-        Vector2 randomPos = new Vector2(randomX, randomY);
+        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        {
+            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            {
+                Vector3Int tilePosition = new Vector3Int(x, y, 0);
+                if (SpawnRange.HasTile(tilePosition))
+                {
+                    validTilePositions.Add(tilePosition);
+                }
+            }
+        }
+    }
+
+    private Vector3 ReturnRandPos()
+    {
+        Vector3 randomPos = Vector3.zero;
+
+        if (validTilePositions.Count > 0)
+        {
+            Vector3Int randomTilePos = validTilePositions[Random.Range(0, validTilePositions.Count)];
+            randomPos = SpawnRange.CellToWorld(randomTilePos);
+        }
 
         return randomPos;
     }
 
-    private void SpawnItem(string rcode)
-    {
-        Vector2 spawnPosition = ReturnRandPos();
-        GameObject spawnedObject = ObjectPoolManager.Instance.GetObject(rcode);
-
-        if (spawnedObject != null)
-        {
-            spawnedObject.transform.position = spawnPosition;
-        }
-        else
-        {
-            Debug.LogWarning("Failed to get object from pool: " + rcode);
-        }
-    }
-
-    public void SpawnRandomItem()
+    private string SpawnRandomItem()
     {
         var pools = ObjectPoolManager.Instance.Pools;
         if (pools.Count == 0)
         {
             Debug.LogError("Item pools is empty.");
-            return;
+            return null;
         }
-        string randomRcode = pools[Random.Range(0, pools.Count)].Rcode;
-        SpawnItem(randomRcode);
+        string randomRcode = pools[Random.Range(0, pools.Count)].Prefab.name;
+        return randomRcode;
+    }
+
+    private IEnumerator SpawnItem()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(SpawnTime);
+
+            if(CurItemsOnMap < MaxItemsOnMap)
+            {
+                Vector3 spawnPos = ReturnRandPos();
+                string spawnRcode = SpawnRandomItem();
+                
+                GameObject spawnedObject = ObjectPoolManager.Instance.GetObject(spawnRcode);
+                if (spawnedObject != null)
+                {
+                    spawnedObject.transform.position = spawnPos;
+                    CurItemsOnMap++;
+                    spawnedObject.GetComponent<ItemPickUp>().OnPickUp += () => CurItemsOnMap--;
+                }
+                else
+                {
+                    Debug.LogWarning("Failed to get object from pool: " + spawnRcode);
+                }
+            }
+        }
     }
 }

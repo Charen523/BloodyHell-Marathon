@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13b31d2dee158634b910976a669f823d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxPlayersPerRoom: 0
   controlPanel: {fileID: 1378296124}
   progressLabel: {fileID: 712038389}
 --- !u!1 &122815678
@@ -682,7 +683,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 22697062}
         m_TargetAssemblyTypeName: Launcher, Assembly-CSharp
-        m_MethodName: Connect
+        m_MethodName: ConnectToLobby
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -963,7 +964,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 22697062}
         m_TargetAssemblyTypeName: Launcher, Assembly-CSharp
-        m_MethodName: Connect
+        m_MethodName: ConnectToRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
