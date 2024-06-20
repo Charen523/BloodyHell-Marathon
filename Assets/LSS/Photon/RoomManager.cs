@@ -18,22 +18,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
 	private void Awake()
 	{
 		// 마스터만 해당 로직 실행
-		if (!PhotonNetwork.IsMasterClient)
-		{
-			Destroy(gameObject);
-		}
+		if (!PhotonNetwork.IsMasterClient) return;
 		DefaultPool pool = PhotonNetwork.PrefabPool as DefaultPool;
 		pool.ResourceCache.Add("PlayerListContent", playerListContent);
-
 	}
 
 	private void Start()
 	{
-		if (PhotonNetwork.IsMasterClient)
-		{
-			PhotonPlayerData.Instance.AddPlayer(PhotonNetwork.LocalPlayer.UserId, GetNextPlayerId());
-			MakePlayerListContent(PhotonPlayerData.Instance.PlayerIdDict[PhotonNetwork.LocalPlayer.UserId]);
-		}
+		if (!PhotonNetwork.IsMasterClient) return;
+		PhotonPlayerData.Instance.AddPlayer(PhotonNetwork.LocalPlayer.UserId, GetNextPlayerId());
+		MakePlayerListContent(PhotonPlayerData.Instance.PlayerIdDict[PhotonNetwork.LocalPlayer.UserId]);
 	}
 	#endregion
 	#region Private Methods
@@ -51,6 +45,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
 	{
 		return playerIdNumber++;
 	}
+
+	[PunRPC]
 	private void MakePlayerListContent(int id)
 	{
 		GameObject newListContent = PhotonNetwork.Instantiate("PlayerListContent", Vector3.zero, Quaternion.identity, 0);
