@@ -1,10 +1,17 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ItemPickUp : MonoBehaviour
 {
     public Item Item { get; set; }
 
-    public void OnTriggerEnter(Collider other)
+    private void Start()
+    {
+        Item = DataManager.Instance.GetData(name);
+        Debug.Log("ItemPickUp Name : " + name);
+    }
+
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
