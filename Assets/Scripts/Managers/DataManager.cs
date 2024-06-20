@@ -39,7 +39,6 @@ public class DataManager : Singleton<DataManager>
             foreach(var data in  datas.ItemDatas)
             {
                 ItemDataDic.Add(data.Rcode, data);
-                Debug.Log(data.Rcode);
             }
         }
     }

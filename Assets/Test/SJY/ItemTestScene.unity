@@ -46308,6 +46308,10 @@ PrefabInstance:
       propertyPath: SpawnRange
       value: 
       objectReference: {fileID: 8049490}
+    - target: {fileID: 2614594093390793024, guid: a881f21bb64ca334aae46625cbcfaceb, type: 3}
+      propertyPath: SpawnRangeCollider
+      value: 
+      objectReference: {fileID: 326372199}
     - target: {fileID: 5870314068034944495, guid: a881f21bb64ca334aae46625cbcfaceb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

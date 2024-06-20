@@ -13,7 +13,7 @@ public abstract class ItemPickUp : MonoBehaviour
         Item = DataManager.Instance.GetData(name);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
@@ -26,5 +26,5 @@ public abstract class ItemPickUp : MonoBehaviour
         }
     }
 
-    public abstract void PickUp(Collider other);
+    public abstract void PickUp(Collider2D other);
 }

@@ -11,23 +11,45 @@ public class ItemSpawner : MonoBehaviour
     public int MaxItemsOnMap = 10;
     private int CurItemsOnMap = 0;
 
+    private List<Vector3Int> validTilePositions = new List<Vector3Int>();
+
     private void Start()
     {
         if (SpawnRange == null) Debug.LogWarning("Need an area (Tilemap) to spawn items.");
-        else StartCoroutine(SpawnItem());
+        else
+        {
+            FindValidTilePositions();
+            StartCoroutine(SpawnItem());
+        }
     }
 
-    private Vector2 ReturnRandPos()
+    private void FindValidTilePositions()
     {
         BoundsInt bounds = SpawnRange.cellBounds;
-        Vector3Int min = bounds.min;
-        Vector3Int max = bounds.max;
 
-        int randomX = Random.Range(min.x, max.x);
-        int randomY = Random.Range(min.y, max.y);
-        Vector3 worldPos = SpawnRange.CellToWorld(new Vector3Int(randomX, randomY, 0));
-        Vector2 randomPos = new Vector2(worldPos.x, worldPos.y);
-        
+        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        {
+            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            {
+                Vector3Int tilePosition = new Vector3Int(x, y, 0);
+                if (SpawnRange.HasTile(tilePosition))
+                {
+                    validTilePositions.Add(tilePosition);
+                }
+            }
+        }
+    }
+
+    private Vector3 ReturnRandPos()
+    {
+        Vector3 randomPos = Vector3.zero;
+
+        if (validTilePositions.Count > 0)
+        {
+            Vector3Int randomTilePos = validTilePositions[Random.Range(0, validTilePositions.Count)];
+            randomPos = SpawnRange.CellToWorld(randomTilePos);
+        }
+
         return randomPos;
     }
 
@@ -51,7 +73,7 @@ public class ItemSpawner : MonoBehaviour
 
             if(CurItemsOnMap < MaxItemsOnMap)
             {
-                Vector2 spawnPos = ReturnRandPos();
+                Vector3 spawnPos = ReturnRandPos();
                 string spawnRcode = SpawnRandomItem();
                 
                 GameObject spawnedObject = ObjectPoolManager.Instance.GetObject(spawnRcode);
