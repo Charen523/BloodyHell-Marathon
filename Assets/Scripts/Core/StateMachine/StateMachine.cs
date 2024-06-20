@@ -1,7 +1,6 @@
 public abstract class StateMachine
 {
     protected IState _currentState;
-    public Entity Entity;
 
     public void ChangeState(IState state)
     {
