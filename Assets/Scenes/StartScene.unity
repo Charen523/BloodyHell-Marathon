@@ -3818,12 +3818,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a4dacb87759b414e9d29933c5760e37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDestroyOnLoad: 1
+  canDestroyOnLoad: 0
   audioMixer: {fileID: 24100000, guid: e96f983b1f681a24390d51200514c3d6, type: 2}
   bgmMixerGroup: {fileID: -7758278541760307574, guid: e96f983b1f681a24390d51200514c3d6, type: 2}
   sfxMixerGroup: {fileID: 1720550355448257906, guid: e96f983b1f681a24390d51200514c3d6, type: 2}
   bgmClip:
   - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
+  isMuted: 000000
 --- !u!4 &1312456398
 Transform:
   m_ObjectHideFlags: 0
