@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class ItemPickUp : MonoBehaviour
+public class ItemPickUp : MonoBehaviour
 {
     public Item Item { get; set; }
 
@@ -12,5 +12,11 @@ public abstract class ItemPickUp : MonoBehaviour
         }
     }
 
-    public abstract void PickUp(Collider other);
+    public virtual void PickUp(Collider other)
+    {
+        if(Item.Type == ItemType.Manual)
+        {
+            other.GetComponent<Player>().PickedUpItem.Add(Item);
+        }
+    }
 }
