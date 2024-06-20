@@ -8,6 +8,9 @@ public class PlayerInputHandler
     public event Action<InputAction.CallbackContext> OnRunPerformedEvent;
     public event Action<InputAction.CallbackContext> OnRunCanceledEvent;
 
+    public event Action<InputAction.CallbackContext> OnGrapPerformedEvent;
+    public event Action<InputAction.CallbackContext> OnGrapCanceledEvent;
+
     public PlayerInputHandler(PlayerStateMachine stateMachine)
     {
         _stateMachine = stateMachine;
@@ -20,6 +23,9 @@ public class PlayerInputHandler
 
         input.PlayerActions.Run.performed += OnRunPerformed;
         input.PlayerActions.Run.canceled += OnRunCanceled;
+
+        input.PlayerActions.Grap.performed += OnGrapPerformed;
+        input.PlayerActions.Grap.canceled += OnGrapCanceled;
     }
 
     public void RemoveInputActionsCallbacks()
@@ -29,6 +35,9 @@ public class PlayerInputHandler
 
         input.PlayerActions.Run.started -= OnRunPerformed;
         input.PlayerActions.Run.canceled -= OnRunCanceled;
+
+        input.PlayerActions.Grap.performed -= OnGrapPerformed;
+        input.PlayerActions.Grap.canceled -= OnGrapCanceled;
     }
     private void OnMoveCanceled(InputAction.CallbackContext context)
     {
@@ -39,6 +48,15 @@ public class PlayerInputHandler
         OnRunPerformedEvent?.Invoke(context);
     }
     private void OnRunCanceled(InputAction.CallbackContext context)
+    {
+        OnRunCanceledEvent?.Invoke(context);
+    }
+
+    private void OnGrapPerformed(InputAction.CallbackContext context)
+    {
+        OnRunPerformedEvent?.Invoke(context);
+    }
+    private void OnGrapCanceled(InputAction.CallbackContext context)
     {
         OnRunCanceledEvent?.Invoke(context);
     }

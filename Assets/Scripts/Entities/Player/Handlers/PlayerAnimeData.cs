@@ -9,10 +9,16 @@ public class PlayerAnimeData
     [SerializeField] string _isWalkParameterName = "IsWalk";
     [SerializeField] string _isRunParameterName = "IsRun";
 
+    [SerializeField] string _grapParameterName = "@Grap";
+    [SerializeField] string _isHoldParameterName = "IsHold";
+
     public int GroundParameterHash { get; private set; }
     public int IsIdleParameterHash { get; private set; }
     public int IsWalkParameterHash { get; private set; }
     public int IsRunParameterHash { get; private set; }
+
+    public int GrapParameterHash { get; private set; }
+    public int IsHoldParameterHash { get; private set; }
 
     public void Initialize()
     {
@@ -20,5 +26,8 @@ public class PlayerAnimeData
         IsIdleParameterHash = Animator.StringToHash(_isIdleParameterName);
         IsWalkParameterHash = Animator.StringToHash(_isWalkParameterName);
         IsRunParameterHash = Animator.StringToHash(_isRunParameterName);
+
+        GrapParameterHash = Animator.StringToHash(_grapParameterName);
+        IsHoldParameterHash = Animator.StringToHash(_isHoldParameterName);
     }
 }
