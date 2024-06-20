@@ -45,6 +45,6 @@ public class DataManager : Singleton<DataManager>
 
     public Item GetData(string rcode)
     {
-        return ItemDataDic[rcode];
+        return ItemDataDic[rcode.Split('(')[0]];
     }
 }
