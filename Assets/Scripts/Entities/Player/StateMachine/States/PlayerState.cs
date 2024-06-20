@@ -21,12 +21,14 @@ public abstract class PlayerState : IState
 
     public virtual void Enter()
     {
+        if (_stateMachine.Player.Input == null) return;
         _inputHandler.OnGrabPerformedEvent += OnGrabPerformed;
         _inputHandler.AddInputActionsCallbacks();
     }
 
     public virtual void Exit()
     {
+        if (_stateMachine.Player.Input == null) return;
         _inputHandler.OnGrabPerformedEvent -= OnGrabPerformed;
         _inputHandler.RemoveInputActionsCallbacks();
     }
@@ -44,6 +46,7 @@ public abstract class PlayerState : IState
     public virtual void Update() { }
     private void ReadMovementInput()
     {
+        if (_stateMachine.Player.Input == null) return;
         _stateMachine.MovementDir = _stateMachine.Player.Input.PlayerActions.Move.ReadValue<Vector2>();
     }
 
