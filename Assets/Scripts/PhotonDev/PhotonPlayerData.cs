@@ -30,7 +30,7 @@ public class PhotonPlayerData : MonoBehaviourPunCallbacks
         private set
         {
             playerIdDict = value;
-        } 
+        }
     }
 	public int MaxNumberOfPlayers
     {

@@ -1,10 +1,8 @@
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
@@ -106,7 +104,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 	// 마스터가 인원 확인하고 시작 카운트 다운
 	[PunRPC]
 	private void StartCountDown()
-	{		
+	{
 		Debug.Log($"유저 {PhotonPlayerData.Instance.MaxNumberOfPlayers}명 모임, 10초 뒤 시작");
 		startCounterBG.SetActive(true);
 		gameStartCoroutine = StartCoroutine(StartGame());
@@ -128,7 +126,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 				photonView.RPC("StartCountDown", RpcTarget.AllBuffered);
 			}
 		}
-		
+
 	}
 
 	// 게스트 플레이어가 도중에 나가면 게임 시작을 취소하고, 해당 플레이어는 화면과 데이터상 목록에서 제외
