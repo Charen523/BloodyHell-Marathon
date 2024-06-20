@@ -1,14 +1,17 @@
-using System;
+ï»¿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public enum ItemType
 {
-    Auto,  // ÀÚµ¿ »ç¿ë
-    Manual // ¼öµ¿ »ç¿ë
+    Auto,   // ìë™
+    Manual  // ìˆ˜ë™
 }
 
 [Serializable]
 public class Item
 {
     public string Rcode;
-    public ItemType type;
+    public ItemType Type;
 }
