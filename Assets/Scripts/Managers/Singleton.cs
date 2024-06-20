@@ -6,7 +6,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T instance;
     [SerializeField]
-    private bool canDestroyOnLoad = true;
+    protected bool canDestroyOnLoad = true;
     public static T Instance
     {
         get
