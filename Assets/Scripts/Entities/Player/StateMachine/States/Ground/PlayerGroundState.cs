@@ -8,14 +8,20 @@ public class PlayerGroundState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        _inputHandler.OnMoveCanceledEvent += OnMovementCanceled;
+        if (_inputHandler != null)
+        {
+            _inputHandler.OnMoveCanceledEvent += OnMovementCanceled;
+        }
         _animeHandler.StartAnimation(_stateMachine.Player.AnimeData.GroundParameterHash);
     }
 
     public override void Exit()
     {
         base.Exit();
-        _inputHandler.OnMoveCanceledEvent -= OnMovementCanceled;
+        if (_inputHandler != null)
+        {
+            _inputHandler.OnMoveCanceledEvent -= OnMovementCanceled;
+        }
         _animeHandler.StopAnimation(_stateMachine.Player.AnimeData.GroundParameterHash);
     }
 
