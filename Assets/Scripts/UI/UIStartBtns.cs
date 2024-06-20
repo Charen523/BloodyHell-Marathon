@@ -46,7 +46,7 @@ public class UIStartBtns : MonoBehaviour
     private void CallLobbyScene()
     {
         //EX) LobbyManager.instance.Connect();
-        SceneManager.LoadScene(1); //LobbyScene.
+        //SceneManager.LoadScene(1); //로비씬으로. CustomSceneManager으로 이동필요.
     }
 
     private void ShowSetting()
