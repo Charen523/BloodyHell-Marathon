@@ -5,26 +5,26 @@ using UnityEngine.Pool;
 [System.Serializable]
 public class Pool
 {
-    public string tag;
-    public GameObject prefab;
-    public int minSize;
-    public int maxSize;
+    public string Rcode;
+    public GameObject Prefab;
+    public int MinSize;
+    public int MaxSize;
 }
 
 public class ObjectPool : MonoBehaviour
 {
-    public List<Pool> pools;
+    public List<Pool> Pools;
     private Dictionary<string, ObjectPool<GameObject>> poolDic;
 
     private void Awake()
     {
         poolDic = new Dictionary<string, ObjectPool<GameObject>>();
 
-        foreach (var pool in pools)
+        foreach (var pool in Pools)
         {
             ObjectPool<GameObject> objectPool = new ObjectPool<GameObject>(
                 createFunc: () => {
-                    var newObj = Instantiate(pool.prefab);
+                    var newObj = Instantiate(pool.Prefab);
                     newObj.SetActive(false);
                     return newObj;
                 },
@@ -38,33 +38,33 @@ public class ObjectPool : MonoBehaviour
                     Destroy(obj);
                 },
                 collectionCheck: false,
-                defaultCapacity: pool.minSize,
-                maxSize: pool.maxSize
+                defaultCapacity: pool.MinSize,
+                maxSize: pool.MaxSize
             );
 
-            poolDic.Add(pool.tag, objectPool);
+            poolDic.Add(pool.Rcode, objectPool);
         }
     }
 
-    public GameObject GetObject(string tag)
+    public GameObject GetObject(string rcode)
     {
-        if (poolDic.ContainsKey(tag))
+        if (poolDic.ContainsKey(rcode))
         {
-            return poolDic[tag].Get();
+            return poolDic[rcode].Get();
         }
-        Debug.LogWarning("No pool with tag: " + tag);
+        Debug.LogWarning("No pool with rcode: " + rcode);
         return null;
     }
 
-    public void ReleaseObject(string tag, GameObject obj)
+    public void ReleaseObject(string rcode, GameObject obj)
     {
-        if (poolDic.ContainsKey(tag))
+        if (poolDic.ContainsKey(rcode))
         {
-            poolDic[tag].Release(obj);
+            poolDic[rcode].Release(obj);
         }
         else
         {
-            Debug.LogWarning("No pool with tag: " + tag);
+            Debug.LogWarning("No pool with rcode: " + rcode);
         }
     }
 }

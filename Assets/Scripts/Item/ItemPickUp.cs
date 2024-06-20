@@ -14,7 +14,7 @@ public class ItemPickUp : MonoBehaviour
 
     public virtual void PickUp(Collider other)
     {
-        if(Item.type == ItemType.Manual)
+        if(Item.Type == ItemType.Manual)
         {
             other.GetComponent<Player>().PickedUpItem.Add(Item);
         }
