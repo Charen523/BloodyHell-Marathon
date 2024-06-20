@@ -1,9 +1,12 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ItemPickUp : MonoBehaviour
 {
     public Item Item { get; set; }
+    public event Action OnPickUp;
 
     private void Start()
     {
@@ -21,6 +24,7 @@ public class ItemPickUp : MonoBehaviour
 
     public virtual void PickUp(Collider other)
     {
+        OnPickUp?.Invoke();
         if(Item.Type == ItemType.Manual)
         {
             other.GetComponent<Player>().PickedUpItem.Add(Item);
