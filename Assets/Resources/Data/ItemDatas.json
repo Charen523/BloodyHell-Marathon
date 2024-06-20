@@ -1,0 +1,16 @@
+{
+"ItemDatas":[
+ {
+  "Rcode": "ITE00001",
+  "Type": "Manual",
+  "Name": "바나나",
+  "Description": "바나나를 밟으면 미끄러집니다."
+ },
+ {
+  "Rcode": "ITE00002",
+  "Type": "Auto",
+  "Name": "부스터",
+  "Description": "플레이어의 속력이 일정시간 빨라집니다."
+ }
+]
+}

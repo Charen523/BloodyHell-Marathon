@@ -10,18 +10,15 @@ public class ItemData
     public List<Item> ItemDatas = new List<Item>();
 }
 
-public class DataManager : MonoBehaviour
+public class DataManager : Singleton<DataManager>
 {
-    public static DataManager Instance;
     [HideInInspector] public Dictionary<string, Item> ItemDataDic = new Dictionary<string, Item>();
 
     string ITEMDATA_PATH = Application.dataPath + "/Resources/Data/ItemDatas.json";
 
-    private void Awake()
+    protected override void Awake()
     {
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
+        base.Awake();
         LoadData();
     }
     private void LoadData()

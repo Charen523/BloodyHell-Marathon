@@ -11,13 +11,14 @@ public class Pool
     public int MaxSize;
 }
 
-public class ObjectPool : MonoBehaviour
+public class ObjectPoolManager : Singleton<ObjectPoolManager>
 {
     public List<Pool> Pools;
     private Dictionary<string, ObjectPool<GameObject>> poolDic;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         poolDic = new Dictionary<string, ObjectPool<GameObject>>();
 
         foreach (var pool in Pools)
