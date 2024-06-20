@@ -5,17 +5,22 @@ using UnityEngine;
 
 public class PhotonPlayerData : MonoBehaviourPunCallbacks
 {
-    private static PhotonPlayerData instance;
-
-    public static PhotonPlayerData Instance
+    #region SerilizedField
+    [SerializeField] private int maxNumberOfPlayers = 1;
+	#endregion
+	#region PrivateField
+	private static PhotonPlayerData instance;
+	private Dictionary<string, int> playerIdDict;
+	#endregion
+	#region Public Elements
+	public static PhotonPlayerData Instance
     {
         get
         {
             return instance;
         }
     }
-
-    private Dictionary<string, int> playerIdDict;
+    
     public Dictionary<string, int> PlayerIdDict 
     {
         get
@@ -27,13 +32,17 @@ public class PhotonPlayerData : MonoBehaviourPunCallbacks
             playerIdDict = value;
         } 
     }
-
-    private void Awake()
+	public int MaxNumberOfPlayers
     {
-        if (!PhotonNetwork.IsMasterClient)
+        get
         {
-            Destroy(gameObject);
-        }
+            return maxNumberOfPlayers;
+		}
+    }
+	#endregion
+
+	private void Awake()
+    {
         if (instance == null)
         {
             instance = this;
@@ -50,4 +59,8 @@ public class PhotonPlayerData : MonoBehaviourPunCallbacks
     {
         PlayerIdDict[userId] = playerNumber;
     }
+	public void RemovePlayer(string userId)
+	{
+		PlayerIdDict.Remove(userId);
+	}
 }
