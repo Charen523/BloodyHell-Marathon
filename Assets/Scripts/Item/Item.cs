@@ -2,8 +2,8 @@ using System;
 
 public enum ItemType
 {
-    Auto,  
-    Manual 
+    Auto,  // 자동
+    Manual // 수동
 }
 
 [Serializable]
