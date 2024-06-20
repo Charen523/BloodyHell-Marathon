@@ -12,6 +12,7 @@ public class PlayerLap
     public int playerRank;
     public int playerScore;
     public int raceLap;
+    public int currentPoint = 0;
     public bool[] checkPoints;
     public bool retire = true;
 }
