@@ -3,7 +3,6 @@ using UnityEngine;
 public class PlayerGrabHandler
 {
     private PlayerStateMachine _stateMachine;
-    private IGrabbable _grabbable;
     public PlayerGrabHandler(PlayerStateMachine stateMachine)
     {
         _stateMachine = stateMachine;
@@ -11,9 +10,11 @@ public class PlayerGrabHandler
 
     public bool DetectAndGrab()
     {
-        RaycastHit2D hit = Physics2D.Raycast(_stateMachine.Player.transform.position, _stateMachine.Player.transform.right, 1f);
+        Vector3 yOffset = Vector2.up * -0.2f;
+        Vector2 direction = _stateMachine.Player.HandPoint.position - (_stateMachine.Player.transform.position + yOffset).normalized;
+        RaycastHit2D hit = Physics2D.Raycast(_stateMachine.Player.transform.position + yOffset, direction, 1f);
 
-        if (hit.collider != null)
+        if (hit.collider != null && hit.collider.gameObject != _stateMachine.Player.gameObject)
         {
             IGrabbable grabbable = hit.collider.GetComponent<IGrabbable>();
             if (grabbable != null)
@@ -29,11 +30,13 @@ public class PlayerGrabHandler
     {
         if (_stateMachine.Player.TargetObject != null)
         {
-            _grabbable = _stateMachine.Player.TargetObject.GetComponent<IGrabbable>();
+            IGrabbable grabbable = _stateMachine.Player.TargetObject.GetComponent<IGrabbable>();
             _stateMachine.Player.TargetObject.transform.SetParent(_stateMachine.Player.HandPoint);
-            _stateMachine.Player.TargetObject.GetComponent<Rigidbody2D>().isKinematic = true;
-            _stateMachine.Player.TargetObject.GetComponent<Collider2D>().isTrigger = true;
-            _grabbable.OnGrab();
+            if (_stateMachine.Player.Collider != null)
+            {
+                Physics2D.IgnoreCollision(_stateMachine.Player.TargetObject.GetComponent<Collider2D>(), _stateMachine.Player.Collider, true);
+            }
+            grabbable.OnGrab();
         }
     }
 
@@ -41,12 +44,13 @@ public class PlayerGrabHandler
     {
         if (_stateMachine.Player.TargetObject != null)
         {
-            _grabbable = _stateMachine.Player.TargetObject.GetComponent<IGrabbable>();
-            _stateMachine.Player.TargetObject.GetComponent<Rigidbody2D>().isKinematic = false;
-            _stateMachine.Player.TargetObject.GetComponent<Collider2D>().isTrigger = false;
+            IGrabbable grabbable = _stateMachine.Player.TargetObject.GetComponent<IGrabbable>();
             _stateMachine.Player.TargetObject.transform.SetParent(null);
-            _grabbable.OnRelease();
-            _grabbable = null;
+            if (_stateMachine.Player.Collider != null)
+            {
+                Physics2D.IgnoreCollision(_stateMachine.Player.TargetObject.GetComponent<Collider2D>(), _stateMachine.Player.Collider, false);
+            }
+            grabbable.OnRelease();
             _stateMachine.Player.TargetObject = null;
         }
     }

@@ -4,7 +4,6 @@ using UnityEngine;
 public class Player : Entity, IGrabbable
 {
   [field: SerializeField] public PlayerAnimeData AnimeData { get; private set; }
-  [field: SerializeField] public Transform HandPoint { get; private set; }
   public GameObject TargetObject { get; set; }
 
   public PlayerInput Input { get; private set; }
