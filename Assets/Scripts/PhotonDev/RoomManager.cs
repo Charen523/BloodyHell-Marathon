@@ -1,16 +1,14 @@
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
 	#region SerializeField
 	[Header("PlayerList")]
-	[SerializeField] private GameObject playerListContentPrefab; // 프리팹 참조 수정
+	[SerializeField] private GameObject playerListContentPrefab;
 	[SerializeField] private Transform playerListParent;
 
 	[Header("GameStartCounter")]
@@ -97,9 +95,20 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		PhotonPlayerData.Instance.PlayerIdDict.Remove(otherPlayer.UserId);
 
 		int playerInGameId = PhotonPlayerData.Instance.PlayerIdDict[otherPlayer.UserId];
-		photonView.RPC("RemovePlayerListContent", RpcTarget.AllBuffered, playerInGameId);
+		if (PhotonNetwork.IsMasterClient)
+		{
+			photonView.RPC("RemovePlayerListContent", RpcTarget.AllBuffered, playerInGameId);
+		}
 	}
 
+	// 마스터가 인원 확인하고 시작 카운트 다운
+	[PunRPC]
+	private void StartCountDown()
+	{
+		Debug.Log($"유저 {PhotonPlayerData.Instance.MaxNumberOfPlayers}명 모임, 10초 뒤 시작");
+		startCounterBG.SetActive(true);
+		gameStartCoroutine = StartCoroutine(StartGame());
+	}
 	#endregion
 
 	#region MonoBehaviourPunCallbacks Callbacks
@@ -111,15 +120,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		{
 			base.OnPlayerEnteredRoom(newPlayer);
 			AddPlayerToData(newPlayer);
-
 			// 인원이 다 차면 게임 시작 카운트 다운
 			if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonPlayerData.Instance.MaxNumberOfPlayers)
 			{
-				Debug.Log($"유저 {PhotonPlayerData.Instance.MaxNumberOfPlayers}명 모임, 10초 뒤 시작");
-				startCounterBG.SetActive(true);
-				gameStartCoroutine = StartCoroutine(StartGame());
+				photonView.RPC("StartCountDown", RpcTarget.AllBuffered);
 			}
 		}
+
 	}
 
 	// 게스트 플레이어가 도중에 나가면 게임 시작을 취소하고, 해당 플레이어는 화면과 데이터상 목록에서 제외
