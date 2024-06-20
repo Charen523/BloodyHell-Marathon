@@ -10,6 +10,8 @@ public class Player : Entity
 
     [HideInInspector] public List<Item> PickedUpItem = new List<Item>();
 
+    public PlayerLap playerlap = new PlayerLap();
+
     protected override void Awake()
     {
         base.Awake();
