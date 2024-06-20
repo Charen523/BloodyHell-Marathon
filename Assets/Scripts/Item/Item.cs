@@ -14,4 +14,6 @@ public class Item
 {
     public string Rcode;
     public ItemType Type;
+    public string Name;
+    public string Description;
 }

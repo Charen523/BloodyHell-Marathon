@@ -7,9 +7,6 @@ public class ItemSpawner : MonoBehaviour
     public GameObject SpawnRange;
     private BoxCollider2D rangeCollider;
 
-    public ObjectPool ObjectPool;
-    public string[] Rcodes;
-
     private void Awake()
     {
         rangeCollider = SpawnRange.GetComponent<BoxCollider2D>();
@@ -30,11 +27,11 @@ public class ItemSpawner : MonoBehaviour
     private void SpawnItem(string rcode)
     {
         Vector2 spawnPosition = ReturnRandPos();
-        GameObject spawnedObject = ObjectPool.GetObject(rcode); // Ç®¿¡¼­ °´Ã¼¸¦ ²¨³¿
+        GameObject spawnedObject = ObjectPoolManager.Instance.GetObject(rcode);
 
         if (spawnedObject != null)
         {
-            spawnedObject.transform.position = spawnPosition; // ·£´ý À§Ä¡¿¡ °´Ã¼ À§Ä¡ ¼³Á¤
+            spawnedObject.transform.position = spawnPosition;
         }
         else
         {
@@ -44,12 +41,13 @@ public class ItemSpawner : MonoBehaviour
 
     public void SpawnRandomItem()
     {
-        if (Rcodes.Length == 0)
+        var pools = ObjectPoolManager.Instance.Pools;
+        if (pools.Count == 0)
         {
-            Debug.LogError("ItemTags array is empty.");
+            Debug.LogError("Item pools is empty.");
             return;
         }
-        string randomRcode = Rcodes[Random.Range(0, Rcodes.Length)];
+        string randomRcode = pools[Random.Range(0, pools.Count)].Rcode;
         SpawnItem(randomRcode);
     }
 }

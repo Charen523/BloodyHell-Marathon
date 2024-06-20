@@ -45,5 +45,12 @@ public class EntityMovementHandler
         Vector3 scale = _stateMachine.Entity.MainSprite.localScale;
         scale.x = _isFacingRight ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
         _stateMachine.Entity.MainSprite.localScale = scale;
+
+        if (_stateMachine.Entity.HandPoint != null)
+        {
+            Vector3 handPointPosition = _stateMachine.Entity.HandPoint.localPosition;
+            handPointPosition.x = _isFacingRight ? Mathf.Abs(handPointPosition.x) : -Mathf.Abs(handPointPosition.x);
+            _stateMachine.Entity.HandPoint.localPosition = handPointPosition;
+        }
     }
 }
