@@ -9,6 +9,8 @@ public class PlayerStateMachine : EntityStateMachine
     public PlayerWalkState WalkState { get; private set; }
     public PlayerRunState RunState { get; private set; }
 
+    public PlayerHoldState HoldState { get; private set; }
+
     public PlayerStateMachine(Player player) : base(player)
     {
         Player = player;
@@ -16,5 +18,6 @@ public class PlayerStateMachine : EntityStateMachine
         IdleState = new PlayerIdleState(this);
         WalkState = new PlayerWalkState(this);
         RunState = new PlayerRunState(this);
+        HoldState = new PlayerHoldState(this);
     }
 }

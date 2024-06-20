@@ -1,36 +1,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Entity
+public class Player : Entity, IGrabbable
 {
-    [field: SerializeField] public PlayerAnimeData AnimeData { get; private set; }
-    public PlayerInput Input { get; private set; }
+  [field: SerializeField] public PlayerAnimeData AnimeData { get; private set; }
+  public GameObject TargetObject { get; set; }
 
-    private PlayerStateMachine _stateMachine;
+  public PlayerInput Input { get; private set; }
 
-    [HideInInspector] public List<Item> PickedUpItem = new List<Item>();
+  private PlayerStateMachine _stateMachine;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        AnimeData.Initialize();
-        Input = GetComponent<PlayerInput>();
+  [HideInInspector] public List<Item> PickedUpItem = new List<Item>();
 
-        _stateMachine = new PlayerStateMachine(this);
-    }
+  protected override void Awake()
+  {
+    base.Awake();
+    AnimeData.Initialize();
+    Input = GetComponent<PlayerInput>();
 
-    private void Start()
-    {
-        _stateMachine.ChangeState(_stateMachine.IdleState);
-    }
+    _stateMachine = new PlayerStateMachine(this);
+  }
 
-    private void Update()
-    {
-        _stateMachine.HandleInput();
-        _stateMachine.Update();
-    }
-    private void FixedUpdate()
-    {
-        _stateMachine.PhysicsUpdate();
-    }
+  private void Start()
+  {
+    _stateMachine.ChangeState(_stateMachine.IdleState);
+  }
+
+  private void Update()
+  {
+    _stateMachine.HandleInput();
+    _stateMachine.Update();
+  }
+  private void FixedUpdate()
+  {
+    _stateMachine.PhysicsUpdate();
+  }
+
+  public void OnGrab()
+  {
+    return;
+  }
+
+  public void OnRelease()
+  {
+    return;
+  }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public abstract class PlayerState : IState
 {
@@ -6,6 +7,7 @@ public abstract class PlayerState : IState
     protected PlayerMovementHandler _movementHandler;
     protected PlayerAnimeHandler _animeHandler;
     protected PlayerInputHandler _inputHandler;
+    protected PlayerGrabHandler _grabHandler;
 
     protected PlayerState(PlayerStateMachine stateMachine)
     {
@@ -14,15 +16,18 @@ public abstract class PlayerState : IState
         _movementHandler = new PlayerMovementHandler(_stateMachine);
         _animeHandler = new PlayerAnimeHandler(_stateMachine);
         _inputHandler = new PlayerInputHandler(_stateMachine);
+        _grabHandler = new PlayerGrabHandler(_stateMachine);
     }
 
     public virtual void Enter()
     {
+        _inputHandler.OnGrabPerformedEvent += OnGrabPerformed;
         _inputHandler.AddInputActionsCallbacks();
     }
 
     public virtual void Exit()
     {
+        _inputHandler.OnGrabPerformedEvent -= OnGrabPerformed;
         _inputHandler.RemoveInputActionsCallbacks();
     }
 
@@ -41,4 +46,13 @@ public abstract class PlayerState : IState
     {
         _stateMachine.MovementDir = _stateMachine.Player.Input.PlayerActions.Move.ReadValue<Vector2>();
     }
+
+    private void OnGrabPerformed(InputAction.CallbackContext context)
+    {
+        if (_grabHandler.DetectAndGrab())
+        {
+            _stateMachine.ChangeState(_stateMachine.HoldState);
+        }
+    }
+
 }
