@@ -10,19 +10,39 @@ public class PlayerGrabHandler
 
     public bool DetectAndGrab()
     {
-        Vector3 yOffset = Vector2.up * -0.2f;
-        Vector2 direction = _stateMachine.Player.HandPoint.position - (_stateMachine.Player.transform.position + yOffset).normalized;
-        RaycastHit2D hit = Physics2D.Raycast(_stateMachine.Player.transform.position + yOffset, direction, 1f);
+        Vector2 yOffset = Vector2.up * -0.3f;
+        Vector2 startPosition = (Vector2)_stateMachine.Player.transform.position + yOffset;
+        Vector2 direction = ((Vector2)_stateMachine.Player.HandPoint.position - startPosition).normalized;
+        RaycastHit2D[] hits = Physics2D.RaycastAll(startPosition, direction, 0.6f);
 
-        if (hit.collider != null && hit.collider.gameObject != _stateMachine.Player.gameObject)
+        Debug.DrawRay(startPosition, direction, Color.red);
+
+        float closestDistance = float.MaxValue;
+        GameObject closestTarget = null;
+
+        foreach (RaycastHit2D hit in hits)
         {
-            IGrabbable grabbable = hit.collider.GetComponent<IGrabbable>();
-            if (grabbable != null)
+            if (hit.collider != null && hit.collider.gameObject != _stateMachine.Player.gameObject)
             {
-                _stateMachine.Player.TargetObject = hit.collider.gameObject;
-                return true;
+                IGrabbable grabbable = hit.collider.GetComponent<IGrabbable>();
+                if (grabbable != null)
+                {
+                    float distance = Vector2.Distance(_stateMachine.Player.transform.position, hit.collider.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestTarget = hit.collider.gameObject;
+                    }
+                }
             }
         }
+
+        if (closestTarget != null)
+        {
+            _stateMachine.Player.TargetObject = closestTarget;
+            return true;
+        }
+
         return false;
     }
 
