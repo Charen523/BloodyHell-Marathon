@@ -8,8 +8,8 @@ public class PlayerInputHandler
     public event Action<InputAction.CallbackContext> OnRunPerformedEvent;
     public event Action<InputAction.CallbackContext> OnRunCanceledEvent;
 
-    public event Action<InputAction.CallbackContext> OnGrapPerformedEvent;
-    public event Action<InputAction.CallbackContext> OnGrapCanceledEvent;
+    public event Action<InputAction.CallbackContext> OnGrabPerformedEvent;
+    public event Action<InputAction.CallbackContext> OnGrabCanceledEvent;
 
     public PlayerInputHandler(PlayerStateMachine stateMachine)
     {
@@ -24,8 +24,8 @@ public class PlayerInputHandler
         input.PlayerActions.Run.performed += OnRunPerformed;
         input.PlayerActions.Run.canceled += OnRunCanceled;
 
-        input.PlayerActions.Grap.performed += OnGrapPerformed;
-        input.PlayerActions.Grap.canceled += OnGrapCanceled;
+        input.PlayerActions.Grab.performed += OnGrabPerformed;
+        input.PlayerActions.Grab.canceled += OnGrabCanceled;
     }
 
     public void RemoveInputActionsCallbacks()
@@ -36,8 +36,8 @@ public class PlayerInputHandler
         input.PlayerActions.Run.started -= OnRunPerformed;
         input.PlayerActions.Run.canceled -= OnRunCanceled;
 
-        input.PlayerActions.Grap.performed -= OnGrapPerformed;
-        input.PlayerActions.Grap.canceled -= OnGrapCanceled;
+        input.PlayerActions.Grab.performed -= OnGrabPerformed;
+        input.PlayerActions.Grab.canceled -= OnGrabCanceled;
     }
     private void OnMoveCanceled(InputAction.CallbackContext context)
     {
@@ -52,12 +52,12 @@ public class PlayerInputHandler
         OnRunCanceledEvent?.Invoke(context);
     }
 
-    private void OnGrapPerformed(InputAction.CallbackContext context)
+    private void OnGrabPerformed(InputAction.CallbackContext context)
     {
-        OnGrapPerformedEvent?.Invoke(context);
+        OnGrabPerformedEvent?.Invoke(context);
     }
-    private void OnGrapCanceled(InputAction.CallbackContext context)
+    private void OnGrabCanceled(InputAction.CallbackContext context)
     {
-        OnGrapCanceledEvent?.Invoke(context);
+        OnGrabCanceledEvent?.Invoke(context);
     }
 }

@@ -59,7 +59,7 @@ AnimatorTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: '@Grap'
+    m_ConditionEvent: '@Grab'
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: -1711482609811743119}
   m_DstState: {fileID: 0}
@@ -118,7 +118,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Grap
+  m_Name: Grab
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 3943720664400960185}
@@ -207,7 +207,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: '@Grap'
+  - m_Name: '@Grab'
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -240,6 +240,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: '@Grab'
+    m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: IsHold
     m_EventTreshold: 0
@@ -343,7 +346,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: grap
+  m_Name: grab
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:

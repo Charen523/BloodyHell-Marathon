@@ -1,7 +1,8 @@
 using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerHoldState : PlayerGrapState
+public class PlayerHoldState : PlayerGrabState
 {
     public PlayerHoldState(PlayerStateMachine stateMachine) : base(stateMachine) { }
 
@@ -9,7 +10,8 @@ public class PlayerHoldState : PlayerGrapState
     {
         base.Enter();
         _stateMachine.MovementSpeedModifier = _stateMachine.Player.Stat.CurrentStat.Condition.HoldSpeedModifier;
-        _inputHandler.OnGrapCanceledEvent += OnGrapCanceled;
+        _inputHandler.OnGrabCanceledEvent += OnGrabCanceled;
+        _grabHandler.GrabObject();
         _animeHandler.StartAnimation(_stateMachine.Player.AnimeData.IsHoldParameterHash);
     }
 
@@ -17,12 +19,14 @@ public class PlayerHoldState : PlayerGrapState
     {
         base.Exit();
 
-        _inputHandler.OnGrapCanceledEvent -= OnGrapCanceled;
+        _inputHandler.OnGrabCanceledEvent -= OnGrabCanceled;
+        _grabHandler.ReleaseObject();
         _animeHandler.StopAnimation(_stateMachine.Player.AnimeData.IsHoldParameterHash);
     }
 
-    private void OnGrapCanceled(InputAction.CallbackContext context)
+    private void OnGrabCanceled(InputAction.CallbackContext context)
     {
+        Debug.Log("22");
         _stateMachine.ChangeState(_stateMachine.IdleState);
     }
 

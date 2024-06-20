@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +7,7 @@ public abstract class PlayerState : IState
     protected PlayerMovementHandler _movementHandler;
     protected PlayerAnimeHandler _animeHandler;
     protected PlayerInputHandler _inputHandler;
+    protected PlayerGrabHandler _grabHandler;
 
     protected PlayerState(PlayerStateMachine stateMachine)
     {
@@ -16,17 +16,18 @@ public abstract class PlayerState : IState
         _movementHandler = new PlayerMovementHandler(_stateMachine);
         _animeHandler = new PlayerAnimeHandler(_stateMachine);
         _inputHandler = new PlayerInputHandler(_stateMachine);
+        _grabHandler = new PlayerGrabHandler(_stateMachine);
     }
 
     public virtual void Enter()
     {
-        _inputHandler.OnGrapPerformedEvent += OnGrapPerformed;
+        _inputHandler.OnGrabPerformedEvent += OnGrabPerformed;
         _inputHandler.AddInputActionsCallbacks();
     }
 
     public virtual void Exit()
     {
-        _inputHandler.OnGrapPerformedEvent -= OnGrapPerformed;
+        _inputHandler.OnGrabPerformedEvent -= OnGrabPerformed;
         _inputHandler.RemoveInputActionsCallbacks();
     }
 
@@ -46,9 +47,14 @@ public abstract class PlayerState : IState
         _stateMachine.MovementDir = _stateMachine.Player.Input.PlayerActions.Move.ReadValue<Vector2>();
     }
 
-    private void OnGrapPerformed(InputAction.CallbackContext context)
+    private void OnGrabPerformed(InputAction.CallbackContext context)
     {
-        _stateMachine.ChangeState(_stateMachine.HoldState);
+        Debug.Log("11");
+        if (_grabHandler.DetectAndGrab())
+        {
+            Debug.Log("1");
+            _stateMachine.ChangeState(_stateMachine.HoldState);
+        }
     }
 
 }
