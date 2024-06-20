@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : Entity, IGrabbable
@@ -9,6 +10,8 @@ public class Player : Entity, IGrabbable
   public PlayerInput Input { get; private set; }
 
   private PlayerStateMachine _stateMachine;
+
+  [HideInInspector] public List<Item> PickedUpItem = new List<Item>();
 
   protected override void Awake()
   {

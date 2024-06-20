@@ -12,14 +12,13 @@ public class Launcher : MonoBehaviourPunCallbacks
 	/// 룸당 최대 인원 수. 이를 넘으면 참여 불가
 	/// </summary>
 	[Tooltip("The maximum number of players per room. When a room is full, it can't be joined by new players, and so new room will be created")]
-	[SerializeField]
-	private byte maxPlayersPerRoom = 5;
 	#endregion
 	#region Private Fields
 	/// <summary>
 	/// 게임 버전. 이게 같은 유저끼리 만나진다고 한다.
 	/// </summary>
-	string gameVersion = "1";
+	private string gameVersion = "1";
+	private int maxPlayersPerRoom;
 	#endregion
 	#region Public Fields
 	//룸에 연결하는 버튼
@@ -45,6 +44,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 	{
 		progressLabel.SetActive(false);
 		controlPanel.SetActive(true);
+		maxPlayersPerRoom = PhotonPlayerData.Instance.MaxNumberOfPlayers;
 	}
 
 	#endregion
@@ -113,7 +113,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 	public override void OnCreatedRoom()
 	{
 		base.OnCreatedRoom();
-		PhotonNetwork.LoadLevel(1);
+		PhotonNetwork.LoadLevel("RoomScene");
 	}
 	#endregion
 }

@@ -13,5 +13,7 @@ public enum ItemType
 public class Item
 {
     public string Rcode;
-    public ItemType type;
+    public ItemType Type;
+    public string Name;
+    public string Description;
 }
