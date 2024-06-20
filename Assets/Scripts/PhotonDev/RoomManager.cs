@@ -10,7 +10,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 {
 	#region SerializeField
 	[Header("PlayerList")]
-	[SerializeField] private GameObject playerListContentPrefab; // 프리팹 참조 수정
+	[SerializeField] private GameObject playerListContentPrefab;
 	[SerializeField] private Transform playerListParent;
 
 	[Header("GameStartCounter")]
