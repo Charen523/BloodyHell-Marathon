@@ -38,7 +38,7 @@
 
 ### ✨프로젝트 소개
 
-`Project Name` Bloddy Hell Marathon
+`Project Name` Bloody Hell Marathon
 
  `Info` 프로젝트 요약
 
@@ -49,10 +49,11 @@
 ### ✨깃 컨벤션
 
 - commit 규칙
-    - init: 최초 커밋: Unity 프로젝트 생성
+    - init: 최초 커밋
     - feat: 기능 추가
-    - refactor: 기능 개선
-    - add: 에셋, .cs 등 파일 추가
+    - update: 기능 변경
+    - refactor: 구조 개선
+    - add: 파일 추가
     - move: 파일 이동, 코드 이동 등
     - remove: 파일 삭제
     - art: UI 개선
@@ -63,24 +64,11 @@
 - branch
     - dev (하루에 한 번 main 업데이트)
     - branch는 기능마다 1개씩.
-        - 기능 추가 시: feat/(기능 이름)
-        - UI 추가 시: UI/(추가하는 UI) ->맵처럼 큰 규모만.
+    - 기능 추가 시: feat/(기능 이름)
 
 ---
 
 ### ✨기능 소개
-
-1. 스타트 씬 플로우.
-
-
-2. 게임 씬 플로우. (일부 화살표 가독성을 위해 생략.)
-
-
-3. 전체 화면
-
-
-4. 조작키
-
 
 --- 
 

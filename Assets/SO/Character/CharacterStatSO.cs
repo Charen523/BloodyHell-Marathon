@@ -18,6 +18,8 @@ public class StatData
     public int MPRegen;
     [Header("Movement")]
     public float MoveSpeed;
+    [field: SerializeField][field: Range(0f, 2f)] public float WalkSpeedModifier = 1.0f;
+    [field: SerializeField][field: Range(0f, 2f)] public float RunSpeedModifier = 1.2f;
     [Header("Attack")]
     public float Attack;
     public float AttackSpeed;
@@ -58,6 +60,9 @@ public class CharacterStatSO : ScriptableObject
         Condition.CriticalDamage += other.Condition.CriticalDamage;
         Condition.EvasionRate += other.Condition.EvasionRate;
         Condition.HitRate += other.Condition.HitRate;
+
+        Condition.WalkSpeedModifier += other.Condition.WalkSpeedModifier;
+        Condition.RunSpeedModifier += other.Condition.RunSpeedModifier;
     }
 
     public void Multiply(CharacterStatSO other)
@@ -75,5 +80,8 @@ public class CharacterStatSO : ScriptableObject
         Condition.CriticalDamage *= other.Condition.CriticalDamage;
         Condition.EvasionRate *= other.Condition.EvasionRate;
         Condition.HitRate *= other.Condition.HitRate;
+
+        Condition.WalkSpeedModifier *= other.Condition.WalkSpeedModifier;
+        Condition.RunSpeedModifier *= other.Condition.RunSpeedModifier;
     }
 }
