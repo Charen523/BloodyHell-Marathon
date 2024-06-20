@@ -20,6 +20,7 @@ public class StatData
     public float MoveSpeed;
     [field: SerializeField][field: Range(0f, 2f)] public float WalkSpeedModifier = 1.0f;
     [field: SerializeField][field: Range(0f, 2f)] public float RunSpeedModifier = 1.2f;
+    [field: SerializeField][field: Range(0f, 2f)] public float HoldSpeedModifier = 0.2f;
     [Header("Attack")]
     public float Attack;
     public float AttackSpeed;
