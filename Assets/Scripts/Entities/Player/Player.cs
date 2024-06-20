@@ -38,11 +38,13 @@ public class Player : Entity, IGrabbable
 
   public void OnGrab()
   {
-    return;
+    _stateMachine.Player.Rigid.isKinematic = true;
+    _stateMachine.ChangeState(_stateMachine.GroggyState);
   }
 
   public void OnRelease()
   {
-    return;
+    _stateMachine.Player.Rigid.isKinematic = false;
+    _stateMachine.ChangeState(_stateMachine.IdleState);
   }
 }
