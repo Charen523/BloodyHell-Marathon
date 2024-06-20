@@ -13,7 +13,8 @@ public class ItemSpawner : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(SpawnItem());
+        if (SpawnRange == null) Debug.LogWarning("Need an area (Tilemap) to spawn items.");
+        else StartCoroutine(SpawnItem());
     }
 
     private Vector2 ReturnRandPos()
@@ -38,7 +39,7 @@ public class ItemSpawner : MonoBehaviour
             Debug.LogError("Item pools is empty.");
             return null;
         }
-        string randomRcode = pools[Random.Range(0, pools.Count)].Rcode;
+        string randomRcode = pools[Random.Range(0, pools.Count)].Prefab.name;
         return randomRcode;
     }
 

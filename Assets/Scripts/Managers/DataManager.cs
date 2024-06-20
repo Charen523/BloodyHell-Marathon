@@ -39,12 +39,13 @@ public class DataManager : Singleton<DataManager>
             foreach(var data in  datas.ItemDatas)
             {
                 ItemDataDic.Add(data.Rcode, data);
+                Debug.Log(data.Rcode);
             }
         }
     }
 
     public Item GetData(string rcode)
     {
-        return ItemDataDic[rcode];
+        return ItemDataDic[rcode.Split('(')[0]];
     }
 }
