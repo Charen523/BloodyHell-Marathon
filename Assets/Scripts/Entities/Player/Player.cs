@@ -9,7 +9,7 @@ public class Player : Entity, IGrabbable
   public PlayerInput Input { get; private set; }
 
   private PlayerStateMachine _stateMachine;
-
+  public PlayerLap playerlap = new PlayerLap();
   [HideInInspector] public List<Item> PickedUpItem = new List<Item>();
 
   protected override void Awake()
