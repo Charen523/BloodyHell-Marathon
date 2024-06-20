@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public abstract class PlayerState : IState
 {
@@ -18,11 +20,13 @@ public abstract class PlayerState : IState
 
     public virtual void Enter()
     {
+        _inputHandler.OnGrapPerformedEvent += OnGrapPerformed;
         _inputHandler.AddInputActionsCallbacks();
     }
 
     public virtual void Exit()
     {
+        _inputHandler.OnGrapPerformedEvent -= OnGrapPerformed;
         _inputHandler.RemoveInputActionsCallbacks();
     }
 
@@ -41,4 +45,10 @@ public abstract class PlayerState : IState
     {
         _stateMachine.MovementDir = _stateMachine.Player.Input.PlayerActions.Move.ReadValue<Vector2>();
     }
+
+    private void OnGrapPerformed(InputAction.CallbackContext context)
+    {
+        _stateMachine.ChangeState(_stateMachine.HoldState);
+    }
+
 }

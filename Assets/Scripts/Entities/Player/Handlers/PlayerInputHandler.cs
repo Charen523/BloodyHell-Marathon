@@ -54,10 +54,10 @@ public class PlayerInputHandler
 
     private void OnGrapPerformed(InputAction.CallbackContext context)
     {
-        OnRunPerformedEvent?.Invoke(context);
+        OnGrapPerformedEvent?.Invoke(context);
     }
     private void OnGrapCanceled(InputAction.CallbackContext context)
     {
-        OnRunCanceledEvent?.Invoke(context);
+        OnGrapCanceledEvent?.Invoke(context);
     }
 }
