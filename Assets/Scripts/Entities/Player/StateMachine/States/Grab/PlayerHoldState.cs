@@ -26,7 +26,6 @@ public class PlayerHoldState : PlayerGrabState
 
     private void OnGrabCanceled(InputAction.CallbackContext context)
     {
-        Debug.Log("22");
         _stateMachine.ChangeState(_stateMachine.IdleState);
     }
 

@@ -49,10 +49,8 @@ public abstract class PlayerState : IState
 
     private void OnGrabPerformed(InputAction.CallbackContext context)
     {
-        Debug.Log("11");
         if (_grabHandler.DetectAndGrab())
         {
-            Debug.Log("1");
             _stateMachine.ChangeState(_stateMachine.HoldState);
         }
     }
