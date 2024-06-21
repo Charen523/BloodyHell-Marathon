@@ -10,7 +10,12 @@ public abstract class ItemPickUp : MonoBehaviour
 
     private void Start()
     {
-        Item = DataManager.Instance.GetData(name);
+        Item = DataManager.Instance.GetData(name.Split('(')[0]);
+    }
+
+    private void OnDisable()
+    {
+        OnPickUp = null;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
