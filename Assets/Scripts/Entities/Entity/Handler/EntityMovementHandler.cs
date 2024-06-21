@@ -1,4 +1,3 @@
-using Photon.Pun;
 using UnityEngine;
 
 public class EntityMovementHandler
@@ -12,12 +11,6 @@ public class EntityMovementHandler
     }
 
     public void Movement(Vector2 dir)
-    {
-        _stateMachine.Entity.photonView.RPC("Movement2", RpcTarget.AllBuffered, dir);
-    }
-
-    [PunRPC]
-    private void Movement2(Vector2 dir)
     {
         Move(dir);
         UpdateSpriteDirection(dir);
