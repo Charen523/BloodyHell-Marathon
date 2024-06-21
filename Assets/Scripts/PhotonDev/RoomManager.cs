@@ -16,10 +16,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
 	[SerializeField] private TextMeshProUGUI startCounterTxt;
 	#endregion
 	#region Private Field
-	private int playerIdNumber = 0;
 	private Coroutine gameStartCoroutine;
 	private Dictionary<int, GameObject> playerObjectList = new Dictionary<int, GameObject>();
-	private string gameSceneName = "CharacterAnimeTestScene";
+	private string gameSceneName = "CharacterAnimeTestScene COPY";
 	#endregion
 
 	#region MonoBehaviour Callbacks
@@ -33,13 +32,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
 	#endregion
 
 	#region Private Methods
-	// °ÔÀÓ ½ÃÀÛ Ä«¿îÆ® ´Ù¿î. ´ÙµÇ¸é ¸¶½ºÅÍ°¡ °ÔÀÓ ½ÃÀÛ
+	// ê²Œì„ ì‹œì‘ ì¹´ìš´íŠ¸ ë‹¤ìš´. ë‹¤ë˜ë©´ ë§ˆìŠ¤í„°ê°€ ê²Œì„ ì‹œì‘
 	private IEnumerator StartGame()
 	{
 		float timer = 10f;
 		while (timer > 0)
 		{
-			startCounterTxt.SetText($"°ÔÀÓ ½ÃÀÛ {timer.ToString("F0")}...");
+			startCounterTxt.SetText($"ê²Œì„ ì‹œì‘ {timer.ToString("F0")}...");
 			yield return new WaitForSeconds(1f);
 			timer--;
 		}
@@ -49,26 +48,20 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 	}
 
-	// »õ ÇÃ·¹ÀÌ¾î¿¡°Ô »õ ¾ÆÀÌµğ ÇÒ´ç
-	private int GetNextPlayerId()
-	{
-		return playerIdNumber++;
-	}
-
-	// ÇÃ·¹ÀÌ¾î¸¦ È­¸é¿¡ Ç¥½ÃÇÏ´Â ÇÁ¸®ÆÕ »ı¼º
+	// í”Œë ˆì´ì–´ë¥¼ í™”ë©´ì— í‘œì‹œí•˜ëŠ” í”„ë¦¬íŒ¹ ìƒì„±
 	[PunRPC]
 	private void MakePlayerListContent(int id)
 	{
 		GameObject newListContent = Instantiate(playerListContentPrefab, playerListParent);
 		TextMeshProUGUI tmp = newListContent.GetComponentInChildren<TextMeshProUGUI>();
-		tmp.SetText($"À¯Àú Id : {id}");
+		tmp.SetText($"ìœ ì € Id : {id}");
 		if (PhotonNetwork.IsMasterClient)
 		{
 			playerObjectList.Add(id, newListContent);
 		}
 	}
 
-	// ÇÃ·¹ÀÌ¾î¸¦ È­¸é¿¡ Ç¥½ÃÇÏ´Â ÇÁ¸®ÆÕ Á¦°Å
+	// í”Œë ˆì´ì–´ë¥¼ í™”ë©´ì— í‘œì‹œí•˜ëŠ” í”„ë¦¬íŒ¹ ì œê±°
 	[PunRPC]
 	private void RemovePlayerListContent(int id)
 	{
@@ -79,16 +72,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 	}
 
-	// ¸¶½ºÅÍ°¡ Ã³¸®ÇÏ´Â ÇÃ·¹ÀÌ¾î Ãß°¡
+	// ë§ˆìŠ¤í„°ê°€ ì²˜ë¦¬í•˜ëŠ” í”Œë ˆì´ì–´ ì¶”ê°€
 	private void AddPlayerToData(Photon.Realtime.Player newPlayer)
 	{
-		PhotonPlayerData.Instance.AddPlayer(newPlayer.UserId, GetNextPlayerId());
+		PhotonPlayerData.Instance.AddPlayer(newPlayer.UserId, newPlayer.ActorNumber);
 
 		int playerInGameId = PhotonPlayerData.Instance.PlayerIdDict[newPlayer.UserId];
 		photonView.RPC("MakePlayerListContent", RpcTarget.AllBuffered, playerInGameId);
 	}
 
-	// ¸¶½ºÅÍ°¡ Ã³¸®ÇÏ´Â ÇÃ·¹ÀÌ¾î Á¦°Å
+	// ë§ˆìŠ¤í„°ê°€ ì²˜ë¦¬í•˜ëŠ” í”Œë ˆì´ì–´ ì œê±°
 	private void RemovePlayerFromData(Photon.Realtime.Player otherPlayer)
 	{
 		StopCoroutine(gameStartCoroutine);
@@ -102,11 +95,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 	}
 
-	// ¸¶½ºÅÍ°¡ ÀÎ¿ø È®ÀÎÇÏ°í ½ÃÀÛ Ä«¿îÆ® ´Ù¿î
+	// ë§ˆìŠ¤í„°ê°€ ì¸ì› í™•ì¸í•˜ê³  ì‹œì‘ ì¹´ìš´íŠ¸ ë‹¤ìš´
 	[PunRPC]
 	private void StartCountDown()
 	{
-		Debug.Log($"À¯Àú {PhotonPlayerData.Instance.MaxNumberOfPlayers}¸í ¸ğÀÓ, 10ÃÊ µÚ ½ÃÀÛ");
+		Debug.Log($"ìœ ì € {PhotonPlayerData.Instance.MaxNumberOfPlayers}ëª… ëª¨ì„, 10ì´ˆ ë’¤ ì‹œì‘");
 		startCounterBG.SetActive(true);
 		gameStartCoroutine = StartCoroutine(StartGame());
 	}
@@ -114,14 +107,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
 	#region MonoBehaviourPunCallbacks Callbacks
 
-	// °Ô½ºÆ® ÇÃ·¹ÀÌ¾î°¡ Ãß°¡µÇ¸é ÇØ´ç ÇÃ·¹ÀÌ¾îÀÇ id¸¦ Ç¥½ÃÇÏ°í ÀÎ¿ø¼ö°¡ ´Ù Â÷¸é °ÔÀÓ 10ÃÊ µÚ¿¡ ½ÃÀÛ
+	// ê²ŒìŠ¤íŠ¸ í”Œë ˆì´ì–´ê°€ ì¶”ê°€ë˜ë©´ í•´ë‹¹ í”Œë ˆì´ì–´ì˜ idë¥¼ í‘œì‹œí•˜ê³  ì¸ì›ìˆ˜ê°€ ë‹¤ ì°¨ë©´ ê²Œì„ 10ì´ˆ ë’¤ì— ì‹œì‘
 	public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
 	{
 		if (PhotonNetwork.IsMasterClient)
 		{
 			base.OnPlayerEnteredRoom(newPlayer);
 			AddPlayerToData(newPlayer);
-			// ÀÎ¿øÀÌ ´Ù Â÷¸é °ÔÀÓ ½ÃÀÛ Ä«¿îÆ® ´Ù¿î
+			// ì¸ì›ì´ ë‹¤ ì°¨ë©´ ê²Œì„ ì‹œì‘ ì¹´ìš´íŠ¸ ë‹¤ìš´
 			if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonPlayerData.Instance.MaxNumberOfPlayers)
 			{
 				photonView.RPC("StartCountDown", RpcTarget.AllBuffered);
@@ -130,7 +123,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
 	}
 
-	// °Ô½ºÆ® ÇÃ·¹ÀÌ¾î°¡ µµÁß¿¡ ³ª°¡¸é °ÔÀÓ ½ÃÀÛÀ» Ãë¼ÒÇÏ°í, ÇØ´ç ÇÃ·¹ÀÌ¾î´Â È­¸é°ú µ¥ÀÌÅÍ»ó ¸ñ·Ï¿¡¼­ Á¦¿Ü
+	// ê²ŒìŠ¤íŠ¸ í”Œë ˆì´ì–´ê°€ ë„ì¤‘ì— ë‚˜ê°€ë©´ ê²Œì„ ì‹œì‘ì„ ì·¨ì†Œí•˜ê³ , í•´ë‹¹ í”Œë ˆì´ì–´ëŠ” í™”ë©´ê³¼ ë°ì´í„°ìƒ ëª©ë¡ì—ì„œ ì œì™¸
 	public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
 	{
 		if (!PhotonNetwork.IsMasterClient) { return; }
