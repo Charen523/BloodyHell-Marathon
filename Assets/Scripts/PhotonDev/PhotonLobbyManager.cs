@@ -22,13 +22,12 @@ public class PhotonLobbyManager : MonoBehaviourPunCallbacks
 		roomDict = new Dictionary<string, GameObject>();
 		if (!PhotonNetwork.IsConnected)
 		{
-			//È¤½Ã¶óµµ ¿¬°á ²÷±â¸é ½ÇÇà
+			//í˜¹ì‹œë¼ë„ ì—°ê²° ëŠê¸°ë©´ ì‹¤í–‰
 			PhotonNetwork.ConnectUsingSettings();
 		}
 	}
 	#endregion
 	#region MonoBehaviourPunCallbacks
-
 	public override void OnConnectedToMaster()
 	{
 		PhotonNetwork.JoinLobby();
@@ -53,7 +52,7 @@ public class PhotonLobbyManager : MonoBehaviourPunCallbacks
 				if (!roomDict.ContainsKey(roomInfo.Name))
 				{
 					GameObject roomEntry = Instantiate(roomListPrefab, roomListParent);
-					roomEntry.GetComponentInChildren<TextMeshProUGUI>().text = $"¹æ ÀÌ¸§ : {roomInfo.Name.Substring(0, 4)}\nÇöÀç ÀÎ¿ø : {roomInfo.PlayerCount}";
+					roomEntry.GetComponentInChildren<TextMeshProUGUI>().text = $"ë°© ì´ë¦„ : {roomInfo.Name.Substring(0, 4)}\ní˜„ì¬ ì¸ì› : {roomInfo.PlayerCount}";
 					Button button = roomEntry.GetComponent<Button>();
 					button.onClick.AddListener(() =>
 					{
@@ -76,7 +75,6 @@ public class PhotonLobbyManager : MonoBehaviourPunCallbacks
 		PhotonNetwork.LoadLevel("RoomScene");
 	}
 	#endregion
-
 	#region Public Methods
 	public void JoinRoom(string roomName)
 	{

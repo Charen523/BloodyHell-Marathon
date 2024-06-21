@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class HealthSystem : BaseCondition
@@ -11,13 +13,14 @@ public class HealthSystem : BaseCondition
   public UnityEvent OnDeathEvent;
 
   private float _regenRate = 0.5f;
+  private Coroutine _regenCoroutine;
 
   protected override void Start()
   {
     base.Start();
     if (_stat.CurrentStat.Condition.HPRegen != 0)
     {
-      InvokeRepeating(nameof(Regen), _regenRate, _regenRate);
+      _regenCoroutine = StartCoroutine(Regen());
     }
   }
 
@@ -42,8 +45,12 @@ public class HealthSystem : BaseCondition
     return true;
   }
 
-  private void Regen()
+  private IEnumerator Regen()
   {
-    Modify(_stat.CurrentStat.Condition.HPRegen);
+    while (true)
+    {
+      Modify(_stat.CurrentStat.Condition.HPRegen);
+      yield return new WaitForSeconds(_regenRate);
+    }
   }
 }
