@@ -19,7 +19,7 @@ MonoBehaviour:
     MaxMP: 100
     MPRegen: 0
     MaxStamina: 100
-    StaminaRegen: 10
+    StaminaRegen: 3
     MoveSpeed: 5
     WalkSpeedModifier: 1
     RunSpeedModifier: 1.2
