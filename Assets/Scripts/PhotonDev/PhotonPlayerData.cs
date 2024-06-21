@@ -3,23 +3,15 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhotonPlayerData : MonoBehaviourPunCallbacks
+public class PhotonPlayerData : Singleton<PhotonPlayerData>
 {
     #region SerilizedField
     [SerializeField] private int maxNumberOfPlayers = 1;
 	#endregion
 	#region PrivateField
-	private static PhotonPlayerData instance;
 	private Dictionary<string, int> playerIdDict;
 	#endregion
 	#region Public Elements
-	public static PhotonPlayerData Instance
-    {
-        get
-        {
-            return instance;
-        }
-    }
     
     public Dictionary<string, int> PlayerIdDict 
     {
@@ -41,17 +33,9 @@ public class PhotonPlayerData : MonoBehaviourPunCallbacks
     }
 	#endregion
 
-	private void Awake()
+	protected override void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
+        base.Awake();
         playerIdDict = new Dictionary<string, int>();
 	}
 
