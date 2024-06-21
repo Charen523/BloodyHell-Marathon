@@ -78,16 +78,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     }
 
-	private IEnumerator ShowPromptTxt(string content)
-	{
-
-
-		yield return new WaitForSeconds(1f);
-
-
-	}
-
-	// 플레이어를 화면에 표시하는 프리팹 생성
+	// 플레이어를 화면에 표시.
 	[PunRPC]
 	private void MakePlayerListContent(int id)
 	{
@@ -100,7 +91,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 	}
 
-	// 플레이어를 화면에 표시하는 프리팹 제거
+	// 플레이어를 화면에서 제거
 	[PunRPC]
 	private void RemovePlayerListContent(int id)
 	{
