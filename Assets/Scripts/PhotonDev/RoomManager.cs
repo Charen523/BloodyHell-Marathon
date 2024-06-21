@@ -19,6 +19,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 	private int playerIdNumber = 0;
 	private Coroutine gameStartCoroutine;
 	private Dictionary<int, GameObject> playerObjectList = new Dictionary<int, GameObject>();
+	private string gameSceneName = "CharacterAnimeTestScene";
 	#endregion
 
 	#region MonoBehaviour Callbacks
@@ -44,7 +45,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 		if (PhotonNetwork.IsMasterClient)
 		{
-			PhotonNetwork.LoadLevel("MainScene");
+			PhotonNetwork.LoadLevel(gameSceneName);
 		}
 	}
 

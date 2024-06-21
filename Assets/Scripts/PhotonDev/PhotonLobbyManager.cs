@@ -76,7 +76,6 @@ public class PhotonLobbyManager : MonoBehaviourPunCallbacks
 		PhotonNetwork.LoadLevel("RoomScene");
 	}
 	#endregion
-
 	#region Public Methods
 	public void JoinRoom(string roomName)
 	{
