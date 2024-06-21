@@ -10,7 +10,10 @@ public class TestGrabbableObject : MonoBehaviour, IGrabbable
     {
         _rigid = GetComponent<Rigidbody2D>();
         _collider = GetComponent<Collider2D>();
-        memoryBodyType = _rigid.bodyType;
+        if(_rigid != null)
+        {
+			memoryBodyType = _rigid.bodyType;
+		}
     }
     public void OnGrab()
     {
