@@ -30,8 +30,6 @@ public class UIStartBtns : MonoBehaviour
 
     private void Start()
     {
-        StartBtns[(int)StartBtnType.Join].onClick.AddListener(JoinAnyRoom);
-        StartBtns[(int)StartBtnType.Lobby].onClick.AddListener(CallLobbyScene);
         StartBtns[(int)StartBtnType.Setting].onClick.AddListener(ShowSetting);
         StartBtns[(int)StartBtnType.Exit].onClick.AddListener(ApplicationExit);
         StartBtns[(int)StartBtnType.Tutorial].onClick.AddListener(Tutorial);
@@ -46,7 +44,7 @@ public class UIStartBtns : MonoBehaviour
     private void CallLobbyScene()
     {
         //EX) LobbyManager.instance.Connect();
-        //SceneManager.LoadScene(1); //·Îºñ¾ÀÀ¸·Î. CustomSceneManagerÀ¸·Î ÀÌµ¿ÇÊ¿ä.
+        //SceneManager.LoadScene(1); //ë¡œë¹„ì”¬ìœ¼ë¡œ. CustomSceneManagerìœ¼ë¡œ ì´ë™í•„ìš”.
     }
 
     private void ShowSetting()
@@ -79,8 +77,8 @@ public class UIStartBtns : MonoBehaviour
 
     private void Tutorial()
     {
-        //1´Ü°è. ÀÌ¹ÌÁö ½½¶óÀÌµå·Î º¸¿©ÁÖ±â.
-        //2´Ü°è. gif ½½¶óÀÌµå·Î º¸¿©ÁÖ±â.
-        //3´Ü°è. Æ©Åä¸®¾ó ¾ÀÀ¸·Î ³Ñ¾î°¡ user°¡ Á÷Á¢ Å×½ºÆ®ÇØº¼ ¼ö ÀÖ°Ô ÇÏ±â.
+        //1ë‹¨ê³„. ì´ë¯¸ì§€ ìŠ¬ë¼ì´ë“œë¡œ ë³´ì—¬ì£¼ê¸°.
+        //2ë‹¨ê³„. gif ìŠ¬ë¼ì´ë“œë¡œ ë³´ì—¬ì£¼ê¸°.
+        //3ë‹¨ê³„. íŠœí† ë¦¬ì–¼ ì”¬ìœ¼ë¡œ ë„˜ì–´ê°€ userê°€ ì§ì ‘ í…ŒìŠ¤íŠ¸í•´ë³¼ ìˆ˜ ìˆê²Œ í•˜ê¸°.
     }
 }

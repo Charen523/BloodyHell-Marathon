@@ -26,7 +26,9 @@ public class EntityMovementHandler
     protected virtual void Move(Vector2 dir)
     {
         float movementSpeed = GetMovementSpeed();
-        _stateMachine.Entity.Rigid.velocity = dir * movementSpeed;
+        Vector2 externalForce = _stateMachine.Entity.ForceReceiver.Movement;
+        Vector2 totalForce = dir * movementSpeed + externalForce;
+        _stateMachine.Entity.Rigid.velocity = totalForce;
     }
     private float GetMovementSpeed()
     {

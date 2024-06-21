@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,12 +7,14 @@ public class CustomSceneManager : Singleton<CustomSceneManager>
 {
     public enum SceneNames
     {
-        Start,
-        Lobby,
-        Room,
-        Game
+        StartScene,
+        PhotonLobbyScene,
+        RoomScene,
+        GameScene
     }
 
+    public GameObject loadingCanvas;
+    
     protected override void Awake()
     {
         canDestroyOnLoad = false;
@@ -31,11 +34,6 @@ public class CustomSceneManager : Singleton<CustomSceneManager>
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void Start()
-    {
-        LoadScene(SceneNames.Start);
-    }
-
     #region Scene Load & Unload
     public void LoadScene(SceneNames scene)
     {
@@ -44,17 +42,16 @@ public class CustomSceneManager : Singleton<CustomSceneManager>
 
     private IEnumerator LoadSceneAsync(SceneNames scene)
     {
-        //TODO: 로딩 애니메이션 시작
-
+        loadingCanvas.SetActive(true);
+        
         // 비동기 씬 로드
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene.ToString());
         while (!asyncLoad.isDone)
         {
-            //TODO: 로딩 진행도 표시
             yield return null;
         }
 
-        //TODO: 로딩 애니메이션 종료
+        loadingCanvas.SetActive(false);
     }
 
     public void UnloadScene(SceneNames scene)
@@ -76,21 +73,25 @@ public class CustomSceneManager : Singleton<CustomSceneManager>
     #region Scene Init
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        switch (scene.name)
+        if (Enum.TryParse(scene.name, out SceneNames sceneName))
         {
-            case "Start":
-                InitializeStartScene();
-                break;
-            case "Lobby":
-                InitializeLobbyScene();
-                break;
-            case "Room":
-                InitializeRoomScene();
-                break;
-            case "Game":
-                InitializeGameScene();
-                break;
+            switch (sceneName)
+            {
+                case SceneNames.StartScene:
+                    InitializeStartScene();
+                    break;
+                case SceneNames.PhotonLobbyScene:
+                    InitializeLobbyScene();
+                    break;
+                case SceneNames.RoomScene:
+                    InitializeRoomScene();
+                    break;
+                case SceneNames.GameScene:
+                    InitializeGameScene();
+                    break;
+            }
         }
+        
     }
     private void InitializeStartScene()
     {
