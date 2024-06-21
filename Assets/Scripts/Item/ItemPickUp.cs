@@ -10,19 +10,28 @@ public abstract class ItemPickUp : MonoBehaviour
 
     private void Start()
     {
-        Item = DataManager.Instance.GetData(name);
+        Item = DataManager.Instance.GetData(name.Split('(')[0]);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnDisable()
     {
-        if (other.CompareTag("Player"))
+        OnPickUp = null;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             OnPickUp?.Invoke();
             if (Item.Type == ItemType.Manual)
             {
-                other.GetComponent<Player>().PickedUpItem.Add(Item);
+                collision.GetComponent<Player>().PickedUpItems.Add(Item);
             }
-            PickUp(other);
+            else // ItemType.Auto
+            { 
+                PickUp(collision);
+            }
+            ObjectPoolManager.Instance.ReleaseObject(Item.Rcode, this.gameObject);
         }
     }
 

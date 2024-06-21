@@ -45106,7 +45106,16 @@ MonoBehaviour:
     _isRunParameterName: IsRun
     _grabParameterName: '@Grab'
     _isHoldParameterName: IsHold
-  PickedUpItem: []
+    _isGroggyParameterName: IsGroggy
+  playerlap:
+    playerCode: 
+    playerRank: 0
+    playerScore: 0
+    raceLap: 0
+    currentPoint: 0
+    checkPoints: 
+    retire: 1
+  PickedUpItems: []
 --- !u!50 &415377353
 Rigidbody2D:
   serializedVersion: 4
@@ -46419,11 +46428,11 @@ PrefabInstance:
       objectReference: {fileID: 6097003032191326894, guid: 7ff5f976101675542acf8fdd19938e9c, type: 3}
     - target: {fileID: 8187793468300167509, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
       propertyPath: Pools.Array.data[0].MaxSize
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8187793468300167509, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
       propertyPath: Pools.Array.data[0].MinSize
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
