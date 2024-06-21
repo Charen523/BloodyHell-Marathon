@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class Player : Entity, IGrabbable
@@ -10,6 +11,7 @@ public class Player : Entity, IGrabbable
 
   private PlayerStateMachine _stateMachine;
   public PlayerLap playerlap = new PlayerLap();
+  public PhotonView PhotonView { get; private set; }
   [HideInInspector] public List<Item> PickedUpItem = new List<Item>();
 
   protected override void Awake()
@@ -17,6 +19,7 @@ public class Player : Entity, IGrabbable
     base.Awake();
     AnimeData.Initialize();
     Input = GetComponent<PlayerInput>();
+    PhotonView = GetComponent<PhotonView>();
 
     _stateMachine = new PlayerStateMachine(this);
   }
