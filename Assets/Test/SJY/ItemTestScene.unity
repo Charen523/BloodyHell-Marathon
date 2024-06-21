@@ -45005,6 +45005,8 @@ GameObject:
   - component: {fileID: 415377347}
   - component: {fileID: 415377345}
   - component: {fileID: 415377355}
+  - component: {fileID: 415377357}
+  - component: {fileID: 415377356}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -45053,7 +45055,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 415377344}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54477d2fa432d2748b7c3cf0a142d032, type: 3}
   m_Name: 
@@ -45141,7 +45143,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!4 &415377354
 Transform:
@@ -45197,6 +45199,30 @@ CapsuleCollider2D:
   m_Offset: {x: -0.0027944245, y: -0.5785506}
   m_Size: {x: 0.50531, y: 0.463381}
   m_Direction: 1
+--- !u!114 &415377356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415377344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b2f16f6dd2f8b4e81404661d4c31b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &415377357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415377344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 657c6a53824ef0143855f0ef51a86223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &546707891
 GameObject:
   m_ObjectHideFlags: 0
@@ -45795,7 +45821,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1937461714}
-  - component: {fileID: 1937461715}
   m_Layer: 6
   m_Name: HandPoint
   m_TagString: Untagged
@@ -45818,41 +45843,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 415377354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &1937461715
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1937461713}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.3, y: 1}
-  m_Direction: 0
 --- !u!1001 &2075444138
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46417,22 +46407,6 @@ PrefabInstance:
     - target: {fileID: 7247850818602455965, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
       propertyPath: m_Name
       value: ObjectPoolManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 8187793468300167509, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
-      propertyPath: Pools.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8187793468300167509, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
-      propertyPath: Pools.Array.data[0].Prefab
-      value: 
-      objectReference: {fileID: 6097003032191326894, guid: 7ff5f976101675542acf8fdd19938e9c, type: 3}
-    - target: {fileID: 8187793468300167509, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
-      propertyPath: Pools.Array.data[0].MaxSize
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8187793468300167509, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
-      propertyPath: Pools.Array.data[0].MinSize
-      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

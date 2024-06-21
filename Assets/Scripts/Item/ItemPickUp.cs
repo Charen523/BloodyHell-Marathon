@@ -8,6 +8,10 @@ public abstract class ItemPickUp : MonoBehaviour
     public Item Item { get; set; }
     public event Action OnPickUp;
 
+    private void Awake()
+    {
+        gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+    }
     private void Start()
     {
         Item = DataManager.Instance.GetData(name.Split('(')[0]);
