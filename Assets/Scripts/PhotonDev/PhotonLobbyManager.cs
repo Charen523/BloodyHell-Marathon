@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -67,7 +68,7 @@ public class PhotonLobbyManager : MonoBehaviourPunCallbacks
 	public override void OnJoinedRoom()
 	{
 		base.OnJoinedRoom();
-		//SceneManager.LoadScene("RoomScene");
+		SceneManager.LoadScene("RoomScene");
 	}
 	public override void OnCreatedRoom()
 	{
