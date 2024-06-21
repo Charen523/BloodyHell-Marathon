@@ -9,6 +9,8 @@ public abstract class BaseCondition : MonoBehaviour, ICondition
   public abstract ConditionType Type { get; }
 
   public event Action<int, int> OnModifyEvent;
+  public event Action OnFilledEvent;
+  public event Action OnLackedEvent;
 
   protected StatHandler _stat;
 
@@ -25,8 +27,17 @@ public abstract class BaseCondition : MonoBehaviour, ICondition
   {
     int prev = _current;
     int calCurrent = _current + amount;
+    if (calCurrent > Max)
+    {
+      Fill();
+      return false;
+    }
 
-    if (calCurrent > Max || calCurrent < 0) return false;
+    if (calCurrent < 0)
+    {
+      Lack();
+      return false;
+    }
 
     _current = calCurrent;
 
@@ -37,5 +48,13 @@ public abstract class BaseCondition : MonoBehaviour, ICondition
     }
 
     return false;
+  }
+  protected virtual void Fill()
+  {
+    OnFilledEvent?.Invoke();
+  }
+  protected virtual void Lack()
+  {
+    OnLackedEvent?.Invoke();
   }
 }

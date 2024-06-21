@@ -16,6 +16,8 @@ public class StatData
     public int HPRegen;
     public int MaxMP;
     public int MPRegen;
+    public int MaxStamina;
+    public int StaminaRegen;
     [Header("Movement")]
     public float MoveSpeed;
     [field: SerializeField][field: Range(0f, 2f)] public float WalkSpeedModifier = 1.0f;
