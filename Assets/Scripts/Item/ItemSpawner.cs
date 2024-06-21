@@ -7,9 +7,9 @@ public class ItemSpawner : MonoBehaviour
 {
     public Tilemap SpawnRange;
 
-    public float SpawnTime = 1f;
+    public float SpawnTime = 3.0f;
     public int MaxItemsOnMap = 10;
-    private int CurItemsOnMap = 0;
+    public int CurItemsOnMap = 0;
 
     private List<Vector3Int> validTilePositions = new List<Vector3Int>();
 
@@ -19,7 +19,8 @@ public class ItemSpawner : MonoBehaviour
         else
         {
             FindValidTilePositions();
-            StartCoroutine(SpawnItem());
+            SpawnAllItems();
+            StartCoroutine(SpawnItemsWithInterval());
         }
     }
 
@@ -53,7 +54,7 @@ public class ItemSpawner : MonoBehaviour
         return randomPos;
     }
 
-    private string SpawnRandomItem()
+    private Pool ReturnRandomPool()
     {
         var pools = ObjectPoolManager.Instance.Pools;
         if (pools.Count == 0)
@@ -61,32 +62,54 @@ public class ItemSpawner : MonoBehaviour
             Debug.LogError("Item pools is empty.");
             return null;
         }
-        string randomRcode = pools[Random.Range(0, pools.Count)].Prefab.name;
-        return randomRcode;
+
+        return pools[Random.Range(0, pools.Count)];
     }
 
-    private IEnumerator SpawnItem()
+    private void SpawnItems()
+    {
+        if (CurItemsOnMap >= MaxItemsOnMap)
+        {
+            Debug.LogWarning("Reached maximum item count.");
+            return;
+        }
+
+        Vector3 spawnPos = ReturnRandPos();
+        Pool spawnPool = ReturnRandomPool();
+
+        if (spawnPool != null)
+        {
+            GameObject spawnedObject = ObjectPoolManager.Instance.GetObject(spawnPool.Prefab.name);
+            if (spawnedObject != null)
+            {
+                spawnedObject.transform.position = spawnPos;
+                CurItemsOnMap++;
+                spawnedObject.GetComponent<ItemPickUp>().OnPickUp += () => CurItemsOnMap--;
+            }
+            else
+            {
+                Debug.LogWarning("Failed to get object from pool: " + spawnPool.Prefab.name);
+            }
+        }
+    }
+    private void SpawnAllItems()
+    {
+        for (int i = 0; i < MaxItemsOnMap; i++)
+        {
+            SpawnItems();
+        }
+    }
+
+    private IEnumerator SpawnItemsWithInterval()
     {
         while (true)
         {
             yield return new WaitForSeconds(SpawnTime);
-
-            if(CurItemsOnMap < MaxItemsOnMap)
+            
+            if (CurItemsOnMap < MaxItemsOnMap)
             {
-                Vector3 spawnPos = ReturnRandPos();
-                string spawnRcode = SpawnRandomItem();
-                
-                GameObject spawnedObject = ObjectPoolManager.Instance.GetObject(spawnRcode);
-                if (spawnedObject != null)
-                {
-                    spawnedObject.transform.position = spawnPos;
-                    CurItemsOnMap++;
-                    spawnedObject.GetComponent<ItemPickUp>().OnPickUp += () => CurItemsOnMap--;
-                }
-                else
-                {
-                    Debug.LogWarning("Failed to get object from pool: " + spawnRcode);
-                }
+                Debug.Log("IEnumerator: " + CurItemsOnMap);
+                SpawnItems();
             }
         }
     }
