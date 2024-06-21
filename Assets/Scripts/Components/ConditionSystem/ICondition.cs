@@ -4,6 +4,7 @@ public enum ConditionType
 {
   Health,
   Mana,
+  Stamina,
 }
 
 public interface ICondition

@@ -1,8 +1,10 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerGrabHandler
 {
     private PlayerStateMachine _stateMachine;
+    private Coroutine _staminaCoroutine;
     public PlayerGrabHandler(PlayerStateMachine stateMachine)
     {
         _stateMachine = stateMachine;
@@ -57,6 +59,7 @@ public class PlayerGrabHandler
                 Physics2D.IgnoreCollision(_stateMachine.Player.TargetObject.GetComponent<Collider2D>(), _stateMachine.Player.Collider, true);
             }
             grabbable.OnGrab();
+            _staminaCoroutine = _stateMachine.Player.StartCoroutine(ConsumeStamina());
         }
     }
 
@@ -71,7 +74,28 @@ public class PlayerGrabHandler
                 Physics2D.IgnoreCollision(_stateMachine.Player.TargetObject.GetComponent<Collider2D>(), _stateMachine.Player.Collider, false);
             }
             grabbable.OnRelease();
+
+            if (_staminaCoroutine != null)
+            {
+                _stateMachine.Player.StopCoroutine(_staminaCoroutine);
+                _staminaCoroutine = null;
+            }
+
             _stateMachine.Player.TargetObject = null;
+        }
+    }
+
+    private IEnumerator ConsumeStamina()
+    {
+        while (true)
+        {
+            bool success = _stateMachine.Player.Stamina.Modify(-20);
+            if (!success)
+            {
+                _stateMachine.ChangeState(_stateMachine.IdleState);
+                yield break;
+            }
+            yield return new WaitForSeconds(1f);
         }
     }
 }
