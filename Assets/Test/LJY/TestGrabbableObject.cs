@@ -14,13 +14,20 @@ public class TestGrabbableObject : MonoBehaviour, IGrabbable
     }
     public void OnGrab()
     {
-        _rigid.isKinematic = true;
-        _rigid.velocity = Vector2.zero;
+        if(_rigid != null)
+        {
+			_rigid.isKinematic = true;
+			_rigid.velocity = Vector2.zero;
+		}
+        
         transform.localPosition = new Vector3(0f, transform.localPosition.y);
     }
 
     public void OnRelease()
     {
-        _rigid.bodyType = memoryBodyType;
+        if(_rigid != null)
+        {
+			_rigid.bodyType = memoryBodyType;
+		}
     }
 }
