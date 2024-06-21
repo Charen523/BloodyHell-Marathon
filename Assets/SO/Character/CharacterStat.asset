@@ -22,7 +22,7 @@ MonoBehaviour:
     StaminaRegen: 3
     MoveSpeed: 5
     WalkSpeedModifier: 1
-    RunSpeedModifier: 1.2
+    RunSpeedModifier: 1.8
     HoldSpeedModifier: 0.2
     Attack: 0
     AttackSpeed: 0
