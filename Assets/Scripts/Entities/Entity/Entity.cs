@@ -10,6 +10,7 @@ public abstract class Entity : MonoBehaviour
   public Collider2D Collider { get; private set; }
   public HealthSystem Health { get; private set; }
   public StaminaSystem Stamina { get; private set; }
+  public ForceReceiver ForceReceiver { get; private set; }
 
   protected virtual void Awake()
   {
@@ -19,5 +20,6 @@ public abstract class Entity : MonoBehaviour
     Stat = GetComponent<StatHandler>();
     Health = GetComponent<HealthSystem>();
     Stamina = GetComponent<StaminaSystem>();
+    ForceReceiver = GetComponent<ForceReceiver>();
   }
 }
