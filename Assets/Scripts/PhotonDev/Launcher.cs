@@ -1,12 +1,13 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using UnityEngine;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
 	#region Private Serializable Fields
 	/// <summary>
-	/// ·ë´ç ÃÖ´ë ÀÎ¿ø ¼ö. ÀÌ¸¦ ³ÑÀ¸¸é Âü¿© ºÒ°¡
+	/// ë£¸ë‹¹ ìµœëŒ€ ì¸ì› ìˆ˜. ì´ë¥¼ ë„˜ìœ¼ë©´ ì°¸ì—¬ ë¶ˆê°€
 	/// </summary>
 	[Tooltip("The maximum number of players per room. When a room is full, it can't be joined by new players, and so new room will be created")]
 	[SerializeField]
@@ -15,22 +16,11 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 	#region Private Fields
 	/// <summary>
-	/// °ÔÀÓ ¹öÀü. ÀÌ°Ô °°Àº À¯Àú³¢¸® ¸¸³ªÁø´Ù°í ÇÑ´Ù.
+	/// ê²Œì„ ë²„ì „. ì´ê²Œ ê°™ì€ ìœ ì €ë¼ë¦¬ ë§Œë‚˜ì§„ë‹¤ê³  í•œë‹¤.
 	/// </summary>
 	private string gameVersion = "1";
 	private bool isConnecting = false;
-	#endregion
-
-	#region Public Fields
-	//·ë¿¡ ¿¬°áÇÏ´Â ¹öÆ°
-	[Tooltip("The Ui Panel to let the user enter name, connect enter Room")]
-	[SerializeField]
-	private GameObject controlPanel;
-
-	//·ÎµùÃ¢
-	[Tooltip("The UI Label to inform the user that the connection is in progress")]
-	[SerializeField]
-	private GameObject progressLabel;
+	private GameObject loadPanel;
 	#endregion
 
 	#region MonoBehaviour CallBacks
@@ -38,18 +28,18 @@ public class Launcher : MonoBehaviourPunCallbacks
 	private void Awake()
 	{
 		// #Critical
-		// ÇöÀç ÀÖ´Â ¸ğµç À¯Àú°¡ °°Àº ¾ÀÀ» ¿­µµ·Ï ÇÏ´Â ±â´É
+		// í˜„ì¬ ìˆëŠ” ëª¨ë“  ìœ ì €ê°€ ê°™ì€ ì”¬ì„ ì—´ë„ë¡ í•˜ëŠ” ê¸°ëŠ¥
 		// this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
 		PhotonNetwork.AutomaticallySyncScene = true;
+
+		loadPanel = Instantiate(CustomSceneManager.Instance.loadingCanvas);
 	}
 
 	private void Start()
 	{
-		progressLabel.SetActive(false);
-		controlPanel.SetActive(true);
 		PhotonNetwork.ConnectUsingSettings();
 		PhotonNetwork.GameVersion = gameVersion;
-	}
+    }
 
 	#endregion
 
@@ -58,44 +48,40 @@ public class Launcher : MonoBehaviourPunCallbacks
 	/// Start the connection process.
 	/// - If already connected, we attempt joining a random room
 	/// - if not yet connected, Connect this application instance to Photon Cloud Network
-	/// ¿¬°á ÇÔ¼ö
-	/// ¿¬°á µÇ¾îÀÖÀ¸¸é ·£´ı ·ë¿¡ ¿¬°á
-	/// ¿¬°á ¾ÈµÇ¾î ÀÖÀ¸¸é ¿¬°áÇÏ°í ´Ù½Ã ·ë¿¡ ¿¬°á
+	/// ì—°ê²° í•¨ìˆ˜
+	/// ì—°ê²° ë˜ì–´ìˆìœ¼ë©´ ëœë¤ ë£¸ì— ì—°ê²°
+	/// ì—°ê²° ì•ˆë˜ì–´ ìˆìœ¼ë©´ ì—°ê²°í•˜ê³  ë‹¤ì‹œ ë£¸ì— ì—°ê²°
 	/// </summary>
 	public void ConnectToRoom()
 	{
-		progressLabel.SetActive(true);
-		controlPanel.SetActive(false);
+        loadPanel.SetActive(true);
 
 		if (PhotonNetwork.IsConnected)
 		{
-			// ·£´ıÇÑ ·ë¿¡ ¿¬°á
+			// ëœë¤í•œ ë£¸ì— ì—°ê²°
 			if (isConnecting)
 			{
 				PhotonNetwork.JoinRandomRoom();
 			}
 			else
 			{
-				progressLabel.SetActive(false);
-				controlPanel.SetActive(true);
-			}
+                loadPanel.SetActive(false);
+            }
 		}
 		else
 		{
-			// ÇöÀç Æ÷Åæ ¿¬°á ¼¼ÆÃ¿¡ ¸ÂÃç¼­ ¿¬°á
+			// í˜„ì¬ í¬í†¤ ì—°ê²° ì„¸íŒ…ì— ë§ì¶°ì„œ ì—°ê²°
 			PhotonNetwork.ConnectUsingSettings();
 			PhotonNetwork.GameVersion = gameVersion;
-			progressLabel.SetActive(false);
-			controlPanel.SetActive(true);
-		}
+            loadPanel.SetActive(false);
+        }
 	}
 
 	public void ConnectToLobby()
 	{
-		progressLabel.SetActive(true);
-		controlPanel.SetActive(false);
+        loadPanel.SetActive(true);
 
-		if (PhotonNetwork.IsConnected)
+        if (PhotonNetwork.IsConnected)
 		{
 			if (isConnecting)
 			{
@@ -103,17 +89,15 @@ public class Launcher : MonoBehaviourPunCallbacks
 			}
 			else
 			{
-				progressLabel.SetActive(false);
-				controlPanel.SetActive(true);
-			}
+                loadPanel.SetActive(false);
+            }
 		}
 		else
 		{
 			PhotonNetwork.ConnectUsingSettings();
 			PhotonNetwork.GameVersion = gameVersion;
-			progressLabel.SetActive(false);
-			controlPanel.SetActive(true);
-		}
+            loadPanel.SetActive(false);
+        }
 	}
 
 	#endregion
@@ -124,13 +108,13 @@ public class Launcher : MonoBehaviourPunCallbacks
 	{
 		Debug.Log("PUN Basics Tutorial/Launcher: OnConnectedToMaster() was called by PUN");
 		isConnecting = true;
-	}
+        loadPanel.SetActive(false);
+    }
 
 	public override void OnDisconnected(DisconnectCause cause)
 	{
-		progressLabel.SetActive(false);
-		controlPanel.SetActive(true);
-		isConnecting = false;
+        loadPanel.SetActive(false);
+        isConnecting = false;
 		Debug.LogWarningFormat("PUN Basics Tutorial/Launcher: OnDisconnected() was called by PUN with reason {0}", cause);
 	}
 
@@ -144,10 +128,11 @@ public class Launcher : MonoBehaviourPunCallbacks
 		PhotonNetwork.CreateRoom(null, roomOptions);
 	}
 
+	//ì§ˆë¬¸1. OnJoinedRoom ì´ìœ .
 	public override void OnJoinedRoom()
 	{
 		Debug.Log("PUN Basics Tutorial/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
-		//·ë¿¡ °Ô½ºÆ®·Î ¿¬°á
+		//ë£¸ì— ê²ŒìŠ¤íŠ¸ë¡œ ì—°ê²°
 	}
 
 	public override void OnCreatedRoom()
