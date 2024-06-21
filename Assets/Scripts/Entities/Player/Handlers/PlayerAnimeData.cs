@@ -12,6 +12,8 @@ public class PlayerAnimeData
     [SerializeField] string _grabParameterName = "@Grab";
     [SerializeField] string _isHoldParameterName = "IsHold";
 
+    [SerializeField] string _isGroggyParameterName = "IsGroggy";
+
     public int GroundParameterHash { get; private set; }
     public int IsIdleParameterHash { get; private set; }
     public int IsWalkParameterHash { get; private set; }
@@ -19,6 +21,8 @@ public class PlayerAnimeData
 
     public int GrabParameterHash { get; private set; }
     public int IsHoldParameterHash { get; private set; }
+
+    public int IsGroggyParameterHash { get; private set; }
 
     public void Initialize()
     {
@@ -29,5 +33,7 @@ public class PlayerAnimeData
 
         GrabParameterHash = Animator.StringToHash(_grabParameterName);
         IsHoldParameterHash = Animator.StringToHash(_isHoldParameterName);
+
+        IsGroggyParameterHash = Animator.StringToHash(_isGroggyParameterName);
     }
 }

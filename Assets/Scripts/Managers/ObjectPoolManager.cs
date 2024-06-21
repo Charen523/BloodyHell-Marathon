@@ -1,11 +1,11 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
 
 [System.Serializable]
 public class Pool
 {
-    public string Rcode;
     public GameObject Prefab;
     public int MinSize;
     public int MaxSize;
@@ -43,7 +43,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
                 maxSize: pool.MaxSize
             );
 
-            poolDic.Add(pool.Rcode, objectPool);
+            poolDic.Add(pool.Prefab.name, objectPool);
         }
     }
 
