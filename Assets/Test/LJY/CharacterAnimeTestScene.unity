@@ -45090,7 +45090,7 @@ GameObject:
   - component: {fileID: 415377351}
   - component: {fileID: 415377350}
   - component: {fileID: 415377349}
-  - component: {fileID: 415377348}
+  - component: {fileID: 415377356}
   - component: {fileID: 415377347}
   - component: {fileID: 415377345}
   - component: {fileID: 415377355}
@@ -45135,18 +45135,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _baseStat: {fileID: 11400000, guid: 98773eba861105c40927d8ae61658fb5, type: 2}
---- !u!114 &415377348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 415377344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54477d2fa432d2748b7c3cf0a142d032, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &415377349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45196,6 +45184,14 @@ MonoBehaviour:
     _grabParameterName: '@Grab'
     _isHoldParameterName: IsHold
     _isGroggyParameterName: IsGroggy
+  playerlap:
+    playerCode: 
+    playerRank: 0
+    playerScore: 0
+    raceLap: 0
+    currentPoint: 0
+    checkPoints: 
+    retire: 1
   PickedUpItem: []
 --- !u!50 &415377353
 Rigidbody2D:
@@ -45278,6 +45274,18 @@ CapsuleCollider2D:
   m_Offset: {x: -0.0027944245, y: -0.5785506}
   m_Size: {x: 0.50531, y: 0.463381}
   m_Direction: 1
+--- !u!114 &415377356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415377344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b2f16f6dd2f8b4e81404661d4c31b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &546707891
 GameObject:
   m_ObjectHideFlags: 0
@@ -46553,11 +46561,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3880280243784564659, guid: 005a35cef4aa33b43b01bdde836f3570, type: 3}
       propertyPath: m_Name
-      value: Mana
+      value: Stamina
       objectReference: {fileID: 0}
     - target: {fileID: 4321820167061823646, guid: 005a35cef4aa33b43b01bdde836f3570, type: 3}
       propertyPath: _type
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4321820167061823646, guid: 005a35cef4aa33b43b01bdde836f3570, type: 3}
       propertyPath: _object
@@ -46569,15 +46577,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4321820167061823646, guid: 005a35cef4aa33b43b01bdde836f3570, type: 3}
       propertyPath: _color.b
-      value: 1
+      value: 0.23137254
       objectReference: {fileID: 0}
     - target: {fileID: 4321820167061823646, guid: 005a35cef4aa33b43b01bdde836f3570, type: 3}
       propertyPath: _color.g
-      value: 0.6227277
+      value: 0.61977166
       objectReference: {fileID: 0}
     - target: {fileID: 4321820167061823646, guid: 005a35cef4aa33b43b01bdde836f3570, type: 3}
       propertyPath: _color.r
-      value: 0.23113209
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -47030,6 +47038,14 @@ MonoBehaviour:
     _grabParameterName: '@Grab'
     _isHoldParameterName: IsHold
     _isGroggyParameterName: IsGroggy
+  playerlap:
+    playerCode: 
+    playerRank: 0
+    playerScore: 0
+    raceLap: 0
+    currentPoint: 0
+    checkPoints: 
+    retire: 1
   PickedUpItem: []
 --- !u!50 &2142847235
 Rigidbody2D:
