@@ -1,6 +1,7 @@
+using Photon.Pun;
 using UnityEngine;
 
-public abstract class Entity : MonoBehaviour
+public abstract class Entity : MonoBehaviourPunCallbacks
 {
   [field: SerializeField] public Transform MainSprite { get; private set; }
   [field: SerializeField] public Transform HandPoint { get; private set; }
