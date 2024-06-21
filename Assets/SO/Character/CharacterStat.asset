@@ -15,10 +15,15 @@ MonoBehaviour:
   Type: 2
   Condition:
     MaxHP: 100
-    HPRegen: 10
+    HPRegen: 0
     MaxMP: 100
-    MPRegen: 10
+    MPRegen: 0
+    MaxStamina: 100
+    StaminaRegen: 10
     MoveSpeed: 5
+    WalkSpeedModifier: 1
+    RunSpeedModifier: 1.2
+    HoldSpeedModifier: 0.2
     Attack: 0
     AttackSpeed: 0
     Defense: 0
