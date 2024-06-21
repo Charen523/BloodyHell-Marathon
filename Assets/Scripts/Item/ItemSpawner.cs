@@ -54,7 +54,7 @@ public class ItemSpawner : MonoBehaviour
         return randomPos;
     }
 
-    private Pool ReturnRandomPool()
+    private Pool ReturnRandPool()
     {
         var pools = ObjectPoolManager.Instance.Pools;
         if (pools.Count == 0)
@@ -75,7 +75,7 @@ public class ItemSpawner : MonoBehaviour
         }
 
         Vector3 spawnPos = ReturnRandPos();
-        Pool spawnPool = ReturnRandomPool();
+        Pool spawnPool = ReturnRandPool();
 
         if (spawnPool != null)
         {
@@ -92,6 +92,7 @@ public class ItemSpawner : MonoBehaviour
             }
         }
     }
+
     private void SpawnAllItems()
     {
         for (int i = 0; i < MaxItemsOnMap; i++)
