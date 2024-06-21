@@ -9,8 +9,8 @@ public class Player : Entity, IGrabbable
   public PlayerInput Input { get; private set; }
 
   private PlayerStateMachine _stateMachine;
-
-  [HideInInspector] public List<Item> PickedUpItems = new List<Item>();
+  public PlayerLap playerlap = new PlayerLap();
+  [HideInInspector] public List<Item> PickedUpItem = new List<Item>();
 
   protected override void Awake()
   {
@@ -38,11 +38,13 @@ public class Player : Entity, IGrabbable
 
   public void OnGrab()
   {
-    return;
+    _stateMachine.Player.Rigid.isKinematic = true;
+    _stateMachine.ChangeState(_stateMachine.GroggyState);
   }
 
   public void OnRelease()
   {
-    return;
+    _stateMachine.Player.Rigid.isKinematic = false;
+    _stateMachine.ChangeState(_stateMachine.IdleState);
   }
 }
