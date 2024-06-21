@@ -10,7 +10,7 @@ public class Player : Entity, IGrabbable
 
   private PlayerStateMachine _stateMachine;
 
-  [HideInInspector] public List<Item> PickedUpItem = new List<Item>();
+  [HideInInspector] public List<Item> PickedUpItems = new List<Item>();
 
   protected override void Awake()
   {
