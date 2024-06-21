@@ -1,8 +1,11 @@
+using Photon.Pun;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(PhotonView))]
+[RequireComponent(typeof(PhotonTransformView))]
 public abstract class ItemPickUp : MonoBehaviour
 {
     public Item Item { get; set; }
@@ -11,6 +14,12 @@ public abstract class ItemPickUp : MonoBehaviour
     private void Awake()
     {
         gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        PhotonTransformView photonTransformView = gameObject.GetComponent<PhotonTransformView>();
+        photonTransformView.m_SynchronizePosition = true;
+        photonTransformView.m_SynchronizeRotation = false;
+        photonTransformView.m_SynchronizeScale = false;
+        photonTransformView.m_UseLocal = false;
     }
     private void Start()
     {
