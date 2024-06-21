@@ -46418,22 +46418,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ObjectPoolManager
       objectReference: {fileID: 0}
-    - target: {fileID: 8187793468300167509, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
-      propertyPath: Pools.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8187793468300167509, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
-      propertyPath: Pools.Array.data[0].Prefab
-      value: 
-      objectReference: {fileID: 6097003032191326894, guid: 7ff5f976101675542acf8fdd19938e9c, type: 3}
-    - target: {fileID: 8187793468300167509, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
-      propertyPath: Pools.Array.data[0].MaxSize
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8187793468300167509, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
-      propertyPath: Pools.Array.data[0].MinSize
-      value: 3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
