@@ -30,7 +30,7 @@ public class RaceManager : Singleton<RaceManager>
 
     protected override void Awake()
     {
-        canDestroyOnLoad = false;
+        dontDestroyOnLoad = false;
         base.Awake();
     }
 
