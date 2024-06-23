@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
@@ -28,6 +29,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {// 게임 시작 카운트 다운. 다되면 마스터가 게임 시작
         int timer = roomUIManager.StartCount;
         
+        if (PhotonNetwork.IsMasterClient)
+        {
+            roomUIManager.GetSkipBtn().interactable = true;
+        }
+
 		while (timer > 0)
 		{
             roomUIManager.UpdateStartCounter(timer);
@@ -38,7 +44,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		LoadGameScene();
     }
 
-	
 	private void AddPlayerToData(Photon.Realtime.Player newPlayer)
     {// 마스터가 처리하는 플레이어 추가
         PhotonPlayerData.Instance.AddPlayer(newPlayer.UserId, newPlayer.ActorNumber);
@@ -69,8 +74,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		gameStartCoroutine = StartCoroutine(StartGame());
 	}
 
-    public void LoadGameScene()
+    private void OnMapChanged(int value)
     {
+        if (!PhotonNetwork.IsMasterClient) { return; }
+
+        photonView.RPC("UpdateMapDropdown", RpcTarget.OthersBuffered, value);
+    }
+
+    #endregion
+
+    #region UI Interacts
+    public void LoadGameScene()
+    {//skipBtn or 자동시작.
         if (PhotonNetwork.IsMasterClient)
         {
             switch (roomUIManager.MapDropdown.value)
@@ -87,19 +102,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
     }
-
-    private void OnMapChanged(int value)
-    {
-        if (!PhotonNetwork.IsMasterClient) { return; }
-
-        photonView.RPC("UpdateMapDropdown", RpcTarget.OthersBuffered, value);
+    public void LeaveRoom()
+    {//exitBtn
+        PhotonNetwork.LeaveRoom();
     }
-
     #endregion
 
     #region MonoBehaviourPunCallbacks Callbacks
 
-    
+
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {// 게스트 플레이어가 추가되면 해당 플레이어의 id를 표시하고 인원수가 다 차면 게임 10초 뒤에 시작
         if (!PhotonNetwork.IsMasterClient) { return; }
@@ -117,7 +128,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
     // 게스트 플레이어가 도중에 나가면 게임 시작을 취소하고, 해당 플레이어는 화면과 데이터상 목록에서 제외
     {
         if (gameStartCoroutine != null)
+        {
             StopCoroutine(gameStartCoroutine);
+            roomUIManager.GetSkipBtn().interactable = false;
+        }
 
         if (!PhotonNetwork.IsMasterClient) { return; }
 
@@ -134,6 +148,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
         roomUIManager.ShowSkipBtn();
         roomUIManager.MapDropdown.interactable = true;
         roomUIManager.MapDropdown.onValueChanged.AddListener(OnMapChanged);
+    }
+
+    public override void OnLeftRoom()
+    {
+        SceneManager.LoadScene(0); //StartScene으로 이동.
     }
     #endregion
 }

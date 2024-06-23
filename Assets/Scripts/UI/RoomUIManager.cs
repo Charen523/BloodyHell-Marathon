@@ -1,6 +1,7 @@
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoomUIManager : MonoBehaviourPun
 {
@@ -21,8 +22,10 @@ public class RoomUIManager : MonoBehaviourPun
     [SerializeField] private int startCount = 10;
     #endregion
 
+    #region public Variables
     public int StartCount => startCount;
     public TMP_Dropdown MapDropdown => mapDropdown;
+    #endregion
 
     #region Monobehaviour Callbacks
 
@@ -31,6 +34,8 @@ public class RoomUIManager : MonoBehaviourPun
         roomName.text = "Room. " + PhotonNetwork.CurrentRoom.Name.Substring(0, 4);
 
         startCounterBG.SetActive(false);
+        GetSkipBtn().interactable = false;
+
         if (!PhotonNetwork.IsMasterClient)
         {
             skipBtn.SetActive(false);
@@ -39,9 +44,9 @@ public class RoomUIManager : MonoBehaviourPun
     }
     #endregion
 
-    public void ShowSkipBtn()
+    public Button GetSkipBtn()
     {
-        skipBtn.SetActive(true);
+        return skipBtn.GetComponent<Button>();
     }
 
     public void UpdateStartCounter(int timer)
