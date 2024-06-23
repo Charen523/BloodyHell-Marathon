@@ -31,13 +31,12 @@ public class RoomUIManager : MonoBehaviourPun
     #endregion
 
     #region Monobehaviour Callbacks
-
     private void Start()
     {
         roomName.text = "Room. " + PhotonNetwork.CurrentRoom.Name.Substring(0, 4);
 
         startCounterBG.SetActive(false);
-        GetSkipBtn().interactable = false;
+        SkipBtnInteractable(false);
         
         for (int i = 0; i < joinSlots.Length; i++)
         {
@@ -52,9 +51,9 @@ public class RoomUIManager : MonoBehaviourPun
     }
     #endregion
 
-    public Button GetSkipBtn()
+    public void SkipBtnInteractable(bool isInteractable)
     {
-        return skipBtn.GetComponent<Button>();
+        skipBtn.GetComponent<Button>().interactable = isInteractable;
     }
 
     public void UpdateStartCounter(int timer)
@@ -106,17 +105,4 @@ public class RoomUIManager : MonoBehaviourPun
         }
     }
 
-    [PunRPC]
-    public void UpdateMapDropdown(int value)
-    {
-        mapDropdown.value = value;
-    }
-
-    private void OnMapDropdownChanged(int value)
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("UpdateMapDropdown", RpcTarget.OthersBuffered, value);
-        }
-    }
 }

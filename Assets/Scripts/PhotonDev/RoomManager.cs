@@ -51,9 +51,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private void InitMaster()
     {
-        roomUIManager.GetSkipBtn().interactable = true;
-        roomUIManager.MapDropdown.interactable = true;
         roomUIManager.MapDropdown.onValueChanged.AddListener(OnMapChanged);
+        roomUIManager.MapDropdown.interactable = true;
         if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(PlayerProperties.indexKey, out object index))
         {
             int playerIndex = (int)index;   
@@ -136,19 +135,26 @@ public class RoomManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
+    private void UpdateMapDropdown(int value)
+    {//마스터가 맵을 바꿀 때.
+        roomUIManager.MapDropdown.value = value;
+    }
+
+    [PunRPC]
     private void StartCountDown()
     {// 마스터가 인원 확인하고 시작 카운트 다운
         Debug.Log($"유저 {PhotonPlayerData.Instance.MaxNumberOfPlayers}명 모임, 10초 뒤 시작");
         roomUIManager.ShowStartCounter();
         gameStartCoroutine = StartCoroutine(StartGame());
     }
+
     private IEnumerator StartGame()
     {// 게임 시작 코루틴.
         int timer = roomUIManager.StartCount;
 
         if (PhotonNetwork.IsMasterClient)
         {
-            roomUIManager.GetSkipBtn().interactable = true;
+            roomUIManager.SkipBtnInteractable(true);
         }
 
         while (timer > 0)
@@ -192,7 +198,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RequestStopGame()
     {//준비 카운트 정지.
-        roomUIManager.GetSkipBtn().interactable = false;
+        roomUIManager.SkipBtnInteractable(false);
         photonView.RPC("StopCountDown", RpcTarget.AllBuffered);
     }
     #endregion
@@ -217,9 +223,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private void TogglePlayerReady()
-    {
+    private void OnMapChanged(int value)
+    {//MapDropdown
+        if (!PhotonNetwork.IsMasterClient) //비상용. 팀원과 테스트해보고 삭제할것.
+            Debug.LogError("Only Master could interact MapDropdown. Edit required.");
+
+        photonView.RPC("UpdateMapDropdown", RpcTarget.OthersBuffered, value);
+    }
+
+    public void OnReadyButtonClicked()
+    { //ReadyBtn
         bool isReady;
+
         if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(PlayerProperties.readyKey))
         {//등록된 적 있으면 그 상태 불러오기.
             isReady = (bool)PhotonNetwork.LocalPlayer.CustomProperties[PlayerProperties.readyKey];
@@ -228,7 +243,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {//없으면 레디한 적이 없다고 간주.
             isReady = false;
         }
-        isReady = !isReady;
+        isReady = !isReady; //Ready토글.
 
         // 준비 상태 업데이트
         ExitGames.Client.Photon.Hashtable newReadyKey
@@ -242,31 +257,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
         else
         {
-
             photonView.RPC("RequestStopGame", RpcTarget.MasterClient);
         }
-    }
-    private void OnMapChanged(int value)
-    {//MapDropdown
-        if (!PhotonNetwork.IsMasterClient) { return; }
-
-        photonView.RPC("UpdateMapDropdown", RpcTarget.OthersBuffered, value);
-    }
-
-    [PunRPC]
-    private void UpdateMapDropdown(int value)
-    {
-        roomUIManager.MapDropdown.value = value;
     }
 
     public void LeaveRoom()
     {//exitBtn
         PhotonNetwork.LeaveRoom();
-    }
-
-    public void OnReadyButtonClicked()
-    { //ReadyBtn
-        TogglePlayerReady();
     }
     #endregion
 
@@ -290,8 +287,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
         
         if (!PhotonNetwork.IsMasterClient) { return; }
 
-        roomUIManager.GetSkipBtn().interactable = false;
+        roomUIManager.SkipBtnInteractable(false);
 	}
+
     public override void OnLeftRoom()
     {//나가는 사람용.
         SceneManager.LoadScene(0); //StartScene으로 이동.
@@ -304,7 +302,5 @@ public class RoomManager : MonoBehaviourPunCallbacks
         base.OnMasterClientSwitched(newMasterClient);
         InitMaster();
     }
-
-    
     #endregion
 }
