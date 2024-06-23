@@ -143,7 +143,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void StartCountDown()
     {// 마스터가 인원 확인하고 시작 카운트 다운
-        Debug.Log($"유저 {PhotonPlayerData.Instance.MaxNumberOfPlayers}명 모임, 10초 뒤 시작");
         roomUIManager.ShowStartCounter();
         gameStartCoroutine = StartCoroutine(StartGame());
     }
@@ -186,11 +185,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             if (player.CustomProperties.TryGetValue(PlayerProperties.readyKey, out object isReady))
             {
-                if (!(bool)isReady) return; //준비 아님.
+                if (!(bool)isReady) 
+                {
+                    Debug.Log("준비 취소");
+                    return; //준비 아님.
+                } 
             }
-            else return; //버튼 누른 적 없음.
+            else
+            {//버튼 누른 적 없음.
+                Debug.Log("준비 안 누른 사람 있음.");
+                return;
+            } 
         }
-
         // 모든 플레이어가 준비된 상태라면 게임 시작
         photonView.RPC("StartCountDown", RpcTarget.AllBuffered);
     }
@@ -249,6 +255,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
         ExitGames.Client.Photon.Hashtable newReadyKey
             = new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.readyKey, isReady } };
         PhotonNetwork.LocalPlayer.SetCustomProperties(newReadyKey);
+
+        StartCoroutine(ReadyStateDelay(isReady));
+    }
+
+    private IEnumerator ReadyStateDelay(bool isReady)
+    {
+        yield return new WaitForSeconds(0.3f);
 
         // 마스터에게 상태 확인 요청
         if (isReady)
