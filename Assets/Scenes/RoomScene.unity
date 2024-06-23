@@ -5387,7 +5387,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1436828362}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 946541323}
+        m_TargetAssemblyTypeName: RoomManager, Assembly-CSharp
+        m_MethodName: LeaveRoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1436828362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6614,7 +6626,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomName: {fileID: 177886590}
   mapDropdown: {fileID: 1227678624}
-  ExitBtn: {fileID: 1436828358}
   skipBtn: {fileID: 1146319474}
   joinSlots:
   - {fileID: 8800085720328877338}

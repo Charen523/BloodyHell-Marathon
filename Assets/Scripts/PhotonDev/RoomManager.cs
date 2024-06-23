@@ -197,9 +197,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
-    
-
-    
     #region UI Interacts
     public void LoadGameScene()
     {//skipBtn or 자동시작.
@@ -219,6 +216,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
     }
+
     private void TogglePlayerReady()
     {
         bool isReady;
@@ -294,6 +292,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         roomUIManager.GetSkipBtn().interactable = false;
 	}
+    public override void OnLeftRoom()
+    {//나가는 사람용.
+        SceneManager.LoadScene(0); //StartScene으로 이동.
+    }
 
     public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
     {
@@ -303,9 +305,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         InitMaster();
     }
 
-    public override void OnLeftRoom()
-    {
-        SceneManager.LoadScene(0); //StartScene으로 이동.
-    }
+    
     #endregion
 }

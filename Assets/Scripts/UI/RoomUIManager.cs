@@ -9,7 +9,6 @@ public class RoomUIManager : MonoBehaviourPun
     [Header("Room Gameobjects")]
     [SerializeField] private TextMeshProUGUI roomName;
     [SerializeField] private TMP_Dropdown mapDropdown;
-    [SerializeField] private GameObject ExitBtn;
     [SerializeField] private GameObject skipBtn;
 
     [Header("PlayerList")]
