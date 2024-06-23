@@ -17,7 +17,7 @@ public class CustomSceneManager : Singleton<CustomSceneManager>
     
     protected override void Awake()
     {
-        canDestroyOnLoad = false;
+        dontDestroyOnLoad = false;
         base.Awake();
 
     }

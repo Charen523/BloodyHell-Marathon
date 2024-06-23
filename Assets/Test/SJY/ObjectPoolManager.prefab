@@ -45,4 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canDestroyOnLoad: 1
-  Pools: []
+  Pools:
+  - Prefab: {fileID: 6097003032191326894, guid: 7ff5f976101675542acf8fdd19938e9c, type: 3}
+    MinSize: 3
+    MaxSize: 10
