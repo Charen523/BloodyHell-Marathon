@@ -49,6 +49,11 @@ MonoBehaviour:
   - ChangeMasterPlayer
   - HideDisconnectedPlayer
   - ShowConnectedPlayer
+  - AddPlayerUI
+  - RemovePlayerUI
+  - RequestCheckAllPlayersReady
+  - StopGameAll
+  - StopGameMaster
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

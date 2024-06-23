@@ -40,29 +40,9 @@ public class RoomUIManager : MonoBehaviourPun
         startCounterBG.SetActive(false);
         GetSkipBtn().interactable = false;
         
-        playerSlots = new bool[5];
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomProperties.playerSlotKey, out var values)) 
-        {
-            playerSlots = (bool[])values;
-        }
-        else
-        {
-            playerSlots[0] = true;
-            for (int i = 1; i < playerSlots.Length; i++)
-            {
-                playerSlots[i] = false;
-            }
-        }
         for (int i = 0; i < joinSlots.Length; i++)
         {
-            if (playerSlots[i])
-            {
-                joinSlots[i].SetActive(true);
-            }
-            else
-            {
-                joinSlots[i].SetActive(false);
-            }
+            joinSlots[i].SetActive(false);
         }
 
         if (!PhotonNetwork.IsMasterClient)
@@ -98,7 +78,9 @@ public class RoomUIManager : MonoBehaviourPun
     {
         joinSlots[index].SetActive(true);
         TextMeshProUGUI tmp = joinSlots[index].transform.Find("PlayerIdTxt").GetComponent<TextMeshProUGUI>();
-        tmp.SetText(UserId);
+
+        string shortUserId = UserId.Substring(0, 7);
+        tmp.SetText(shortUserId);
     }
 
     [PunRPC]

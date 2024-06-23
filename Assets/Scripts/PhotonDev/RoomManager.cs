@@ -22,16 +22,28 @@ public class RoomManager : MonoBehaviourPunCallbacks
 	private Coroutine gameStartCoroutine;
     #endregion
 
-	#region Private Methods
+    #region Monobehaviour Callbacks
+    private IEnumerator Start()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            InitRoom();
+
+            //SetCustomProperties가 비동기이기 때문.
+            yield return new WaitForSeconds(1);
+
+            AddPlayerToData(PhotonNetwork.LocalPlayer, AssignPlayerSlot()); //Master의 PlayerData 추가.
+            InitMaster(); //방장 권한.
+        }
+    }
+    #endregion
+
+    #region Private Methods
     private void InitRoom()
     {
-        AddPlayerToData(PhotonNetwork.LocalPlayer, 0); //Master의 PlayerData 추가.
-        InitMaster(); //방장 권한.
-
-        /*방에 존재하는 플레이어 감지*/
+        /*방에 존재하는 플레이어 감지 프로퍼티 초기화.*/
         bool[] playerSlots = new bool[5];
-        playerSlots[0] = true;
-        ExitGames.Client.Photon.Hashtable newPlayerSlots
+        ExitGames.Client.Photon.Hashtable newPlayerSlots 
             = new ExitGames.Client.Photon.Hashtable { { RoomProperties.playerSlotKey, playerSlots } };
         PhotonNetwork.CurrentRoom.SetCustomProperties(newPlayerSlots);
     }
@@ -41,7 +53,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
         roomUIManager.GetSkipBtn().interactable = true;
         roomUIManager.MapDropdown.interactable = true;
         roomUIManager.MapDropdown.onValueChanged.AddListener(OnMapChanged);
-        //roomUIManager.ChangeMasterPlayer(newMasterClient.CustomProperties);
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(PlayerProperties.indexKey, out object index))
+        {
+            int playerIndex = (int)index;   
+            roomUIManager.ChangeMasterPlayer(playerIndex);
+        }
+        else
+        {
+            Debug.LogError("LocalPlayer doesnt have indexKey CustomProperties.");
+        }
     }
 
     private void AddPlayerToData(Photon.Realtime.Player newPlayer, int index)
@@ -51,6 +71,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
+            Debug.Log("현재 인덱스: " + index);
             photonView.RPC("AddPlayerUI", RpcTarget.AllBuffered, newPlayer.UserId, index);
         }
     }
@@ -70,7 +91,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private int AssignPlayerSlot()
     {
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomProperties.playerSlotKey, out var values))
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomProperties.playerSlotKey, out object values))
         {
             bool[] playerSlots = (bool[])values;
 
@@ -84,6 +105,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                     PhotonNetwork.CurrentRoom.SetCustomProperties(newPlayerSlots);
 
                     SetPlayerIndex(i);
+                    return i;
                 }
             }
 
@@ -266,23 +288,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region MonoBehaviourPunCallbacks Callbacks
-    public override void OnJoinedRoom()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            InitRoom();
-        }
-    }
-
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {// 게스트 플레이어가 추가되면 해당 플레이어의 id를 표시하고 인원수가 다 차면 게임 10초 뒤에 시작
         if (!PhotonNetwork.IsMasterClient) { return; }
 
         base.OnPlayerEnteredRoom(newPlayer);
 
-        //플레이어 번호 부여.
-        int playerIndex = AssignPlayerSlot();
-        AddPlayerToData(newPlayer, playerIndex);
+        AddPlayerToData(newPlayer, AssignPlayerSlot());
 
     }
 
