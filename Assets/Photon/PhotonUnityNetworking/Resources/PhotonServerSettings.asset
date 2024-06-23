@@ -45,6 +45,18 @@ MonoBehaviour:
   - RemovePlayerListContent
   - CheckPlayerCount
   - StartCountDown
+  - UpdateMapDropdown
+  - ChangeMasterPlayer
+  - HideDisconnectedPlayer
+  - ShowConnectedPlayer
+  - AddPlayerUI
+  - RemovePlayerUI
+  - RequestCheckAllPlayersReady
+  - StopGameAll
+  - StopGameMaster
+  - RequestCheckReady
+  - RequestStopGame
+  - StopCountDown
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
