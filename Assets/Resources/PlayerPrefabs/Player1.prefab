@@ -241,12 +241,13 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 1
   OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
   - {fileID: 651761904283606340}
   - {fileID: 3613984512164125393}
+  - {fileID: -5516209586486813848}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -296,8 +297,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters: []
-  m_SynchronizeLayers: []
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: '@Ground'
+  - Type: 4
+    SynchronizeType: 2
+    Name: IsIdle
+  - Type: 4
+    SynchronizeType: 2
+    Name: IsWalk
+  - Type: 4
+    SynchronizeType: 2
+    Name: IsRun
+  - Type: 4
+    SynchronizeType: 2
+    Name: '@Grab'
+  - Type: 4
+    SynchronizeType: 2
+    Name: IsHold
+  - Type: 4
+    SynchronizeType: 2
+    Name: IsGroggy
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &1223576742339472449
 GameObject:
   m_ObjectHideFlags: 0
