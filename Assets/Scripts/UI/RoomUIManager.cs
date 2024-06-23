@@ -13,13 +13,17 @@ public class RoomUIManager : MonoBehaviourPun
     [SerializeField] private GameObject skipBtn;
 
     [Header("PlayerList")]
-    [SerializeField] private GameObject playerListContentPrefab;
+    [SerializeField] private GameObject[] joinSlots;
     [SerializeField] private Transform playerListParent;
 
     [Header("GameStart Counter")]
     [SerializeField] private GameObject startCounterBG;
     [SerializeField] private TextMeshProUGUI startCounterTxt;
     [SerializeField] private int startCount = 10;
+    #endregion
+
+    #region private Variables
+    private bool[] playerSlots;
     #endregion
 
     #region public Variables
@@ -35,6 +39,31 @@ public class RoomUIManager : MonoBehaviourPun
 
         startCounterBG.SetActive(false);
         GetSkipBtn().interactable = false;
+        
+        playerSlots = new bool[5];
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomProperties.playerSlotKey, out var values)) 
+        {
+            playerSlots = (bool[])values;
+        }
+        else
+        {
+            playerSlots[0] = true;
+            for (int i = 1; i < playerSlots.Length; i++)
+            {
+                playerSlots[i] = false;
+            }
+        }
+        for (int i = 0; i < joinSlots.Length; i++)
+        {
+            if (playerSlots[i])
+            {
+                joinSlots[i].SetActive(true);
+            }
+            else
+            {
+                joinSlots[i].SetActive(false);
+            }
+        }
 
         if (!PhotonNetwork.IsMasterClient)
         {
@@ -65,23 +94,33 @@ public class RoomUIManager : MonoBehaviourPun
     }
 
     [PunRPC]
-    public void MakePlayerListContent(int id)
+    public void ShowConnectedPlayer(string UserId, int index)
     {
-        GameObject newListContent = Instantiate(playerListContentPrefab, playerListParent);
-        TextMeshProUGUI tmp = newListContent.GetComponentInChildren<TextMeshProUGUI>();
-        tmp.SetText($"유저 Id : {id}");
+        joinSlots[index].SetActive(true);
+        TextMeshProUGUI tmp = joinSlots[index].transform.Find("PlayerIdTxt").GetComponent<TextMeshProUGUI>();
+        tmp.SetText(UserId);
     }
 
     [PunRPC]
-    public void RemovePlayerListContent(int id)
+    public void HideDisconnectedPlayer(int index)
     {
-        foreach (Transform child in playerListParent)
+        joinSlots[index].SetActive(false);
+    }
+
+    [PunRPC]
+    public void ChangeMasterPlayer(int index)
+    {
+        for (int i = 0; i < joinSlots.Length; i++)
         {
-            TextMeshProUGUI tmp = child.GetComponentInChildren<TextMeshProUGUI>();
-            if (tmp != null && tmp.text.Contains(id.ToString()))
+            TextMeshProUGUI tmp = joinSlots[i].transform.Find("PlayerNumTxt").GetComponent<TextMeshProUGUI>();
+
+            if (i == index)
             {
-                Destroy(child.gameObject);
-                break;
+                tmp.text = "방 장:";
+            }
+            else
+            {
+                tmp.text = "룸메이트:";
             }
         }
     }
