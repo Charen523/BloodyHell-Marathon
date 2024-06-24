@@ -44,7 +44,7 @@ public class RaceManager : Singleton<RaceManager>
     public UnityAction<int, PlayerLap> OnCheckPoint;
     public UnityAction<Dictionary<int, PlayerLap>> OnShowRank;
 
-    private PhotonShowBoard showBoard;
+    public PhotonShowBoard showBoard;
     protected override void Awake()
     {
         isDontDestroyOnLoad = false;
@@ -61,6 +61,7 @@ public class RaceManager : Singleton<RaceManager>
         foreach (string key in keys)
         {
             dicPlayer[key].checkPoints = new bool[track.checkPoint.Length];
+            dicPlayer[key].checkPoints[0] = true;
         }
     }
 
@@ -70,23 +71,22 @@ public class RaceManager : Singleton<RaceManager>
         var keys = dicPlayerId.Keys;
         foreach (string key in keys)
         {
-            string strKey = key.Substring(0, 7);
-            dicPlayer.Add(strKey, new PlayerLap());
-            dicPlayer[strKey].playerCode = strKey;
-            dicPlayer[strKey].color = dicPlayerId[key];
-            racers.Add(dicPlayer[strKey]);
+            dicPlayer.Add(key, new PlayerLap());
+            dicPlayer[key].playerCode = key;
+            dicPlayer[key].color = dicPlayerId[key];
+            racers.Add(dicPlayer[key]);
         }
     }
 
     public void LastCheckPoint(PlayerLap player)
     {
         if (!PhotonNetwork.IsMasterClient) return;
-        for (int i = 1; i < player.checkPoints.Length; i++) 
+        for (int i = 1; i < dicPlayer[player.playerCode].checkPoints.Length; i++) 
         {
-            player.checkPoints[i] = false;
+            dicPlayer[player.playerCode].checkPoints[i] = false;
         }
-        player.raceLap++;
-        player.currentPoint = 0;
+        dicPlayer[player.playerCode].raceLap++;
+        dicPlayer[player.playerCode].currentPoint = 0;
         dicPlayer[player.playerCode].playerScore += track.checkPointScore[track.checkPointScore.Length - 1];
         if (dicPlayer[player.playerCode].playerScore >= track.finalScore)
         {
@@ -97,10 +97,10 @@ public class RaceManager : Singleton<RaceManager>
     public void PassedCheckPoint(int index, PlayerLap player)
     {
         if (!PhotonNetwork.IsMasterClient) return;
-        if (!player.checkPoints[index])
+        if (!dicPlayer[player.playerCode].checkPoints[index])
         {
-            player.checkPoints[index] = true;
-            player.currentPoint = index;
+            dicPlayer[player.playerCode].checkPoints[index] = true;
+            dicPlayer[player.playerCode].currentPoint = index;
             dicPlayer[player.playerCode].playerScore += track.checkPointScore[index];
         }
     }
@@ -112,7 +112,6 @@ public class RaceManager : Singleton<RaceManager>
         {
             isFirst = false;
             showBoard.ShowBoard();
-            //StartCoroutine(CountDown());
         }
 
         racers.Remove(player);
@@ -130,8 +129,8 @@ public class RaceManager : Singleton<RaceManager>
         for (int i = currentTime; i > 0; i--)
         {
             
-            countdownTxt.text = currentTime.ToString();
-            countdownBar.fillAmount = (float)currentTime / waitTime;
+            countdownTxt.text = i.ToString();
+            countdownBar.fillAmount = (float)i / waitTime;
             yield return new WaitForSeconds(1);
         }
         isRacePlaying = false;
@@ -143,8 +142,6 @@ public class RaceManager : Singleton<RaceManager>
             dicRank[rankIndex].retire = true;
             racers.Remove(racers[i]);
         }
-        //전체 게임 정지 및 결과화면
-        Time.timeScale = 0;
         rankPopUp.SetActive(true);
         OnShowRank?.Invoke(dicRank);
     }
