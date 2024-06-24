@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RoomUIManager : MonoBehaviourPun
+public class RoomUIManager : BaseUIManager
 {
     #region SerializeField
     [Header("Room Gameobjects")]

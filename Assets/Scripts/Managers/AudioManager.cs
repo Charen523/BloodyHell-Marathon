@@ -19,7 +19,7 @@ public class AudioManager : Singleton<AudioManager>
 
     protected override void Awake()
     {
-        isDontDestroyOnLoad = false;
+        isDontDestroyOnLoad = true;
         base.Awake();
 
         bgmAudioSource = GetComponent<AudioSource>();

@@ -840,7 +840,7 @@ GameObject:
   - component: {fileID: 521151962}
   - component: {fileID: 521151964}
   m_Layer: 0
-  m_Name: P4
+  m_Name: 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1045,7 +1045,7 @@ GameObject:
   - component: {fileID: 540963541}
   - component: {fileID: 540963543}
   m_Layer: 0
-  m_Name: P2
+  m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3574,7 +3574,7 @@ GameObject:
   - component: {fileID: 1795972383}
   - component: {fileID: 1795972385}
   m_Layer: 0
-  m_Name: P5
+  m_Name: 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3961,6 +3961,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c4b73562c937d34f9dd881c13fb355c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDontDestroyOnLoad: 1
+  loadingPrefab: {fileID: 8670379034188375969, guid: 42870c392f6be2e43bf7b279dd1118d5, type: 3}
+  loadingPanel: {fileID: 0}
   roomToggleGroup: {fileID: 2018125017}
   roomListParent: {fileID: 55208229}
   roomListPrefab: {fileID: 6882505608905955739, guid: 85cb0a2690de9dc4891518fce609f66e, type: 3}
@@ -4206,7 +4209,7 @@ GameObject:
   - component: {fileID: 2006832503}
   - component: {fileID: 2006832505}
   m_Layer: 0
-  m_Name: P3
+  m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
