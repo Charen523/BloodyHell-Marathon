@@ -13,15 +13,14 @@ public class RankSlot : MonoBehaviour
     private TextMeshProUGUI userNameTxt;
     [SerializeField]
     private TextMeshProUGUI userScoreTxt;
-    [SerializeField]
-    private Animator rankAnime;
+    public Animator rankAnime;
     [SerializeField]
     private Image victoryStandImg;
 
     public void Init(SlotData data)
     {
         userRankTxt.text = data.userRank;
-        userNameTxt.text = data.userName;
+        userNameTxt.text = data.userName.Substring(0, 7);
         userScoreTxt.text = data.userScore;
         rankAnime.runtimeAnimatorController = data.rankAnime;
         rankAnime.SetTrigger(data.animeParam);
