@@ -9,7 +9,7 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField] private AudioMixerGroup bgmMixerGroup;
     [SerializeField] private AudioMixerGroup sfxMixerGroup;
 
-    public AudioClip[] bgmClip; //BuildIndexø° µ˚∂Û BGM «“¥Á.
+    public AudioClip[] bgmClip; //BuildIndexÏóê Îî∞Îùº BGM Ìï†Îãπ.
 
     private AudioSource bgmAudioSource;
     private int sceneNum = -1;
@@ -19,7 +19,7 @@ public class AudioManager : Singleton<AudioManager>
 
     protected override void Awake()
     {
-        dontDestroyOnLoad = false;
+        isDontDestroyOnLoad = false;
         base.Awake();
 
         bgmAudioSource = GetComponent<AudioSource>();
@@ -28,7 +28,7 @@ public class AudioManager : Singleton<AudioManager>
             bgmAudioSource = gameObject.AddComponent<AudioSource>();
         }
 
-        // BGM πÕº≠ ±◊∑Ï º≥¡§
+        // BGM ÎØπÏÑú Í∑∏Î£π ÏÑ§Ï†ï
         bgmAudioSource.outputAudioMixerGroup = bgmMixerGroup;
         bgmAudioSource.loop = true;
 
@@ -82,7 +82,7 @@ public class AudioManager : Singleton<AudioManager>
 
     public static void PlayClip(AudioClip clip)
     {
-        //»ø∞˙¿Ω.
+        //Ìö®Í≥ºÏùå.
     }
 
     public void SetMasterVolume(float volume)

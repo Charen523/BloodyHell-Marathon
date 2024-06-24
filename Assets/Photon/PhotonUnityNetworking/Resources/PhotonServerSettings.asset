@@ -45,6 +45,8 @@ MonoBehaviour:
   - RemovePlayerListContent
   - CheckPlayerCount
   - StartCountDown
+  - GoalIn
+  - StartCounting
   - UpdateMapDropdown
   - ChangeMasterPlayer
   - HideDisconnectedPlayer

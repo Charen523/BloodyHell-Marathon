@@ -6,7 +6,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T instance;
     [SerializeField]
-    protected bool dontDestroyOnLoad = true;
+    protected bool isDontDestroyOnLoad = true;
     public static T Instance
     {
         get
@@ -29,7 +29,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         if (instance == null)
         {
             instance = this as T;
-            if (dontDestroyOnLoad)
+            if (isDontDestroyOnLoad)
             {
                 DontDestroyOnLoad(this.gameObject);
             }
