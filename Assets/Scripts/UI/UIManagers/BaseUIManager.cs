@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -45,8 +46,23 @@ public class BaseUIManager : Singleton<BaseUIManager>
         {
             yield return null;
         }
+    }
 
-        loadingPanel.SetActive(false);
+    public void PhotonLoadLevel(string sceneName)
+    {
+        StartCoroutine(PhotonLoadLevelAsync(sceneName));
+    }
+
+    private IEnumerator PhotonLoadLevelAsync(string sceneName)
+    {
+        loadingPanel.SetActive(true);
+
+        // 비동기 씬 로드
+        PhotonNetwork.LoadLevel(sceneName);
+        while (PhotonNetwork.LevelLoadingProgress < 1.0f)
+        {
+            yield return null;
+        }
     }
     #endregion
 }

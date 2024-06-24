@@ -30,10 +30,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
             InitRoom(); 
 
             //SetCustomProperties가 비동기이기 때문.
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.5f);
             AddPlayerToData(PhotonNetwork.LocalPlayer, AssignPlayerSlot()); //Master의 PlayerData 추가.
 
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.5f);
             InitMaster(); //방장 권한.
         }
     }
@@ -217,13 +217,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
             switch (roomUIManager.MapDropdown.value)
             {
                 case 0:
-                    PhotonNetwork.LoadLevel("CharacterAnimeTestScene COPY");
+                    roomUIManager.PhotonLoadLevel("CharacterAnimeTestScene COPY");
                     break;
                 case 1:
-                    PhotonNetwork.LoadLevel("GameScene");
+                    roomUIManager.PhotonLoadLevel("GameScene");
                     break;
                 case 2:
-                    PhotonNetwork.LoadLevel("ItemTest");
+                    roomUIManager.PhotonLoadLevel("ItemTest");
                     break;
                 default:
                     Debug.LogError("Selected Map Option is out of index.");
@@ -308,7 +308,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {//나가는 사람용.
-        SceneManager.LoadScene(0); //StartScene으로 이동.
+        roomUIManager.LoadScene("StartScene");
     }
 
     public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)

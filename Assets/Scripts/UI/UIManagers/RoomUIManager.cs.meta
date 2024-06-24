@@ -3,7 +3,15 @@ guid: 22ec9ff2e7a95194188a8922272b48db
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - loadingPrefab: {fileID: 8670379034188375969, guid: 42870c392f6be2e43bf7b279dd1118d5, type: 3}
+  - loadingPanel: {instanceID: 0}
+  - roomName: {instanceID: 0}
+  - mapDropdown: {instanceID: 0}
+  - skipBtn: {instanceID: 0}
+  - playerListParent: {instanceID: 0}
+  - startCounterBG: {instanceID: 0}
+  - startCounterTxt: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
