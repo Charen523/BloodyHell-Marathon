@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class ItemSpawner : MonoBehaviour
+[RequireComponent(typeof(PhotonView))]
+public class ItemSpawner : MonoBehaviourPunCallbacks
 {
     public Tilemap SpawnRange;
 
@@ -16,15 +17,17 @@ public class ItemSpawner : MonoBehaviour
 
     private void Start()
     {
-        if (SpawnRange == null) Debug.LogWarning("Need an area (Tilemap) to spawn items.");
-        else
+        if (SpawnRange == null)
         {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                FindValidTilePositions();
-                SpawnAllItems();
-                StartCoroutine(SpawnItemsWithInterval());
-            }
+            Debug.LogWarning("Need an area (Tilemap) to spawn items.");
+            return;
+        }
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            FindValidTilePositions();
+            SpawnAllItems();
+            StartCoroutine(SpawnItemsWithInterval());
         }
     }
 
@@ -47,15 +50,11 @@ public class ItemSpawner : MonoBehaviour
 
     private Vector3 ReturnRandPos()
     {
-        Vector3 randomPos = Vector3.zero;
+        if (validTilePositions.Count == 0)
+            return Vector3.zero;
 
-        if (validTilePositions.Count > 0)
-        {
-            Vector3Int randomTilePos = validTilePositions[Random.Range(0, validTilePositions.Count)];
-            randomPos = SpawnRange.CellToWorld(randomTilePos);
-        }
-
-        return randomPos;
+        Vector3Int randomTilePos = validTilePositions[Random.Range(0, validTilePositions.Count)];
+        return SpawnRange.CellToWorld(randomTilePos);
     }
 
     private Pool ReturnRandPool()
@@ -79,23 +78,30 @@ public class ItemSpawner : MonoBehaviour
         }
 
         Vector3 spawnPos = ReturnRandPos();
-        Pool spawnPool = ReturnRandPool();
+        Pool pool = ReturnRandPool();
 
-        if (spawnPool != null)
+        if (pool != null)
         {
-            GameObject spawnedObject = ObjectPoolManager.Instance.GetObject(spawnPool.Prefab.name);
-            if (spawnedObject != null)
-            {
-                spawnedObject.transform.position = spawnPos;
-                CurItemsOnMap++;
-                spawnedObject.GetComponent<ItemPickUp>().OnPickUp += () => CurItemsOnMap--;
-            }
-            else
-            {
-                Debug.LogWarning("Failed to get object from pool: " + spawnPool.Prefab.name);
-            }
+            string poolName = pool.Prefab.name;
+            photonView.RPC("SpawnRPC", RpcTarget.AllBuffered, poolName, spawnPos);
         }
     }
+
+    [PunRPC]
+    public void SpawnRPC(string poolName, Vector3 spawnPos)
+    {
+        GameObject spawnedObject = ObjectPoolManager.Instance.GetObject(poolName);
+        if (spawnedObject != null)
+        {
+            spawnedObject.transform.position = spawnPos;
+            CurItemsOnMap++;
+            spawnedObject.GetComponent<ItemPickUp>().OnPickUp += () => CurItemsOnMap--;
+        }
+        else
+        {
+            Debug.LogWarning("Failed to get object from pool: " + poolName);
+        }
+    } 
 
     private void SpawnAllItems()
     {
@@ -113,7 +119,6 @@ public class ItemSpawner : MonoBehaviour
             
             if (CurItemsOnMap < MaxItemsOnMap)
             {
-                Debug.Log("IEnumerator: " + CurItemsOnMap);
                 SpawnItems();
             }
         }

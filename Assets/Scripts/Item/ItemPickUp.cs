@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(PhotonTransformView))]
-public abstract class ItemPickUp : MonoBehaviour
+public abstract class ItemPickUp : MonoBehaviourPunCallbacks
 {
     public Item Item { get; set; }
     public event Action OnPickUp;
@@ -26,8 +26,9 @@ public abstract class ItemPickUp : MonoBehaviour
         Item = DataManager.Instance.GetData(name.Split('(')[0]);
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
+        base.OnDisable();
         OnPickUp = null;
     }
 
@@ -44,8 +45,16 @@ public abstract class ItemPickUp : MonoBehaviour
             { 
                 PickUp(collision);
             }
-            ObjectPoolManager.Instance.ReleaseObject(Item.Rcode, this.gameObject);
+            photonView.RPC("OnPickedUp", RpcTarget.AllBuffered);
+            //ObjectPoolManager.Instance.obj = this.gameObject;
+            //ObjectPoolManager.Instance.photonView.RPC("ReleaseObject", RpcTarget.All, Item.Rcode);
         }
+    }
+
+    [PunRPC]
+    public void OnPickedUp()
+    {
+        ObjectPoolManager.Instance.ReleaseObject(Item.Rcode, gameObject);
     }
 
     public abstract void PickUp(Collider2D other);

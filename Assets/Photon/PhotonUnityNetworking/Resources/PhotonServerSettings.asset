@@ -59,6 +59,9 @@ MonoBehaviour:
   - RequestCheckReady
   - RequestStopGame
   - StopCountDown
+  - ReleaseObject
+  - SpawnRPC
+  - OnPickedUp
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
