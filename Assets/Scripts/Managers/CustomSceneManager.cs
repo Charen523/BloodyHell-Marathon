@@ -13,7 +13,7 @@ public class CustomSceneManager : Singleton<CustomSceneManager>
     {
         isDontDestroyOnLoad = true;
         base.Awake();
-        loadingPanel = Instantiate(loadingPrefab);
+        loadingPanel = Instantiate(loadingPrefab, transform);
         loadingPanel.SetActive(false);
     }
     #endregion
@@ -46,8 +46,6 @@ public class CustomSceneManager : Singleton<CustomSceneManager>
         {
             yield return null;
         }
-        Destroy(loadingPanel);
-        loadingPanel = Instantiate(loadingPrefab);
         HideLoadPanel();
     }
 
@@ -66,8 +64,6 @@ public class CustomSceneManager : Singleton<CustomSceneManager>
         {
             yield return null;
         }
-        Destroy(loadingPanel);
-        loadingPanel = Instantiate(loadingPrefab);
         HideLoadPanel();
     }
     #endregion

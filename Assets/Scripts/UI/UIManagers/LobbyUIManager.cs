@@ -28,16 +28,26 @@ public class LobbyUIManager : Singleton<LobbyUIManager>
     {//LobbyManager에서  RoomList 추가.
         GameObject roomPrefab = Instantiate(roomListPrefab, roomListParent);
 
-        TMP_Text roomName = roomPrefab.transform.Find("RoomIdTxt").GetComponent<TMP_Text>();
+        /*RoomPrefab 내용 업데이트.*/
+        TMP_Text roomName = roomPrefab.transform.Find("RoomName").Find("RoomIdTxt").GetComponent<TMP_Text>();
         roomName.text = name.Substring(0, 4);
 
-        TMP_Text currentPlayer = roomPrefab.transform.Find("CurrentPlayerNum").GetComponent<TMP_Text>();
+        TMP_Text currentPlayer = roomPrefab.transform.Find("MaxPlayers").Find("CurrentPlayerNum").GetComponent<TMP_Text>();
         currentPlayer.text = playerCount.ToString();
 
-        TMP_Text maxPlayer = roomPrefab.transform.Find("MaxPlayerNum").GetComponent<TMP_Text>();
+        TMP_Text maxPlayer = roomPrefab.transform.Find("MaxPlayers").Find("MaxPlayerNum").GetComponent<TMP_Text>();
         maxPlayer.text = $"참여인원:    / {maxPlayers}";
 
-        roomToggleGroup.RegisterToggle(roomPrefab.GetComponent<Toggle>());
+        if (roomPrefab.TryGetComponent<Toggle>(out Toggle toggle))
+        {
+            toggle.group = roomToggleGroup;
+            roomToggleGroup.RegisterToggle(roomPrefab.GetComponent<Toggle>());   
+        }
+        else
+        {
+            Debug.LogError("Toggle component not found in the room prefab.");
+        }
+
         roomList.Add(name, roomPrefab);
     }
 
@@ -53,8 +63,9 @@ public class LobbyUIManager : Singleton<LobbyUIManager>
     public int GetSelectedToggle()
     {
         var selectedToggle = roomToggleGroup.GetFirstActiveToggle();
+        Debug.Log(selectedToggle.name.ToString());
 
-        if (int.TryParse(selectedToggle.name, out int index)) { return index; }
+        if (int.TryParse(selectedToggle.name, out int index)) { return (index - 2); }
 
         Transform parent = selectedToggle.transform.parent;
         for (int i = 0; i < parent.childCount; i++)
@@ -66,6 +77,7 @@ public class LobbyUIManager : Singleton<LobbyUIManager>
         Debug.LogError($"SelectedToggle not in ToggleIndex: {selectedToggle.name}");
         return -1;
     }
+
     public void LoadStartScene()
     {
         CustomSceneManager.Instance.LoadScene("StartScene");

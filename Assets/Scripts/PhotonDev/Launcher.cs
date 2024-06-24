@@ -11,7 +11,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 	/// </summary>
 	[Tooltip("The maximum number of players per room. When a room is full, it can't be joined by new players, and so new room will be created")]
 	[SerializeField]
-	private int maxPlayersPerRoom = 4;
+	private int maxPlayersPerRoom = 5; //랜덤 방 생성시 플레이어수
 	#endregion
 
 	#region Private Fields

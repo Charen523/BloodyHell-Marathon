@@ -39,10 +39,9 @@ public class PhotonLobbyManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            Debug.LogError($"Wrong SelectedToggle. Cant Participate Game.");
+            Debug.LogError($"SelectedToggle index {toggleIndex} is out of range of enableRooms.");
         }
     }
-
 
     #region MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
@@ -62,7 +61,11 @@ public class PhotonLobbyManager : MonoBehaviourPunCallbacks
 		{
 			if (roomInfo.RemovedFromList || !roomInfo.IsVisible)
 			{
-                enableRooms.Remove(roomInfo.Name);
+				if (enableRooms.Contains(roomInfo.Name))
+				{
+                    lobbyUIManager.DeleteRoomList(roomInfo.Name);
+                    enableRooms.Remove(roomInfo.Name);
+                }
 			}
 			else if (!enableRooms.Contains(roomInfo.Name))
 			{
