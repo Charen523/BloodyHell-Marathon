@@ -3,7 +3,12 @@ guid: 4c4b73562c937d34f9dd881c13fb355c
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - loadingPrefab: {fileID: 8670379034188375969, guid: 42870c392f6be2e43bf7b279dd1118d5, type: 3}
+  - loadingPanel: {instanceID: 0}
+  - roomToggleGroup: {instanceID: 0}
+  - roomListParent: {instanceID: 0}
+  - roomListPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
