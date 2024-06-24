@@ -62,6 +62,11 @@ MonoBehaviour:
   - ReleaseObject
   - SpawnRPC
   - OnPickedUp
+  - RPC_SetActiveState
+  - RequestSpawnNewItem
+  - SpawnItems
+  - OnEnable
+  - SpawnNewItem
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

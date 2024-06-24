@@ -1,6 +1,5 @@
 using Photon.Pun;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,7 +8,7 @@ using UnityEngine.Events;
 public abstract class ItemPickUp : MonoBehaviourPunCallbacks
 {
     public Item Item { get; set; }
-    public event Action OnPickUp;
+    public ItemSpawner Spawner { get; set; }
 
     private void Awake()
     {
@@ -21,40 +20,40 @@ public abstract class ItemPickUp : MonoBehaviourPunCallbacks
         photonTransformView.m_SynchronizeScale = false;
         photonTransformView.m_UseLocal = false;
     }
+
     private void Start()
     {
         Item = DataManager.Instance.GetData(name.Split('(')[0]);
-    }
-
-    public override void OnDisable()
-    {
-        base.OnDisable();
-        OnPickUp = null;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            OnPickUp?.Invoke();
             if (Item.Type == ItemType.Manual)
             {
                 collision.GetComponent<Player>().PickedUpItems.Add(Item);
             }
             else // ItemType.Auto
-            { 
+            {
                 PickUp(collision);
             }
-            photonView.RPC("OnPickedUp", RpcTarget.AllBuffered);
-            //ObjectPoolManager.Instance.obj = this.gameObject;
-            //ObjectPoolManager.Instance.photonView.RPC("ReleaseObject", RpcTarget.All, Item.Rcode);
+            photonView.RPC("OnPickedUp", RpcTarget.All);
         }
     }
 
     [PunRPC]
     public void OnPickedUp()
     {
-        ObjectPoolManager.Instance.ReleaseObject(Item.Rcode, gameObject);
+        if (photonView.IsMine || PhotonNetwork.IsMasterClient)
+        {
+            ObjectPoolManager.Instance.ReleaseObject(Item.Rcode, gameObject);
+
+            if (PhotonNetwork.IsMasterClient && Spawner != null)
+            {
+                Spawner.photonView.RPC("SpawnNewItem", RpcTarget.MasterClient);
+            }
+        }
     }
 
     public abstract void PickUp(Collider2D other);
