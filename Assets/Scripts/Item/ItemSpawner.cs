@@ -4,34 +4,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class ItemSpawner : MonoBehaviour
+[RequireComponent(typeof(PhotonView))]
+public class ItemSpawner : MonoBehaviourPunCallbacks
 {
     public Tilemap SpawnRange;
-
     public float SpawnTime = 3.0f;
     public int MaxItemsOnMap = 10;
-    public int CurItemsOnMap = 0;
-
     private List<Vector3Int> validTilePositions = new List<Vector3Int>();
 
     private void Start()
     {
-        if (SpawnRange == null) Debug.LogWarning("Need an area (Tilemap) to spawn items.");
-        else
+        if (SpawnRange == null)
         {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                FindValidTilePositions();
-                SpawnAllItems();
-                StartCoroutine(SpawnItemsWithInterval());
-            }
+            Debug.LogWarning("Need an area (Tilemap) to spawn items.");
+            return;
+        }
+
+        FindValidTilePositions();
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            SpawnAllItems();
         }
     }
 
     private void FindValidTilePositions()
     {
         BoundsInt bounds = SpawnRange.cellBounds;
-
         for (int x = bounds.xMin; x < bounds.xMax; x++)
         {
             for (int y = bounds.yMin; y < bounds.yMax; y++)
@@ -47,15 +46,11 @@ public class ItemSpawner : MonoBehaviour
 
     private Vector3 ReturnRandPos()
     {
-        Vector3 randomPos = Vector3.zero;
+        if (validTilePositions.Count == 0)
+            return Vector3.zero;
 
-        if (validTilePositions.Count > 0)
-        {
-            Vector3Int randomTilePos = validTilePositions[Random.Range(0, validTilePositions.Count)];
-            randomPos = SpawnRange.CellToWorld(randomTilePos);
-        }
-
-        return randomPos;
+        Vector3Int randomTilePos = validTilePositions[Random.Range(0, validTilePositions.Count)];
+        return SpawnRange.CellToWorld(randomTilePos);
     }
 
     private Pool ReturnRandPool()
@@ -70,29 +65,27 @@ public class ItemSpawner : MonoBehaviour
         return pools[Random.Range(0, pools.Count)];
     }
 
-    private void SpawnItems()
+    [PunRPC]
+    private void SpawnNewItem()
     {
-        if (CurItemsOnMap >= MaxItemsOnMap)
-        {
-            Debug.LogWarning("Reached maximum item count.");
+        if (!PhotonNetwork.IsMasterClient)
             return;
-        }
-
         Vector3 spawnPos = ReturnRandPos();
-        Pool spawnPool = ReturnRandPool();
+        Pool pool = ReturnRandPool();
 
-        if (spawnPool != null)
+        if (pool != null)
         {
-            GameObject spawnedObject = ObjectPoolManager.Instance.GetObject(spawnPool.Prefab.name);
+            string poolName = pool.Prefab.name;
+            GameObject spawnedObject = ObjectPoolManager.Instance.GetObject(poolName);
             if (spawnedObject != null)
             {
                 spawnedObject.transform.position = spawnPos;
-                CurItemsOnMap++;
-                spawnedObject.GetComponent<ItemPickUp>().OnPickUp += () => CurItemsOnMap--;
+                var itemPickUp = spawnedObject.GetComponent<ItemPickUp>();
+                itemPickUp.Spawner = this;
             }
             else
             {
-                Debug.LogWarning("Failed to get object from pool: " + spawnPool.Prefab.name);
+                Debug.LogWarning("Failed to get object from pool: " + poolName);
             }
         }
     }
@@ -101,21 +94,7 @@ public class ItemSpawner : MonoBehaviour
     {
         for (int i = 0; i < MaxItemsOnMap; i++)
         {
-            SpawnItems();
-        }
-    }
-
-    private IEnumerator SpawnItemsWithInterval()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(SpawnTime);
-            
-            if (CurItemsOnMap < MaxItemsOnMap)
-            {
-                Debug.Log("IEnumerator: " + CurItemsOnMap);
-                SpawnItems();
-            }
+            SpawnNewItem();
         }
     }
 }
