@@ -47,6 +47,7 @@ public abstract class PlayerState : IState
     private void ReadMovementInput()
     {
         if (_stateMachine.Player.Input == null) return;
+        if (!_stateMachine.Player.PlayerPhotonView.IsMine) return;
         _stateMachine.MovementDir = _stateMachine.Player.Input.PlayerActions.Move.ReadValue<Vector2>();
     }
 

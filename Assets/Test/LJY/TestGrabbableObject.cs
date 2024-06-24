@@ -10,17 +10,27 @@ public class TestGrabbableObject : MonoBehaviour, IGrabbable
     {
         _rigid = GetComponent<Rigidbody2D>();
         _collider = GetComponent<Collider2D>();
-        memoryBodyType = _rigid.bodyType;
+        if(_rigid != null)
+        {
+			memoryBodyType = _rigid.bodyType;
+		}
     }
     public void OnGrab()
     {
-        _rigid.isKinematic = true;
-        _rigid.velocity = Vector2.zero;
+        if(_rigid != null)
+        {
+			_rigid.isKinematic = true;
+			_rigid.velocity = Vector2.zero;
+		}
+        
         transform.localPosition = new Vector3(0f, transform.localPosition.y);
     }
 
     public void OnRelease()
     {
-        _rigid.bodyType = memoryBodyType;
+        if(_rigid != null)
+        {
+			_rigid.bodyType = memoryBodyType;
+		}
     }
 }
