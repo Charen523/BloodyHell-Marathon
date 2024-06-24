@@ -2,6 +2,10 @@ public abstract class StateMachine
 {
     protected IState _currentState;
 
+    public IState GetState()
+    {
+        return _currentState;
+    }
     public void ChangeState(IState state)
     {
         _currentState?.Exit();
