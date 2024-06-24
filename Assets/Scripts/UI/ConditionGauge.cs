@@ -1,8 +1,9 @@
 using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ConditionGauge : MonoBehaviour
+public class ConditionGauge : MonoBehaviourPunCallbacks
 {
   [SerializeField] private GameObject _object;
   [SerializeField] private ConditionType _type;
@@ -33,6 +34,17 @@ public class ConditionGauge : MonoBehaviour
   }
 
   private void UpdateUI(int current, int max)
+  {
+
+    // if (_lerpCoroutine != null)
+    //   StopCoroutine(_lerpCoroutine);
+
+    // _lerpCoroutine = StartCoroutine(LerpFillAmount((float)current / max));
+    photonView.RPC(nameof(UpdateUIRPC), RpcTarget.All, current, max);
+  }
+
+  [PunRPC]
+  public void UpdateUIRPC(int current, int max)
   {
     if (_lerpCoroutine != null)
       StopCoroutine(_lerpCoroutine);

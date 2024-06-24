@@ -59,14 +59,7 @@ MonoBehaviour:
   - RequestCheckReady
   - RequestStopGame
   - StopCountDown
-  - ReleaseObject
-  - SpawnRPC
-  - OnPickedUp
-  - RPC_SetActiveState
-  - RequestSpawnNewItem
-  - SpawnItems
-  - OnEnable
-  - SpawnNewItem
+  - CallFlipSprite
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
