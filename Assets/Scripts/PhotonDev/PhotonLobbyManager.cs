@@ -1,92 +1,90 @@
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 
 public class PhotonLobbyManager : MonoBehaviourPunCallbacks
 {
-	#region SerializeField
-	[Header("RoomListObjects")]
-	[SerializeField] private GameObject roomListPrefab;
-	[SerializeField] private Transform roomListParent;
-	#endregion
-	#region Private Fields
-	private Dictionary<string, GameObject> roomDict;
-	#endregion
-	#region MonoBehaviour
-	private void Start()
+	[SerializeField] private LobbyUIManager lobbyUIManager;
+
+    private List<string> enableRooms;
+
+    #region MonoBehaviour Callbacks
+    private void Start()
 	{
-		roomDict = new Dictionary<string, GameObject>();
+		enableRooms = new List<string>();
+
 		if (!PhotonNetwork.IsConnected)
 		{
 			//혹시라도 연결 끊기면 실행
 			PhotonNetwork.ConnectUsingSettings();
 		}
 	}
-	#endregion
-	#region MonoBehaviourPunCallbacks
-	public override void OnConnectedToMaster()
+    #endregion
+
+    public void ParticipateRoom()
+    {
+        int toggleIndex = LobbyUIManager.Instance.GetSelectedToggle();
+        if (toggleIndex < 4)
+        {
+            RoomOptions roomOptions = new RoomOptions();
+            roomOptions.PublishUserId = true;
+            roomOptions.MaxPlayers = toggleIndex + 2;
+            PhotonNetwork.CreateRoom(null, roomOptions);
+        }
+        else if (toggleIndex != -1)
+        {
+			PhotonNetwork.JoinRoom(enableRooms[toggleIndex - 4]);
+        }
+        else
+        {
+            Debug.LogError($"SelectedToggle index {toggleIndex} is out of range of enableRooms.");
+        }
+    }
+
+    #region MonoBehaviourPunCallbacks
+    public override void OnConnectedToMaster()
 	{
 		PhotonNetwork.JoinLobby();
 	}
+
 	public override void OnJoinedLobby()
 	{
-		base.OnJoinedLobby();
 		Debug.Log("Joined Lobby");
+		//가능하면 내 id 보여주기.
 	}
+
 	public override void OnRoomListUpdate(List<RoomInfo> roomList)
 	{
-		base.OnRoomListUpdate(roomList);
 		foreach (RoomInfo roomInfo in roomList)
 		{
-			if (roomDict.ContainsKey(roomInfo.Name))
+			if (roomInfo.RemovedFromList || !roomInfo.IsVisible)
 			{
-				Destroy(roomDict[roomInfo.Name]);
-				roomDict.Remove(roomInfo.Name);
-			}
-			else
-			{
-				if (!roomDict.ContainsKey(roomInfo.Name))
+				if (enableRooms.Contains(roomInfo.Name))
 				{
-					GameObject roomEntry = Instantiate(roomListPrefab, roomListParent);
-					roomEntry.GetComponentInChildren<TextMeshProUGUI>().text = $"방 이름 : {roomInfo.Name.Substring(0, 4)}\n현재 인원 : {roomInfo.PlayerCount}";
-					Button button = roomEntry.GetComponent<Button>();
-					button.onClick.AddListener(() =>
-					{
-						JoinRoom(roomInfo.Name);
-					}
-					);
-					roomDict.Add(roomInfo.Name, roomEntry);
-				}
+                    lobbyUIManager.DeleteRoomList(roomInfo.Name);
+                    enableRooms.Remove(roomInfo.Name);
+                }
 			}
-		}
+			else if (!enableRooms.Contains(roomInfo.Name))
+			{
+				lobbyUIManager.MakeNewRoomList(roomInfo.Name, roomInfo.PlayerCount, roomInfo.MaxPlayers);
+                enableRooms.Add(roomInfo.Name);
+            }
+        }
 	}
+
+    public override void OnCreatedRoom()
+    {
+        CustomSceneManager.Instance.PhotonLoadLevel("RoomScene");
+    }
+    
 	public override void OnJoinedRoom()
 	{
-		base.OnJoinedRoom();
-		SceneManager.LoadScene("RoomScene");
-	}
-	public override void OnCreatedRoom()
-	{
-		base.OnCreatedRoom();
-		PhotonNetwork.LoadLevel("RoomScene");
+		CustomSceneManager.Instance.LoadScene("RoomScene");
 	}
 	#endregion
-	#region Public Methods
-	public void JoinRoom(string roomName)
-	{
-		PhotonNetwork.JoinRoom(roomName);
-	}
-	public void MakeRoom()
-	{
-		RoomOptions roomOptions = new RoomOptions();
-		roomOptions.PublishUserId = true;
-		roomOptions.MaxPlayers = PhotonPlayerData.Instance.MaxNumberOfPlayers;
-		PhotonNetwork.CreateRoom(null, roomOptions);
-	}
-	#endregion
+
+	
 }

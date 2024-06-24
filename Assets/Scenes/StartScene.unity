@@ -1724,11 +1724,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 597151105}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f8b6096298da7e49bac1f8c1ed101e7, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f43a0d52f3a7224eba0f5ce4c59a3f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDestroyOnLoad: 1
-  loadingCanvas: {fileID: 8670379034188375969, guid: 42870c392f6be2e43bf7b279dd1118d5, type: 3}
+  isDontDestroyOnLoad: 1
+  loadingPrefab: {fileID: 8670379034188375969, guid: 42870c392f6be2e43bf7b279dd1118d5, type: 3}
+  loadingPanel: {fileID: 0}
 --- !u!1 &659749350
 GameObject:
   m_ObjectHideFlags: 0
@@ -3878,11 +3879,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a4dacb87759b414e9d29933c5760e37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDestroyOnLoad: 0
+  isDontDestroyOnLoad: 1
   audioMixer: {fileID: 24100000, guid: e96f983b1f681a24390d51200514c3d6, type: 2}
   bgmMixerGroup: {fileID: -7758278541760307574, guid: e96f983b1f681a24390d51200514c3d6, type: 2}
   sfxMixerGroup: {fileID: 1720550355448257906, guid: e96f983b1f681a24390d51200514c3d6, type: 2}
   bgmClip:
+  - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
+  - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
+  - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
   - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
   - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
   - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
@@ -3932,7 +3936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efa977a4d2292924485795919e0ae746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDestroyOnLoad: 1
+  isDontDestroyOnLoad: 1
   maxNumberOfPlayers: 2
 --- !u!4 &1319240592
 Transform:
