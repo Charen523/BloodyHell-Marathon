@@ -29,7 +29,6 @@ public class RaceManager : Singleton<RaceManager>
 
     //트랙 정보
     public Track track;
-    public Player playerInfo;
 
     //1등 골인 후 대기시간
     [SerializeField]
@@ -45,6 +44,7 @@ public class RaceManager : Singleton<RaceManager>
     public UnityAction<int, PlayerLap> OnCheckPoint;
     public UnityAction<Dictionary<int, PlayerLap>> OnShowRank;
 
+    private PhotonShowBoard showBoard;
     protected override void Awake()
     {
         isDontDestroyOnLoad = false;
@@ -54,16 +54,28 @@ public class RaceManager : Singleton<RaceManager>
     // Start is called before the first frame update
     void Start()
     {
-        //나중에 멀티 정보 받아와서 딕셔너리에 플레이어들 이름넣기
-        //racers
-        dicPlayer.Add("testPlayer", playerInfo.playerlap);
+        OnLastCheckPoint += LastCheckPoint;
+        OnCheckPoint += OnCheckPoint;
+        InitData();
         var keys = dicPlayer.Keys;
         foreach (string key in keys)
         {
             dicPlayer[key].checkPoints = new bool[track.checkPoint.Length];
         }
-        OnLastCheckPoint += LastCheckPoint;
-        OnCheckPoint += OnCheckPoint;
+    }
+
+    public void InitData()
+    {
+        Dictionary<string, int>  dicPlayerId = PhotonPlayerData.Instance.PlayerIdDict;
+        var keys = dicPlayerId.Keys;
+        foreach (string key in keys)
+        {
+            string strKey = key.Substring(0, 7);
+            dicPlayer.Add(strKey, new PlayerLap());
+            dicPlayer[strKey].playerCode = strKey;
+            dicPlayer[strKey].color = dicPlayerId[key];
+            racers.Add(dicPlayer[strKey]);
+        }
     }
 
     public void LastCheckPoint(PlayerLap player)
@@ -78,7 +90,6 @@ public class RaceManager : Singleton<RaceManager>
         dicPlayer[player.playerCode].playerScore += track.checkPointScore[track.checkPointScore.Length - 1];
         if (dicPlayer[player.playerCode].playerScore >= track.finalScore)
         {
-            //phtonview.~~~ 룸매니저 127, 88번쨰줄 참고
             GoalIn(player);
         }
     }
@@ -100,8 +111,8 @@ public class RaceManager : Singleton<RaceManager>
         if (isFirst)
         {
             isFirst = false;
-            //photonView.RPC("StartCounting", RpcTarget.AllBuffered);
-            StartCoroutine(CountDown());
+            showBoard.ShowBoard();
+            //StartCoroutine(CountDown());
         }
 
         racers.Remove(player);
@@ -110,13 +121,9 @@ public class RaceManager : Singleton<RaceManager>
         dicRank[rankIndex].retire = false;
     }
 
-    [PunRPC]
-    private void StartCounting()
-    {
-        StartCoroutine(CountDown());
-    }
 
-    private IEnumerator CountDown()
+
+    public IEnumerator CountDown()
     {
         int currentTime = waitTime;
         countdown.SetActive(true);

@@ -31,13 +31,12 @@ public class RankBoard : MonoBehaviour
             if(dicRank.ContainsKey(i)) 
             {
                 SlotData data = new SlotData();
-                int index = CheckedColorIndex(dicRank[i].color);
-                data.rankAnime = characterAnimators[index];
+                data.rankAnime = characterAnimators[dicRank[i].color];
                 data.userName = dicRank[i].playerCode;
                 data.userScore = dicRank[i].playerScore.ToString();
                 if (dicRank[i].playerRank <= 3 && !dicRank[i].retire)
                 {
-                    data.victoryStand = standColors[index];
+                    data.victoryStand = standColors[dicRank[i].color];
                     data.animeParam = i.ToString();
                     data.userRank = i.ToString();
                 }
@@ -57,25 +56,6 @@ public class RankBoard : MonoBehaviour
 
     }
 
-    public int CheckedColorIndex(PlayerColor color)
-    {
-        switch(color) 
-        {
-            case PlayerColor.A:
-                return 0;
-            case PlayerColor.B:
-                return 1;
-            case PlayerColor.C:
-                return 2;
-            case PlayerColor.D:
-                return 3;
-            case PlayerColor.E:
-                return 4;
-            default:
-                Debug.Log("ColorIndex Error");
-                return -1;
-        }
-    }
 
     public void ReturnWaitingRoom()
     {
