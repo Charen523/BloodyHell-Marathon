@@ -7,6 +7,7 @@ public class PlayerLap
 {
     [Header("플레이어 정보")]
     public string playerCode;
+    public PlayerColor color;
 
     [Header("플레이어 레이스 정보")]
     public int playerRank;
@@ -15,4 +16,9 @@ public class PlayerLap
     public int currentPoint = 0;
     public bool[] checkPoints;
     public bool retire = true;
+}
+
+public enum PlayerColor
+{
+    A, B, C, D, E
 }
