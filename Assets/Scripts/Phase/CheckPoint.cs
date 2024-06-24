@@ -11,6 +11,7 @@ public class CheckPoint : MonoBehaviour
     {
         if (collision.TryGetComponent(out player))
         {
+            player.playerlap = RaceManager.Instance.dicPlayer[player.playerlap.playerCode];
             if(player.playerlap.currentPoint == pointIndex - 1)
             {
                 RaceManager.Instance.PassedCheckPoint(pointIndex, player.playerlap);
