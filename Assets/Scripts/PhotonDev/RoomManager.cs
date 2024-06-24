@@ -223,7 +223,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                     PhotonNetwork.LoadLevel("GameScene");
                     break;
                 case 2:
-                    PhotonNetwork.LoadLevel("ItemTestScene");
+                    PhotonNetwork.LoadLevel("ItemTest");
                     break;
                 default:
                     Debug.LogError("Selected Map Option is out of index.");
