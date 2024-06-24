@@ -2,6 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using Photon.Pun;
+using Photon.Realtime;
+using UnityEngine.UI;
+using TMPro;
 
 public class RaceManager : Singleton<RaceManager>
 {
@@ -14,23 +19,35 @@ public class RaceManager : Singleton<RaceManager>
     //첫번째로 도착한 유저 여부
     public bool isFirst = true;
     //플레이어 랭킹
-    private Dictionary<int, string> dicRank = new Dictionary<int, string>();
+    private Dictionary<int, PlayerLap> dicRank = new Dictionary<int, PlayerLap>();
     //플레이어정보 
     public Dictionary<string, PlayerLap> dicPlayer = new Dictionary<string, PlayerLap>();
+    [SerializeField]
+    private List<PlayerLap> racers = new List<PlayerLap>();
     //랭킹 순위
     private int rankIndex = 0;
 
     //트랙 정보
     public Track track;
-    public Player playeri;
+    public Player playerInfo;
 
     //1등 골인 후 대기시간
     [SerializeField]
     private int waitTime = 10;
+    [SerializeField]
+    private Image countdownBar;
+    [SerializeField]
+    private TextMeshProUGUI countdownTxt;
+    [SerializeField]
+    private GameObject countdown;
+
+    public UnityAction<PlayerLap> OnLastCheckPoint;
+    public UnityAction<int, PlayerLap> OnCheckPoint;
+    public UnityAction<Dictionary<int, PlayerLap>> OnShowRank;
 
     protected override void Awake()
     {
-        canDestroyOnLoad = false;
+        isDontDestroyOnLoad = false;
         base.Awake();
     }
 
@@ -38,22 +55,20 @@ public class RaceManager : Singleton<RaceManager>
     void Start()
     {
         //나중에 멀티 정보 받아와서 딕셔너리에 플레이어들 이름넣기
-        dicPlayer.Add("testPlayer", playeri.playerlap);
+        //racers
+        dicPlayer.Add("testPlayer", playerInfo.playerlap);
         var keys = dicPlayer.Keys;
         foreach (string key in keys)
         {
             dicPlayer[key].checkPoints = new bool[track.checkPoint.Length];
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        OnLastCheckPoint += LastCheckPoint;
+        OnCheckPoint += OnCheckPoint;
     }
 
     public void LastCheckPoint(PlayerLap player)
     {
+        if (!PhotonNetwork.IsMasterClient) return;
         for (int i = 1; i < player.checkPoints.Length; i++) 
         {
             player.checkPoints[i] = false;
@@ -63,12 +78,14 @@ public class RaceManager : Singleton<RaceManager>
         dicPlayer[player.playerCode].playerScore += track.checkPointScore[track.checkPointScore.Length - 1];
         if (dicPlayer[player.playerCode].playerScore >= track.finalScore)
         {
+            //phtonview.~~~ 룸매니저 127, 88번쨰줄 참고
             GoalIn(player);
         }
     }
 
     public void PassedCheckPoint(int index, PlayerLap player)
     {
+        if (!PhotonNetwork.IsMasterClient) return;
         if (!player.checkPoints[index])
         {
             player.checkPoints[index] = true;
@@ -77,34 +94,53 @@ public class RaceManager : Singleton<RaceManager>
         }
     }
 
+    [PunRPC]
     public void GoalIn(PlayerLap player)
     {
         if (isFirst)
         {
             isFirst = false;
+            //photonView.RPC("StartCounting", RpcTarget.AllBuffered);
             StartCoroutine(CountDown());
-            dicRank.Add(++rankIndex, player.playerCode);
         }
-        else if (isRacePlaying)
-        {
-            dicRank.Add(++rankIndex, player.playerCode);
-        }
-        else
-        {
-            //플레이어 리타이어
-        }
+
+        racers.Remove(player);
+        dicRank.Add(++rankIndex, player);
+        dicRank[rankIndex].playerRank = rankIndex;
+        dicRank[rankIndex].retire = false;
+    }
+
+    [PunRPC]
+    private void StartCounting()
+    {
+        StartCoroutine(CountDown());
     }
 
     private IEnumerator CountDown()
     {
-        for (int i = waitTime; i > 0; i--)
+        int currentTime = waitTime;
+        countdown.SetActive(true);
+        for (int i = currentTime; i > 0; i--)
         {
-            //TODO : 남은시간 보여주는 텍스트이미지 및 애니메이션효과
-            // = waitTime.ToString();
+            
+            countdownTxt.text = currentTime.ToString();
+            countdownBar.fillAmount = (float)currentTime / waitTime;
             yield return new WaitForSeconds(1);
         }
         isRacePlaying = false;
-        //TODO : 전체 게임 정지 및 결과화면
+        yield return null;
+        for (int i = 0; i < racers.Count; i++)
+        {
+            dicRank.Add(++rankIndex, racers[i]);
+            dicRank[rankIndex].playerRank = rankIndex;
+            dicRank[rankIndex].retire = true;
+            racers.Remove(racers[i]);
+        }
+        //전체 게임 정지 및 결과화면
+        Time.timeScale = 0;
         rankPopUp.SetActive(true);
+        OnShowRank?.Invoke(dicRank);
     }
+
+    
 }
