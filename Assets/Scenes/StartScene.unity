@@ -3884,6 +3884,9 @@ MonoBehaviour:
   sfxMixerGroup: {fileID: 1720550355448257906, guid: e96f983b1f681a24390d51200514c3d6, type: 2}
   bgmClip:
   - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
+  - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
+  - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
+  - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
   isMuted: 000000
 --- !u!4 &1312456398
 Transform:

@@ -6,19 +6,16 @@ public class Booster : ItemPickUp
 {
     public float AddSpeed = 3.0f;
     public float Duration = 3.0f;
-    public override void PickUp(Collider2D other)
+    public float forceMagnitude = 30f;
+    public override void PickUp(Collider2D collision)
     {
-        StartCoroutine(SpeedUp(other));
-    }
-
-    private IEnumerator SpeedUp(Collider2D other)
-    {
-        StatHandler stats = other.GetComponent<StatHandler>();
-        if (stats != null)
+        ForceReceiver forceReceiver = collision.gameObject.GetComponent<ForceReceiver>();
+        Rigidbody2D rigidbody = collision.gameObject.GetComponent<Rigidbody2D>();
+        if (forceReceiver != null && rigidbody != null)
         {
-            stats.CurrentStat.Condition.MoveSpeed += AddSpeed;
-            yield return new WaitForSeconds(Duration);
-            stats.CurrentStat.Condition.MoveSpeed -= AddSpeed;
+            Vector2 collisionDirection = rigidbody.velocity.normalized;
+            Vector2 appliedForce = collisionDirection * forceMagnitude;
+            forceReceiver.AddForce(appliedForce);
         }
     }
 }
