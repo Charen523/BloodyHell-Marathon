@@ -21,11 +21,11 @@ public class CheckPoint : MonoBehaviour
                 {
                     if (!player.playerlap.checkPoints[i])
                     {
-                        RaceManager.Instance.PassedCheckPoint(pointIndex, player.playerlap);
+                        RaceManager.Instance.OnCheckPoint?.Invoke(pointIndex, player.playerlap);
                         return;
                     }
                 }
-                RaceManager.Instance.LastCheckPoint(player.playerlap);
+                RaceManager.Instance.OnLastCheckPoint?.Invoke(player.playerlap);
             }       
             else
             {
