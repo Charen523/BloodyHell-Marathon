@@ -128,16 +128,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 		PhotonNetwork.CreateRoom(null, roomOptions);
 	}
 
-	//질문1. OnJoinedRoom 이유.
-	public override void OnJoinedRoom()
-	{
-		Debug.Log("PUN Basics Tutorial/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
-		//룸에 게스트로 연결
-	}
-
 	public override void OnCreatedRoom()
 	{
-		base.OnCreatedRoom();
 		PhotonNetwork.LoadLevel("RoomScene");
 	}
 
