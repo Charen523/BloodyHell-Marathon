@@ -33,7 +33,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             yield return new WaitForSeconds(0.3f);
             AddPlayerToData(PhotonNetwork.LocalPlayer, AssignPlayerSlot()); //Master의 PlayerData 추가.
 
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.5f);
             InitMaster(); //방장 권한.
         }
     }
