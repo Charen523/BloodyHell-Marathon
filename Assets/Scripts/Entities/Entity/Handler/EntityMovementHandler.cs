@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class EntityMovementHandler
@@ -33,15 +34,17 @@ public class EntityMovementHandler
     {
         if (direction.x > 0.2 && !_isFacingRight)
         {
-            FlipSprite(true);
+            _stateMachine.Entity.RPCProxy.photonView.RPC("CallFlipSprite", RpcTarget.All, true);
+            // FlipSprite(true);
         }
         else if (direction.x < -0.2 && _isFacingRight)
         {
-            FlipSprite(false);
+            _stateMachine.Entity.RPCProxy.photonView.RPC("CallFlipSprite", RpcTarget.All, false);
+            // FlipSprite(false);
         }
     }
 
-    protected virtual void FlipSprite(bool faceRight)
+    public virtual void FlipSprite(bool faceRight)
     {
         _isFacingRight = faceRight;
         Vector3 scale = _stateMachine.Entity.MainSprite.localScale;

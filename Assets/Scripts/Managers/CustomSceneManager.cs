@@ -1,116 +1,70 @@
-using System;
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class CustomSceneManager : Singleton<CustomSceneManager>
 {
-    public enum SceneNames
-    {
-        StartScene,
-        PhotonLobbyScene,
-        RoomScene,
-        GameScene
-    }
+    [SerializeField]private GameObject loadingPrefab;
+    [HideInInspector]public GameObject loadingPanel;
 
-    public GameObject loadingCanvas;
-    
+    #region MonobehaviourCallbacks
     protected override void Awake()
     {
-        isDontDestroyOnLoad = false;
+        isDontDestroyOnLoad = true;
         base.Awake();
+        loadingPanel = Instantiate(loadingPrefab, transform);
+        loadingPanel.SetActive(false);
+    }
+    #endregion
 
-    }
-    
-    private void OnEnable()
+    #region LoadPanel
+    public void ShowLoadPanel()
     {
-        // 씬 로드 이벤트에 등록
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        loadingPanel.SetActive(true);
     }
 
-    private void OnDisable()
+    public void HideLoadPanel()
     {
-        // 씬 로드 이벤트에서 해제
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        loadingPanel.SetActive(false);
     }
+    #endregion
 
     #region Scene Load & Unload
-    public void LoadScene(SceneNames scene)
+    public void LoadScene(string sceneName)
     {
-        StartCoroutine(LoadSceneAsync(scene));
+        StartCoroutine(LoadSceneAsync(sceneName));
     }
 
-    private IEnumerator LoadSceneAsync(SceneNames scene)
+    private IEnumerator LoadSceneAsync(string sceneName)
     {
-        loadingCanvas.SetActive(true);
-        
+        ShowLoadPanel();
+
         // 비동기 씬 로드
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene.ToString());
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         while (!asyncLoad.isDone)
         {
             yield return null;
         }
-
-        loadingCanvas.SetActive(false);
+        HideLoadPanel();
     }
 
-    public void UnloadScene(SceneNames scene)
+    public void PhotonLoadLevel(string sceneName)
     {
-        StartCoroutine(UnloadSceneAsync(scene));
+        StartCoroutine(PhotonLoadLevelAsync(sceneName));
     }
 
-    private IEnumerator UnloadSceneAsync(SceneNames scene)
+    private IEnumerator PhotonLoadLevelAsync(string sceneName)
     {
-        // 씬 언로드 비동기 실행
-        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(scene.ToString());
-        while (!asyncUnload.isDone)
+        ShowLoadPanel();
+
+        // 비동기 씬 로드
+        PhotonNetwork.LoadLevel(sceneName);
+        while (PhotonNetwork.LevelLoadingProgress < 1.0f)
         {
             yield return null;
         }
-    }
-    #endregion
-
-    #region Scene Init
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (Enum.TryParse(scene.name, out SceneNames sceneName))
-        {
-            switch (sceneName)
-            {
-                case SceneNames.StartScene:
-                    InitializeStartScene();
-                    break;
-                case SceneNames.PhotonLobbyScene:
-                    InitializeLobbyScene();
-                    break;
-                case SceneNames.RoomScene:
-                    InitializeRoomScene();
-                    break;
-                case SceneNames.GameScene:
-                    InitializeGameScene();
-                    break;
-            }
-        }
-        
-    }
-    private void InitializeStartScene()
-    {
-        // Start 씬 초기화 작업
-    }
-
-    private void InitializeLobbyScene()
-    {
-        // Lobby 씬 초기화 작업
-    }
-
-    private void InitializeRoomScene()
-    {
-        // Room 씬 초기화 작업
-    }
-
-    private void InitializeGameScene()
-    {
-        // Game 씬 초기화 작업
+        HideLoadPanel();
     }
     #endregion
 }

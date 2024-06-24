@@ -3528,6 +3528,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22ec9ff2e7a95194188a8922272b48db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDontDestroyOnLoad: 1
+  loadingPrefab: {fileID: 8670379034188375969, guid: 42870c392f6be2e43bf7b279dd1118d5, type: 3}
+  loadingPanel: {fileID: 0}
   roomName: {fileID: 177886590}
   mapDropdown: {fileID: 1227678624}
   skipBtn: {fileID: 1146319474}
