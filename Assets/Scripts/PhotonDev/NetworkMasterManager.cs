@@ -15,39 +15,25 @@ public class NetworkMasterManager : MonoBehaviourPunCallbacks
 	[SerializeField] private NetworkPlayerData networkPlayerData;
 	#endregion
 	#region Private Fields
-	private Dictionary<string, GameObject> playerDict;
 	private PhotonView pv;
 	#endregion
 	#region Public Elements
-	public Dictionary<string, GameObject> PlayerObjectDict
-	{
-		get
-		{
-			return playerDict;
-		}
-		private set
-		{
-			playerDict = value;
-		}
-	}
 	#endregion
 	#region MonoBehaviour Callbacks
 	private void Awake()
 	{
-		playerDict = new Dictionary<string, GameObject>();
 		// 게임 시작시 각 플레이어에게 줄 캐릭터를 생성하고 소유권을 나눠줌
 		if (PhotonNetwork.IsMasterClient)
 		{
 			int i = 0;
 			Vector2 createPos = startPos;
-			foreach (var playerIdPair in PhotonPlayerData.Instance.PlayerIdDict)
+			foreach (var player in PhotonNetwork.PlayerList)
 			{
 				// 새 플레이어 생성하고 소유권 부여, 마스터의 Dictionary에 추가
 				GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab[i], createPos, Quaternion.identity);
 				Debug.Log("플레이어 생성");
 				pv = newPlayer.GetComponent<PhotonView>();
-				pv.TransferOwnership(playerIdPair.Value);
-				PlayerObjectDict.Add(playerIdPair.Key, newPlayer);
+				pv.TransferOwnership(player.ActorNumber);
 				Debug.Log("플레이어 초기화 끝");
 
 				i++;
