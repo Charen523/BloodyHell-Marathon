@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,9 +19,12 @@ public class ItemSpawner : MonoBehaviour
         if (SpawnRange == null) Debug.LogWarning("Need an area (Tilemap) to spawn items.");
         else
         {
-            FindValidTilePositions();
-            SpawnAllItems();
-            StartCoroutine(SpawnItemsWithInterval());
+            if (PhotonNetwork.IsMasterClient)
+            {
+                FindValidTilePositions();
+                SpawnAllItems();
+                StartCoroutine(SpawnItemsWithInterval());
+            }
         }
     }
 
