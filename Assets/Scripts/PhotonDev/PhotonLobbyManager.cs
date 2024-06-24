@@ -9,14 +9,12 @@ using UnityEngine.UI;
 
 public class PhotonLobbyManager : MonoBehaviourPunCallbacks
 {
-	#region SerializeField
-	[Header("RoomListObjects")]
-	[SerializeField] private GameObject roomListPrefab;
-	[SerializeField] private Transform roomListParent;
-	#endregion
+	[SerializeField] private LobbyUIManager lobbyUIManager;
+	
 	#region Private Fields
 	private Dictionary<string, GameObject> roomDict;
 	#endregion
+
 	#region MonoBehaviour
 	private void Start()
 	{
@@ -28,11 +26,13 @@ public class PhotonLobbyManager : MonoBehaviourPunCallbacks
 		}
 	}
 	#endregion
+
 	#region MonoBehaviourPunCallbacks
 	public override void OnConnectedToMaster()
 	{
 		PhotonNetwork.JoinLobby();
 	}
+
 	public override void OnJoinedLobby()
 	{
 		base.OnJoinedLobby();
@@ -52,17 +52,17 @@ public class PhotonLobbyManager : MonoBehaviourPunCallbacks
 			{
 				if (!roomDict.ContainsKey(roomInfo.Name))
 				{
-					GameObject roomEntry = Instantiate(roomListPrefab, roomListParent);
-					roomEntry.GetComponentInChildren<TextMeshProUGUI>().text = $"방 이름 : {roomInfo.Name.Substring(0, 4)}\n현재 인원 : {roomInfo.PlayerCount}";
-					Button button = roomEntry.GetComponent<Button>();
-					button.onClick.AddListener(() =>
-					{
-						JoinRoom(roomInfo.Name);
-					}
-					);
-					roomDict.Add(roomInfo.Name, roomEntry);
-				}
-			}
+                    //GameObject roomEntry = Instantiate(roomListPrefab, roomListParent);
+                    //roomEntry.GetComponentInChildren<TextMeshProUGUI>().text = $"방 이름 : {roomInfo.Name.Substring(0, 4)}\n현재 인원 : {roomInfo.PlayerCount}";
+                    //Button button = roomEntry.GetComponent<Button>();
+                    //button.onClick.AddListener(() =>
+                    //{
+                    //	JoinRoom(roomInfo.Name);
+                    //}
+                    //);
+                    //roomDict.Add(roomInfo.Name, masterId);
+                }
+            }
 		}
 	}
 	public override void OnJoinedRoom()
