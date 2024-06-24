@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BaseUIManager : Singleton<BaseUIManager>
+public class CustomSceneManager : Singleton<CustomSceneManager>
 {
     [SerializeField]private GameObject loadingPrefab;
     [HideInInspector]public GameObject loadingPanel;
@@ -11,7 +11,7 @@ public class BaseUIManager : Singleton<BaseUIManager>
     #region MonobehaviourCallbacks
     protected override void Awake()
     {
-        isDontDestroyOnLoad = false;
+        isDontDestroyOnLoad = true;
         base.Awake();
         loadingPanel = Instantiate(loadingPrefab);
         loadingPanel.SetActive(false);
@@ -38,7 +38,7 @@ public class BaseUIManager : Singleton<BaseUIManager>
 
     private IEnumerator LoadSceneAsync(string sceneName)
     {
-        loadingPanel.SetActive(true);
+        ShowLoadPanel();
 
         // 비동기 씬 로드
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
@@ -46,6 +46,9 @@ public class BaseUIManager : Singleton<BaseUIManager>
         {
             yield return null;
         }
+        Destroy(loadingPanel);
+        loadingPanel = Instantiate(loadingPrefab);
+        HideLoadPanel();
     }
 
     public void PhotonLoadLevel(string sceneName)
@@ -55,7 +58,7 @@ public class BaseUIManager : Singleton<BaseUIManager>
 
     private IEnumerator PhotonLoadLevelAsync(string sceneName)
     {
-        loadingPanel.SetActive(true);
+        ShowLoadPanel();
 
         // 비동기 씬 로드
         PhotonNetwork.LoadLevel(sceneName);
@@ -63,6 +66,9 @@ public class BaseUIManager : Singleton<BaseUIManager>
         {
             yield return null;
         }
+        Destroy(loadingPanel);
+        loadingPanel = Instantiate(loadingPrefab);
+        HideLoadPanel();
     }
     #endregion
 }

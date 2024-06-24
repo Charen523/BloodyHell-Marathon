@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RoomUIManager : BaseUIManager
+public class RoomUIManager : Singleton<RoomUIManager>
 {
     #region SerializeField
     [Header("Room Gameobjects")]
@@ -31,6 +31,12 @@ public class RoomUIManager : BaseUIManager
     #endregion
 
     #region Monobehaviour Callbacks
+
+    protected override void Awake()
+    {
+        isDontDestroyOnLoad = false;
+        base.Awake();
+    }
     private void Start()
     {
         roomName.text = "Room. " + PhotonNetwork.CurrentRoom.Name.Substring(0, 4);

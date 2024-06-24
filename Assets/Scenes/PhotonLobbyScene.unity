@@ -1375,16 +1375,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RoomManager, Assembly-CSharp
-        m_MethodName: LeaveRoom
+      - m_Target: {fileID: 1906779481}
+        m_TargetAssemblyTypeName: LobbyUIManager, Assembly-CSharp
+        m_MethodName: LoadStartScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: StartScene
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &651600055
@@ -2382,9 +2382,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RoomManager, Assembly-CSharp
-        m_MethodName: LoadGameScene
+      - m_Target: {fileID: 946541325}
+        m_TargetAssemblyTypeName: PhotonLobbyManager, Assembly-CSharp
+        m_MethodName: ParticipateRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3962,8 +3962,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDontDestroyOnLoad: 1
-  loadingPrefab: {fileID: 8670379034188375969, guid: 42870c392f6be2e43bf7b279dd1118d5, type: 3}
-  loadingPanel: {fileID: 0}
   roomToggleGroup: {fileID: 2018125017}
   roomListParent: {fileID: 55208229}
   roomListPrefab: {fileID: 6882505608905955739, guid: 85cb0a2690de9dc4891518fce609f66e, type: 3}

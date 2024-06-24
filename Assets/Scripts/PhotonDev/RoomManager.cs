@@ -217,13 +217,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
             switch (roomUIManager.MapDropdown.value)
             {
                 case 0:
-                    roomUIManager.PhotonLoadLevel("CharacterAnimeTestScene COPY");
+                    CustomSceneManager.Instance.PhotonLoadLevel("CharacterAnimeTestScene COPY");
                     break;
                 case 1:
-                    roomUIManager.PhotonLoadLevel("GameScene");
+                    CustomSceneManager.Instance.PhotonLoadLevel("GameScene");
                     break;
                 case 2:
-                    roomUIManager.PhotonLoadLevel("ItemTest");
+                    CustomSceneManager.Instance.PhotonLoadLevel("ItemTest");
                     break;
                 default:
                     Debug.LogError("Selected Map Option is out of index.");
@@ -308,7 +308,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {//나가는 사람용.
-        roomUIManager.LoadScene("StartScene");
+        CustomSceneManager.Instance.LoadScene("StartScene");
     }
 
     public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)

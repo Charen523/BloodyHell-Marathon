@@ -1694,7 +1694,7 @@ GameObject:
   - component: {fileID: 597151106}
   - component: {fileID: 597151107}
   m_Layer: 0
-  m_Name: StartUIManager
+  m_Name: CustomSceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1724,7 +1724,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 597151105}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 469ce540840e9c141892c5a685d77de4, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f43a0d52f3a7224eba0f5ce4c59a3f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isDontDestroyOnLoad: 1
