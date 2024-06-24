@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -20,30 +21,32 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     {
         base.Awake();
         poolDic = new Dictionary<string, ObjectPool<GameObject>>();
-
-        foreach (var pool in Pools)
+        if (PhotonNetwork.IsMasterClient)
         {
-            ObjectPool<GameObject> objectPool = new ObjectPool<GameObject>(
-                createFunc: () => {
-                    var newObj = Instantiate(pool.Prefab);
-                    newObj.SetActive(false);
-                    return newObj;
-                },
-                actionOnGet: (obj) => {
-                    obj.SetActive(true);
-                },
-                actionOnRelease: (obj) => {
-                    obj.SetActive(false);
-                },
-                actionOnDestroy: (obj) => {
-                    Destroy(obj);
-                },
-                collectionCheck: false,
-                defaultCapacity: pool.MinSize,
-                maxSize: pool.MaxSize
-            );
+            foreach (var pool in Pools)
+            {
+                ObjectPool<GameObject> objectPool = new ObjectPool<GameObject>(
+                    createFunc: () => {
+                        var newObj = PhotonNetwork.Instantiate("Items/"+pool.Prefab.name, Vector2.zero, Quaternion.identity);
+                        newObj.SetActive(false);
+                        return newObj;
+                    },
+                    actionOnGet: (obj) => {
+                        obj.SetActive(true);
+                    },
+                    actionOnRelease: (obj) => {
+                        obj.SetActive(false);
+                    },
+                    actionOnDestroy: (obj) => {
+                        Destroy(obj);
+                    },
+                    collectionCheck: false,
+                    defaultCapacity: pool.MinSize,
+                    maxSize: pool.MaxSize
+                );
 
-            poolDic.Add(pool.Prefab.name, objectPool);
+                poolDic.Add(pool.Prefab.name, objectPool);
+            }
         }
     }
 
