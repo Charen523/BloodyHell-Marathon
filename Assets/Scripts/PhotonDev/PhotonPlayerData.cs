@@ -5,13 +5,15 @@ using UnityEngine;
 
 public class PhotonPlayerData : Singleton<PhotonPlayerData>
 {
-    #region SerilizedField
+    #region Serialized Field
     [SerializeField] private int maxNumberOfPlayers = 1;
 	#endregion
-	#region PrivateField
-	private Dictionary<string, int> playerIdDict;
+
+	#region Private Field
+	private Dictionary<string, int> playerIdDict; //string = UserId, int = Sprite.
 	#endregion
-	#region Public Elements
+
+	#region Properties
     public Dictionary<string, int> PlayerIdDict 
     {
         get
@@ -30,27 +32,21 @@ public class PhotonPlayerData : Singleton<PhotonPlayerData>
             return maxNumberOfPlayers;
 		}
     }
-    #endregion
-    #region MonoBehaviour Callbacks
-    protected override void Awake()
+	#endregion
+
+	protected override void Awake()
     {
         base.Awake();
-        playerIdDict = new Dictionary<string, int>();
+        playerIdDict = new Dictionary<string, int>(); 
 	}
-	#endregion
-	#region Public Methods
 
-    // 플레이어 dictionary에 플레이어 UserId, PlayerId 할당
-	public void AddPlayer(string userId, int playerNumber)
+    public void AddPlayer(string userId, int playerNumber)
     {
         PlayerIdDict[userId] = playerNumber;
     }
 
-    // 플레이어 dictionary에서 플레이어 제거
 	public void RemovePlayer(string userId)
 	{
 		PlayerIdDict.Remove(userId);
 	}
-
-	#endregion
 }
