@@ -18,7 +18,7 @@ public class PlayerInputHandler
 
     public void AddInputActionsCallbacks()
     {
-        if (!_stateMachine.Player.PlayerPhotonView.IsMine) return;
+        if (!_stateMachine.Player.photonView.IsMine) return;
         PlayerInput input = _stateMachine.Player.Input;
         input.PlayerActions.Move.canceled += OnMoveCanceled;
 
@@ -31,7 +31,7 @@ public class PlayerInputHandler
 
     public void RemoveInputActionsCallbacks()
     {
-        if (!_stateMachine.Player.PlayerPhotonView.IsMine) return;
+        if (!_stateMachine.Player.photonView.IsMine) return;
         PlayerInput input = _stateMachine.Player.Input;
         input.PlayerActions.Move.canceled -= OnMoveCanceled;
 

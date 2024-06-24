@@ -3,8 +3,8 @@ using UnityEngine.InputSystem;
 
 public abstract class PlayerState : IState
 {
+    public PlayerMovementHandler MovementHandler;
     protected PlayerStateMachine _stateMachine;
-    protected PlayerMovementHandler _movementHandler;
     protected PlayerAnimeHandler _animeHandler;
     protected PlayerInputHandler _inputHandler;
     protected PlayerGrabHandler _grabHandler;
@@ -13,7 +13,7 @@ public abstract class PlayerState : IState
     {
         _stateMachine = stateMachine;
 
-        _movementHandler = new PlayerMovementHandler(_stateMachine);
+        MovementHandler = new PlayerMovementHandler(_stateMachine);
         _animeHandler = new PlayerAnimeHandler(_stateMachine);
         _inputHandler = new PlayerInputHandler(_stateMachine);
         _grabHandler = new PlayerGrabHandler(_stateMachine);
@@ -40,14 +40,14 @@ public abstract class PlayerState : IState
 
     public virtual void PhysicsUpdate()
     {
-        _movementHandler.Movement(_stateMachine.MovementDir);
+        MovementHandler.Movement(_stateMachine.MovementDir);
     }
 
     public virtual void Update() { }
     private void ReadMovementInput()
     {
         if (_stateMachine.Player.Input == null) return;
-        if (!_stateMachine.Player.PlayerPhotonView.IsMine) return;
+        if (!_stateMachine.Player.photonView.IsMine) return;
         _stateMachine.MovementDir = _stateMachine.Player.Input.PlayerActions.Move.ReadValue<Vector2>();
     }
 

@@ -32,11 +32,11 @@ public class NetworkPlayerData : MonoBehaviour
 	#region MonoBehaviour Callbacks
 	private void Awake()
 	{
-		if(instance == null)
+		if (instance == null)
 		{
 			instance = this;
 		}
-		else if(instance != this)
+		else if (instance != this)
 		{
 			Destroy(gameObject);
 		}
@@ -46,7 +46,7 @@ public class NetworkPlayerData : MonoBehaviour
 	// 자기 플레이어 객체 저장하고, 카메라 타겟으로 지정
 	public void SetMyPlayer(Player player)
 	{
-		if (MyPlayer == null & player.PlayerPhotonView.IsMine)
+		if (MyPlayer == null & player.photonView.IsMine)
 		{
 			MyPlayer = player;
 			cameraManager.SetTarget(player.transform);
