@@ -105,7 +105,7 @@ MonoBehaviour:
     currentPoint: 0
     checkPoints: 
     retire: 1
-  PickedUpItem: []
+  PickedUpItems: []
 --- !u!114 &4064137011872083970
 MonoBehaviour:
   m_ObjectHideFlags: 0

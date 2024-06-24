@@ -1,9 +1,10 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NetworkMasterManager : MonoBehaviour
+public class NetworkMasterManager : MonoBehaviourPunCallbacks
 {
 	#region SerializeField
 	[SerializeField] private string[] playerPrefab;
@@ -11,6 +12,7 @@ public class NetworkMasterManager : MonoBehaviour
 	[SerializeField] private Vector2 positionInterval;
 	[SerializeField] private string boxPrefab;
 	[SerializeField] private string ballPrefab;
+	[SerializeField] private NetworkPlayerData networkPlayerData;
 	#endregion
 	#region Private Fields
 	private Dictionary<string, GameObject> playerDict;
@@ -30,7 +32,6 @@ public class NetworkMasterManager : MonoBehaviour
 	}
 	#endregion
 	#region MonoBehaviour Callbacks
-	
 	private void Awake()
 	{
 		playerDict = new Dictionary<string, GameObject>();
@@ -41,10 +42,14 @@ public class NetworkMasterManager : MonoBehaviour
 			Vector2 createPos = startPos;
 			foreach (var playerIdPair in PhotonPlayerData.Instance.PlayerIdDict)
 			{
+				// 새 플레이어 생성하고 소유권 부여, 마스터의 Dictionary에 추가
 				GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab[i], createPos, Quaternion.identity);
+				Debug.Log("플레이어 생성");
 				pv = newPlayer.GetComponent<PhotonView>();
 				pv.TransferOwnership(playerIdPair.Value);
 				PlayerObjectDict.Add(playerIdPair.Key, newPlayer);
+				Debug.Log("플레이어 초기화 끝");
+
 				i++;
 				createPos += positionInterval;
 			}
@@ -58,7 +63,6 @@ public class NetworkMasterManager : MonoBehaviour
 			GameObject newBox = PhotonNetwork.Instantiate(boxPrefab, new Vector2(-10, -6.6f), Quaternion.identity);
 			GameObject newBall = PhotonNetwork.Instantiate(ballPrefab, new Vector2(-6, -7f), Quaternion.identity);
 		}
-
 	}
 	#endregion
 }
