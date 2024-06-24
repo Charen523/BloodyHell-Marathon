@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Test/LSS/Scene/CharacterAnimeTestScene COPY.unity
     guid: 616abba0cd7e03e41a41bb1453b6b38e
+  - enabled: 1
+    path: Assets/Test/SJY/ItemTest.unity
+    guid: 2924ef4220b7731499d73fd93f9cd6b3
   m_configObjects: {}

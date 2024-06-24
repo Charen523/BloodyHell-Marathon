@@ -1784,7 +1784,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1079957762}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2391,6 +2391,8 @@ MonoBehaviour:
     - m_Text: TestScene
       m_Image: {fileID: 0}
     - m_Text: GameScene1
+      m_Image: {fileID: 0}
+    - m_Text: GemenScene
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
