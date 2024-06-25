@@ -1806,12 +1806,10 @@ MonoBehaviour:
   sfxMixerGroup: {fileID: 1720550355448257906, guid: e96f983b1f681a24390d51200514c3d6, type: 2}
   bgmClip:
   - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
-  - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
-  - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
-  - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
-  - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
-  - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
-  - {fileID: 8300000, guid: ffefa14f8f24aed4d83e51ebefda1bee, type: 3}
+  - {fileID: 8300000, guid: 840bba296f25a604baaa0c1fac600ce2, type: 3}
+  - {fileID: 8300000, guid: 840bba296f25a604baaa0c1fac600ce2, type: 3}
+  - {fileID: 8300000, guid: 53bd78acf77c92a41a2a8e4f2c648ca1, type: 3}
+  - {fileID: 8300000, guid: 1c8311686d221ea47ad42f26039e5b84, type: 3}
   isMuted: 000000
 --- !u!4 &1312456398
 Transform:
