@@ -101,9 +101,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
     private void RemovePlayerFromData(Photon.Realtime.Player otherPlayer)
     {//마스터 전용 메서드.
         int playerIndex;
-        if (otherPlayer.CustomProperties.TryGetValue(PlayerProperties.indexKey, out object value)) 
+        if (otherPlayer.CustomProperties.TryGetValue(PlayerProperties.indexKey, out object value))
         {
             playerIndex = (int)value;
+            photonView.RPC("UpdateReadyUI", RpcTarget.AllBuffered, playerIndex, false);
             OpenPlayerSlot(playerIndex);
             photonView.RPC("RemovePlayerUI", RpcTarget.AllBuffered, playerIndex);
         }
