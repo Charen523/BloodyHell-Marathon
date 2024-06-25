@@ -35,7 +35,9 @@ public class Launcher : MonoBehaviourPunCallbacks
 	private void Start()
 	{
         CustomSceneManager.Instance.ShowLoadPanel();
+        Debug.Log("ConnectUsingSettings show load.");
         PhotonNetwork.ConnectUsingSettings();
+
 		PhotonNetwork.GameVersion = gameVersion;
     }
 
@@ -53,50 +55,50 @@ public class Launcher : MonoBehaviourPunCallbacks
 	public void ConnectToRoom()
 	{
         CustomSceneManager.Instance.ShowLoadPanel();
+        Debug.Log("ConnectToRoom show load.");
 
         if (PhotonNetwork.IsConnected)
 		{
 			// 랜덤한 룸에 연결
 			if (isConnecting)
 			{
-				PhotonNetwork.JoinRandomRoom();
+                
+                PhotonNetwork.JoinRandomRoom();
 			}
-			else
-			{
-                CustomSceneManager.Instance.HideLoadPanel();
-            }
 		}
 		else
 		{
 			// 현재 포톤 연결 세팅에 맞춰서 연결
 			PhotonNetwork.ConnectUsingSettings();
 			PhotonNetwork.GameVersion = gameVersion;
-            CustomSceneManager.Instance.HideLoadPanel();
         }
-	}
+
+        CustomSceneManager.Instance.HideLoadPanel();
+        Debug.Log("ConnectToRoom hide load.");
+    }
 
 	public void ConnectToLobby()
 	{
         CustomSceneManager.Instance.ShowLoadPanel();
+        Debug.Log("ConnectToLobby show load.");
 
         if (PhotonNetwork.IsConnected)
 		{
 			if (isConnecting)
 			{
-				PhotonNetwork.JoinLobby();
-			}
-			else
-			{
                 CustomSceneManager.Instance.HideLoadPanel();
-            }
+                Debug.Log("OnJoinedLobby hide load.");
+                CustomSceneManager.Instance.LoadScene("PhotonLobbyScene");
+			}
 		}
 		else
 		{
 			PhotonNetwork.ConnectUsingSettings();
 			PhotonNetwork.GameVersion = gameVersion;
-            CustomSceneManager.Instance.HideLoadPanel();
         }
-	}
+        CustomSceneManager.Instance.HideLoadPanel();
+        Debug.Log("ConnectToLobby hide load.");
+    }
 
 	#endregion
 
@@ -107,6 +109,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 		Debug.Log("PUN Basics Tutorial/Launcher: OnConnectedToMaster() was called by PUN");
 		isConnecting = true;
         CustomSceneManager.Instance.HideLoadPanel();
+        Debug.Log("OnConnectedToMaster hide load.");
     }
 
 	public override void OnDisconnected(DisconnectCause cause)
@@ -128,12 +131,9 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 	public override void OnCreatedRoom()
 	{
+		CustomSceneManager.Instance.HideLoadPanel();
+		Debug.Log("OnCreatedRoom hide load.");
 		CustomSceneManager.Instance.LoadScene("RoomScene");
-	}
-
-	public override void OnJoinedLobby()
-	{
-        CustomSceneManager.Instance.LoadScene("PhotonLobbyScene");
 	}
 	#endregion
 }

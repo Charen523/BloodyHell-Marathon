@@ -60,10 +60,9 @@ MonoBehaviour:
   - RequestStopGame
   - StopCountDown
   - CallFlipSprite
+  - UpdateUIRPC
   - OnPickedUp
   - SpawnNewItem
-  - UpdateUIRPC
-  - SpawnItem
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

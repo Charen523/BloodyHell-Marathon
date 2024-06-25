@@ -81,8 +81,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {// 마스터가 처리하는 플레이어 제거
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonPlayerData.Instance.PlayerIdDict.Remove(otherPlayer.UserId);
             int playerInGameId = PhotonPlayerData.Instance.PlayerIdDict[otherPlayer.UserId];
+            PhotonPlayerData.Instance.PlayerIdDict.Remove(otherPlayer.UserId);
             photonView.RPC("RemovePlayerUI", RpcTarget.AllBuffered, playerInGameId);
         }
     }

@@ -39,6 +39,7 @@ public class CustomSceneManager : Singleton<CustomSceneManager>
     private IEnumerator LoadSceneAsync(string sceneName)
     {
         ShowLoadPanel();
+        Debug.Log("LoadSceneAsync show load.");
 
         // 비동기 씬 로드
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
@@ -57,6 +58,7 @@ public class CustomSceneManager : Singleton<CustomSceneManager>
     private IEnumerator PhotonLoadLevelAsync(string sceneName)
     {
         ShowLoadPanel();
+        Debug.Log("photonloadlevel show load.");
 
         // 비동기 씬 로드
         PhotonNetwork.LoadLevel(sceneName);
