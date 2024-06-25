@@ -24,7 +24,7 @@ public class RankSlot : MonoBehaviour
         userScoreTxt.text = data.userScore;
         rankAnime.runtimeAnimatorController = data.rankAnime;
         rankAnime.SetTrigger(data.animeParam);
-        if (victoryStandImg != null)
+        if (victoryStandImg != null && data.animeParam != "Retire")
         {
             victoryStandImg.gameObject.SetActive(true);
             victoryStandImg.sprite = data.victoryStand;
