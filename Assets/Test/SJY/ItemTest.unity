@@ -44930,6 +44930,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1483414426860651262, guid: a881f21bb64ca334aae46625cbcfaceb, type: 3}
+      propertyPath: Synchronization
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1483414426860651262, guid: a881f21bb64ca334aae46625cbcfaceb, type: 3}
       propertyPath: OwnershipTransfer
       value: 0
       objectReference: {fileID: 0}
@@ -44996,6 +45000,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3765753236550739829, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
       propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3765753236550739829, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
+      propertyPath: Synchronization
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3765753236550739829, guid: 4f9aa98ed8617fc44946784025b9eada, type: 3}
