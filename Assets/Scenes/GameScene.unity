@@ -305,14 +305,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab:
   - PlayerPrefabs/Player1
-  - PlayerPrefabs/Player1
-  - PlayerPrefabs/Player1
-  - PlayerPrefabs/Player1
-  - PlayerPrefabs/Player1
-  startPos: {x: -15, y: -4}
-  positionInterval: {x: 2.5, y: 0}
-  boxPrefab: Objects/Block
-  ballPrefab: Objects/Ball
+  - PlayerPrefabs/Player2
+  - PlayerPrefabs/Player3
+  - PlayerPrefabs/Player4
+  - PlayerPrefabs/Player5
+  startPos: {x: -21, y: -6}
+  positionInterval: {x: 0, y: -0.5}
   networkPlayerData: {fileID: 62550408}
 --- !u!4 &82154291
 Transform:
