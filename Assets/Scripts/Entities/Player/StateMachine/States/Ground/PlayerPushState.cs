@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,7 +11,8 @@ public class PlayerPushState : PlayerGroundState
         base.Enter();
 
         _animeHandler.SetTriggerAnimation(_stateMachine.Player.AnimeData.PushParameterHash);
-        _pushHandler.Push();
+        // PushHandler.Push();
+        _stateMachine.Player.RPCProxy.photonView.RPC("CallPush", RpcTarget.All);
     }
 
     public override void Exit()

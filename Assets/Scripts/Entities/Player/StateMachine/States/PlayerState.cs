@@ -4,21 +4,21 @@ using UnityEngine.InputSystem;
 public abstract class PlayerState : IState
 {
     public PlayerMovementHandler MovementHandler;
+    public PlayerPushHandler PushHandler;
     protected PlayerStateMachine _stateMachine;
     protected PlayerAnimeHandler _animeHandler;
     protected PlayerInputHandler _inputHandler;
     protected PlayerGrabHandler _grabHandler;
-    protected PlayerPushHandler _pushHandler;
 
     protected PlayerState(PlayerStateMachine stateMachine)
     {
         _stateMachine = stateMachine;
 
         MovementHandler = new PlayerMovementHandler(_stateMachine);
+        PushHandler = new PlayerPushHandler(_stateMachine);
         _animeHandler = new PlayerAnimeHandler(_stateMachine);
         _inputHandler = new PlayerInputHandler(_stateMachine);
         _grabHandler = new PlayerGrabHandler(_stateMachine);
-        _pushHandler = new PlayerPushHandler(_stateMachine);
     }
 
     public virtual void Enter()

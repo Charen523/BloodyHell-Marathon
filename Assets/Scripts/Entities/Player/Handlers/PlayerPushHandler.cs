@@ -30,7 +30,7 @@ public class PlayerPushHandler
                 if (temp != null)
                 {
                     Vector2 collisionDirection = (hit.transform.position - playerPosition).normalized;
-                    Vector2 appliedForce = collisionDirection * 10f;
+                    Vector2 appliedForce = collisionDirection * 30f;
                     temp.AddForce(appliedForce);
                 }
             }

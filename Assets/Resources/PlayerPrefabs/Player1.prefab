@@ -334,6 +334,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: IsGroggy
+  - Type: 9
+    SynchronizeType: 2
+    Name: Push
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
