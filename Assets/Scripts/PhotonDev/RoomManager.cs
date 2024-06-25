@@ -188,7 +188,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
             timer--;
         }
 
-        LoadGameScene();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            LoadGameScene();
+        }
     }
 
     [PunRPC]
@@ -209,28 +212,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
     }
 
-    [PunRPC]
-    private void LoadGameScene()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            switch (roomUIManager.MapDropdown.value)
-            {
-                case 0:
-                    CustomSceneManager.Instance.PhotonLoadLevel("CharacterAnimeTestScene COPY");
-                    break;
-                case 1:
-                    CustomSceneManager.Instance.PhotonLoadLevel("GameScene");
-                    break;
-                case 2:
-                    CustomSceneManager.Instance.PhotonLoadLevel("ItemTest");
-                    break;
-                default:
-                    Debug.LogError("Selected Map Option is out of index.");
-                    break;
-            }
-        }
-    }
+
+   
     #endregion
 
     #region Individual PunRPC
@@ -290,9 +273,25 @@ public class RoomManager : MonoBehaviourPunCallbacks
     #region UI Interacts
     public void OnSkipBtn()
     {
-        photonView.RPC("LoadGameScene", RpcTarget.AllBuffered);
+        LoadGameScene();
     }
-    
+
+    private void LoadGameScene()
+    {
+        switch (roomUIManager.MapDropdown.value)
+        {
+            case 0:
+                CustomSceneManager.Instance.PhotonLoadLevel("GameScene");
+                break;
+            case 1:
+                CustomSceneManager.Instance.PhotonLoadLevel("GameScene2");
+                break;
+            default:
+                Debug.LogError("Selected Map Option is out of index.");
+                break;
+        }
+    }
+
     private void OnMapChanged(int value)
     {//MapDropdown
         if (!PhotonNetwork.IsMasterClient) //비상용. 팀원과 테스트해보고 삭제할것.
