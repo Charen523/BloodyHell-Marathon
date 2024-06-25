@@ -101,9 +101,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
     private void RemovePlayerFromData(Photon.Realtime.Player otherPlayer)
     {//마스터 전용 메서드.
         int playerIndex;
-        if (otherPlayer.CustomProperties.TryGetValue(PlayerProperties.indexKey, out object value)) 
+        if (otherPlayer.CustomProperties.TryGetValue(PlayerProperties.indexKey, out object value))
         {
             playerIndex = (int)value;
+            photonView.RPC("UpdateReadyUI", RpcTarget.AllBuffered, playerIndex, false);
             OpenPlayerSlot(playerIndex);
             photonView.RPC("RemovePlayerUI", RpcTarget.AllBuffered, playerIndex);
         }
@@ -187,7 +188,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
             timer--;
         }
 
-        LoadGameScene();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            LoadGameScene();
+        }
     }
 
     [PunRPC]
@@ -208,28 +212,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
     }
 
-    [PunRPC]
-    private void LoadGameScene()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            switch (roomUIManager.MapDropdown.value)
-            {
-                case 0:
-                    CustomSceneManager.Instance.PhotonLoadLevel("CharacterAnimeTestScene COPY");
-                    break;
-                case 1:
-                    CustomSceneManager.Instance.PhotonLoadLevel("GameScene");
-                    break;
-                case 2:
-                    CustomSceneManager.Instance.PhotonLoadLevel("ItemTest");
-                    break;
-                default:
-                    Debug.LogError("Selected Map Option is out of index.");
-                    break;
-            }
-        }
-    }
     #endregion
 
     #region Individual PunRPC
@@ -289,9 +271,25 @@ public class RoomManager : MonoBehaviourPunCallbacks
     #region UI Interacts
     public void OnSkipBtn()
     {
-        photonView.RPC("LoadGameScene", RpcTarget.AllBuffered);
+        LoadGameScene();
     }
-    
+
+    private void LoadGameScene()
+    {
+        switch (roomUIManager.MapDropdown.value)
+        {
+            case 0:
+                CustomSceneManager.Instance.PhotonLoadLevel("GameScene");
+                break;
+            case 1:
+                CustomSceneManager.Instance.PhotonLoadLevel("GameScene2");
+                break;
+            default:
+                Debug.LogError("Selected Map Option is out of index.");
+                break;
+        }
+    }
+
     private void OnMapChanged(int value)
     {//MapDropdown
         if (!PhotonNetwork.IsMasterClient) //비상용. 팀원과 테스트해보고 삭제할것.
@@ -360,6 +358,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
+            photonView.RPC("StopCountDown", RpcTarget.AllBuffered);
+            Debug.Log("중간 난입 막았는데 왜 들어올 수 있지...?");
+
             int currentIndex = ClosePlayerSlot();
             AddPlayerToData(newPlayer, currentIndex);
             photonView.RPC("GivePlayerIndex", newPlayer, currentIndex);
