@@ -212,8 +212,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
     }
 
-
-   
     #endregion
 
     #region Individual PunRPC
@@ -360,6 +358,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
+            photonView.RPC("StopCountDown", RpcTarget.AllBuffered);
+            Debug.Log("중간 난입 막았는데 왜 들어올 수 있지...?");
+
             int currentIndex = ClosePlayerSlot();
             AddPlayerToData(newPlayer, currentIndex);
             photonView.RPC("GivePlayerIndex", newPlayer, currentIndex);
