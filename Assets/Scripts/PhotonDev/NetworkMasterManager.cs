@@ -10,8 +10,6 @@ public class NetworkMasterManager : MonoBehaviourPunCallbacks
 	[SerializeField] private string[] playerPrefab;
 	[SerializeField] private Vector2 startPos;
 	[SerializeField] private Vector2 positionInterval;
-	[SerializeField] private string boxPrefab;
-	[SerializeField] private string ballPrefab;
 	[SerializeField] private NetworkPlayerData networkPlayerData;
 	#endregion
 	#region Private Fields
@@ -40,15 +38,6 @@ public class NetworkMasterManager : MonoBehaviourPunCallbacks
 				i++;
 				createPos += positionInterval;
 			}
-		}
-	}
-	private void Start()
-	{
-		//물체 2개 박스, 공 생성
-		if (PhotonNetwork.IsMasterClient)
-		{
-			GameObject newBox = PhotonNetwork.Instantiate(boxPrefab, new Vector2(-10, -6.6f), Quaternion.identity);
-			GameObject newBall = PhotonNetwork.Instantiate(ballPrefab, new Vector2(-6, -7f), Quaternion.identity);
 		}
 	}
 	#endregion
