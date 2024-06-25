@@ -51,7 +51,8 @@ public abstract class ItemPickUp : MonoBehaviourPunCallbacks
 
             if (PhotonNetwork.IsMasterClient && Spawner != null)
             {
-                Spawner.photonView.RPC("SpawnNewItem", RpcTarget.MasterClient);
+                Spawner.photonView.RPC("SpawnItem", RpcTarget.MasterClient);
+                PhotonNetwork.SendAllOutgoingCommands(); // 즉시 메시지 전송
             }
         }
     }
