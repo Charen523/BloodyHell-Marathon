@@ -61,6 +61,8 @@ MonoBehaviour:
   - StopCountDown
   - CallFlipSprite
   - UpdateUIRPC
+  - OnPickedUp
+  - SpawnNewItem
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
