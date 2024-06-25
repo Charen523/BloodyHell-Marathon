@@ -28,6 +28,31 @@ public class ItemSpawner : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
+    public void SpawnItem()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+        Vector3 spawnPos = ReturnRandPos();
+        Pool pool = ReturnRandPool();
+
+        if (pool != null)
+        {
+            string poolName = pool.Prefab.name;
+            GameObject spawnedObject = ObjectPoolManager.Instance.GetObject(poolName);
+            if (spawnedObject != null)
+            {
+                spawnedObject.transform.position = spawnPos;
+                var itemPickUp = spawnedObject.GetComponent<ItemPickUp>();
+                itemPickUp.Spawner = this;
+            }
+            else
+            {
+                Debug.LogWarning("Failed to get object from pool: " + poolName);
+            }
+        }
+    }
+
     private void FindValidTilePositions()
     {
         BoundsInt bounds = SpawnRange.cellBounds;
@@ -65,36 +90,11 @@ public class ItemSpawner : MonoBehaviourPunCallbacks
         return pools[Random.Range(0, pools.Count)];
     }
 
-    [PunRPC]
-    private void SpawnNewItem()
-    {
-        if (!PhotonNetwork.IsMasterClient)
-            return;
-        Vector3 spawnPos = ReturnRandPos();
-        Pool pool = ReturnRandPool();
-
-        if (pool != null)
-        {
-            string poolName = pool.Prefab.name;
-            GameObject spawnedObject = ObjectPoolManager.Instance.GetObject(poolName);
-            if (spawnedObject != null)
-            {
-                spawnedObject.transform.position = spawnPos;
-                var itemPickUp = spawnedObject.GetComponent<ItemPickUp>();
-                itemPickUp.Spawner = this;
-            }
-            else
-            {
-                Debug.LogWarning("Failed to get object from pool: " + poolName);
-            }
-        }
-    }
-
     private void SpawnAllItems()
     {
         for (int i = 0; i < MaxItemsOnMap; i++)
         {
-            SpawnNewItem();
+            SpawnItem();
         }
     }
 }
