@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,8 @@ public class RoomUIManager : Singleton<RoomUIManager>
     [Header("Room Gameobjects")]
     [SerializeField] private TextMeshProUGUI roomName;
     [SerializeField] private TMP_Dropdown mapDropdown;
-    [SerializeField] private GameObject skipBtn;
+    [SerializeField] public GameObject skipBtn;
+    private List<GameObject> readyBtns = new List<GameObject>();
 
     [Header("PlayerList")]
     [SerializeField] private GameObject[] joinSlots;
@@ -19,10 +21,6 @@ public class RoomUIManager : Singleton<RoomUIManager>
     [SerializeField] private GameObject startCounterBG;
     [SerializeField] private TextMeshProUGUI startCounterTxt;
     [SerializeField] private int startCount = 10;
-    #endregion
-
-    #region private Variables
-    private bool[] playerSlots;
     #endregion
 
     #region public Variables
@@ -53,6 +51,12 @@ public class RoomUIManager : Singleton<RoomUIManager>
         {
             skipBtn.SetActive(false);
             mapDropdown.interactable = false;
+        }
+
+        foreach (GameObject obj in joinSlots)
+        {
+            GameObject button = obj.transform.Find("ReadyBtn").gameObject;
+            readyBtns.Add(button);
         }
     }
     #endregion
@@ -108,6 +112,23 @@ public class RoomUIManager : Singleton<RoomUIManager>
             {
                 tmp.text = "룸메이트:";
             }
+        }
+    }
+
+    [PunRPC]
+    public void ChangeReadyUI(int index, bool isReady)
+    {
+        GameObject changeButton = readyBtns[index];
+
+        if (isReady)
+        {
+            changeButton.GetComponent<Image>().color = new Color(127 / 255f, 255 / 255f, 111 / 255f);
+            changeButton.GetComponentInChildren<TMP_Text>().text = "준비완료!";
+        }
+        else
+        {
+            changeButton.GetComponent<Image>().color = new Color(255 / 255f, 107 / 255f, 32 / 255f);
+            changeButton.GetComponentInChildren<TMP_Text>().text = "준비중";
         }
     }
 

@@ -36,6 +36,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 	{
         CustomSceneManager.Instance.ShowLoadPanel();
         PhotonNetwork.ConnectUsingSettings();
+
 		PhotonNetwork.GameVersion = gameVersion;
     }
 
@@ -53,18 +54,17 @@ public class Launcher : MonoBehaviourPunCallbacks
 	public void ConnectToRoom()
 	{
         CustomSceneManager.Instance.ShowLoadPanel();
+        Debug.Log("ConnectToRoom show load.");
 
         if (PhotonNetwork.IsConnected)
 		{
 			// 랜덤한 룸에 연결
 			if (isConnecting)
 			{
-				PhotonNetwork.JoinRandomRoom();
-			}
-			else
-			{
                 CustomSceneManager.Instance.HideLoadPanel();
-            }
+                Debug.Log("Success, ConnectToRoom hide load.");
+                PhotonNetwork.JoinRandomRoom();
+			}
 		}
 		else
 		{
@@ -72,29 +72,30 @@ public class Launcher : MonoBehaviourPunCallbacks
 			PhotonNetwork.ConnectUsingSettings();
 			PhotonNetwork.GameVersion = gameVersion;
             CustomSceneManager.Instance.HideLoadPanel();
+            Debug.Log("Failed, ConnectToRoom hide load.");
         }
-	}
+    }
 
 	public void ConnectToLobby()
 	{
-        CustomSceneManager.Instance.ShowLoadPanel();
+		CustomSceneManager.Instance.ShowLoadPanel();
+		Debug.Log("ConnectToLobby show load.");
 
-        if (PhotonNetwork.IsConnected)
+		if (PhotonNetwork.IsConnected)
 		{
 			if (isConnecting)
 			{
-				PhotonNetwork.JoinLobby();
-			}
-			else
-			{
                 CustomSceneManager.Instance.HideLoadPanel();
-            }
+                Debug.Log("Success, ConnectToLobby hide load.");
+                CustomSceneManager.Instance.LoadScene("PhotonLobbyScene");
+			}
 		}
 		else
 		{
 			PhotonNetwork.ConnectUsingSettings();
 			PhotonNetwork.GameVersion = gameVersion;
             CustomSceneManager.Instance.HideLoadPanel();
+            Debug.Log("Fail, ConnectToLobby hide load.");
         }
 	}
 
@@ -123,17 +124,17 @@ public class Launcher : MonoBehaviourPunCallbacks
 		RoomOptions roomOptions = new RoomOptions();
 		roomOptions.PublishUserId = true;
 		roomOptions.MaxPlayers = maxPlayersPerRoom;
-		PhotonNetwork.CreateRoom(null, roomOptions);
+
+        CustomSceneManager.Instance.ShowLoadPanel();
+        Debug.Log("OnJoinRandomFailed show load.");
+        PhotonNetwork.CreateRoom(null, roomOptions);
 	}
 
 	public override void OnCreatedRoom()
 	{
+		CustomSceneManager.Instance.HideLoadPanel();
+		Debug.Log("OnCreatedRoom hide load.");
 		CustomSceneManager.Instance.LoadScene("RoomScene");
-	}
-
-	public override void OnJoinedLobby()
-	{
-        CustomSceneManager.Instance.LoadScene("PhotonLobbyScene");
 	}
 	#endregion
 }

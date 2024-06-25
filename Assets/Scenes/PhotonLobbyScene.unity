@@ -1289,6 +1289,7 @@ GameObject:
   - component: {fileID: 651600055}
   - component: {fileID: 651600054}
   - component: {fileID: 651600053}
+  - component: {fileID: 651600057}
   m_Layer: 5
   m_Name: ExitBtn
   m_TagString: Untagged
@@ -1375,9 +1376,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1906779481}
-        m_TargetAssemblyTypeName: LobbyUIManager, Assembly-CSharp
-        m_MethodName: LoadStartScene
+      - m_Target: {fileID: 651600057}
+        m_TargetAssemblyTypeName: ExitBtn, Assembly-CSharp
+        m_MethodName: ApplicationExit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1425,6 +1426,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 651600051}
   m_CullTransparentMesh: 1
+--- !u!114 &651600057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 651600051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa8f2d25d8264d147a6421aa603e1d3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &696639578
 GameObject:
   m_ObjectHideFlags: 0
@@ -2101,7 +2114,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uB3CC\uC544\uAC00\uAE30"
+  m_text: "\uAC8C\uC784\uC885\uB8CC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aed9c21948733e142af610d36893a00a, type: 2}
   m_sharedMaterial: {fileID: -2750371811150166589, guid: aed9c21948733e142af610d36893a00a, type: 2}

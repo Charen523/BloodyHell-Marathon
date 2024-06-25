@@ -61,6 +61,19 @@ MonoBehaviour:
   - StopCountDown
   - CallFlipSprite
   - UpdateUIRPC
+  - CallPush
+  - OnPickedUp
+  - SpawnNewItem
+  - SpawnItem
+  - ChangeMasterUI
+  - ChangeReadyUI
+  - LoadGameScene
+  - RequestChangeReadyUI
+  - UpdateReadyUI
+  - GivePlayerIndex
+  - HIdeLoadingToAll
+  - ShowLoadingToAll
+  - HideLoadingToAll
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
