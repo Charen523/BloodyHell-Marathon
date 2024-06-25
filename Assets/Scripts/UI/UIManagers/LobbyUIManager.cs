@@ -63,7 +63,6 @@ public class LobbyUIManager : Singleton<LobbyUIManager>
     public int GetSelectedToggle()
     {
         var selectedToggle = roomToggleGroup.GetFirstActiveToggle();
-        Debug.Log(selectedToggle.name.ToString());
 
         if (int.TryParse(selectedToggle.name, out int index)) { return (index - 2); }
 

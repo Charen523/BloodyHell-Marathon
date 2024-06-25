@@ -64,6 +64,12 @@ MonoBehaviour:
   - OnPickedUp
   - SpawnNewItem
   - SpawnItem
+  - ChangeMasterUI
+  - ChangeReadyUI
+  - LoadGameScene
+  - RequestChangeReadyUI
+  - UpdateReadyUI
+  - GivePlayerIndex
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
