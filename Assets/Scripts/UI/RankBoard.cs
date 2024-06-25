@@ -1,7 +1,6 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -9,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class RankBoard : MonoBehaviour
 {
     [SerializeField]
-    private AnimatorController[] characterAnimators;
+    private RuntimeAnimatorController[] characterAnimators;
     [SerializeField]
     private Sprite[] standColors;
     [SerializeField]
@@ -22,11 +21,12 @@ public class RankBoard : MonoBehaviour
     void Start()
     {
         RaceManager.Instance.OnShowRank += ShowRanking;
+        gameObject.SetActive(false);
     }
 
     public void ShowRanking(Dictionary<int, PlayerLap> dicRank)
     {
-        for(int i = 1; i < dicRank.Count; i++) 
+        for(int i = 1; i <= dicRank.Count; i++) 
         { 
             if(dicRank.ContainsKey(i)) 
             {
@@ -50,7 +50,9 @@ public class RankBoard : MonoBehaviour
                     data.userRank = "-";
                     data.animeParam = "Retire";
                 }
-                rankSlot[i].Init(data);
+                rankSlot[i - 1].gameObject.SetActive(true);
+                rankSlot[i - 1].rankAnime.gameObject.SetActive(true);
+                rankSlot[i - 1].Init(data);
             }
         }
 

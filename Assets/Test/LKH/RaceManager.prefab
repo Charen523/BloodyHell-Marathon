@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5623096082438047521}
   - component: {fileID: 5828130276783999612}
+  - component: {fileID: 6316867185555440819}
   m_Layer: 0
   m_Name: RaceManager
   m_TagString: Untagged
@@ -44,10 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e50e0667305834ca87e50495612454, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDestroyOnLoad: 0
+  isDontDestroyOnLoad: 1
   isRacePlaying: 1
   rankPopUp: {fileID: 0}
   isFirst: 1
+  racers: []
   track:
     trackName: Test
     checkPoint:
@@ -57,5 +59,30 @@ MonoBehaviour:
     - {fileID: 0}
     checkPointScore: 0a0000000a0000000a0000000a00000032000000
     finalScore: 80
-  playeri: {fileID: 0}
   waitTime: 10
+  countdownBar: {fileID: 0}
+  countdownTxt: {fileID: 0}
+  countdown: {fileID: 0}
+--- !u!114 &6316867185555440819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895780401679059179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 5828130276783999612}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
