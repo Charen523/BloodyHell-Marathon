@@ -13,6 +13,8 @@ public class PlayerStateMachine : EntityStateMachine
 
     public PlayerGroggyState GroggyState { get; private set; }
 
+    public PlayerPushState PushState { get; private set; }
+
     public PlayerStateMachine(Player player) : base(player)
     {
         Player = player;
@@ -22,5 +24,6 @@ public class PlayerStateMachine : EntityStateMachine
         RunState = new PlayerRunState(this);
         HoldState = new PlayerHoldState(this);
         GroggyState = new PlayerGroggyState(this);
+        PushState = new PlayerPushState(this);
     }
 }

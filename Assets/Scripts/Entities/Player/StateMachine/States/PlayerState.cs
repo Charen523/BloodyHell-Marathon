@@ -8,6 +8,7 @@ public abstract class PlayerState : IState
     protected PlayerAnimeHandler _animeHandler;
     protected PlayerInputHandler _inputHandler;
     protected PlayerGrabHandler _grabHandler;
+    protected PlayerPushHandler _pushHandler;
 
     protected PlayerState(PlayerStateMachine stateMachine)
     {
@@ -17,6 +18,7 @@ public abstract class PlayerState : IState
         _animeHandler = new PlayerAnimeHandler(_stateMachine);
         _inputHandler = new PlayerInputHandler(_stateMachine);
         _grabHandler = new PlayerGrabHandler(_stateMachine);
+        _pushHandler = new PlayerPushHandler(_stateMachine);
     }
 
     public virtual void Enter()

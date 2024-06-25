@@ -18,6 +18,11 @@ public class EntityAnimeHandler
         _stateMachine.Entity.Animator.SetBool(animatorHash, false);
     }
 
+    public virtual void SetTriggerAnimation(int animatorHash)
+    {
+        _stateMachine.Entity.Animator.SetTrigger(animatorHash);
+    }
+
     public virtual float GetNormalizedTime(Animator animator, string tag)
     {
         AnimatorStateInfo currentInfo = animator.GetCurrentAnimatorStateInfo(0);
