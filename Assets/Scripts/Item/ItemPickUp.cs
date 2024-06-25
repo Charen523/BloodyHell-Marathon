@@ -38,6 +38,7 @@ public abstract class ItemPickUp : MonoBehaviourPunCallbacks
             {
                 PickUp(collision);
             }
+            if(collision.GetComponent<PhotonView>().IsMine) ItemUIManager.Instance.OnItemUI(Item.Name, Item.Description);
             photonView.RPC("OnPickedUp", RpcTarget.MasterClient);
         }
     }
