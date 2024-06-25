@@ -11,7 +11,7 @@ public class SpawnBall : ItemPickUp
         if (rigidbody != null)
         {
             Vector3 collisionDirection = rigidbody.velocity.normalized;
-            PhotonNetwork.Instantiate("Objects/Circle (1)", transform.position - collisionDirection * 2, Quaternion.identity);
+            PhotonNetwork.Instantiate("Objects/BounceBall", transform.position - collisionDirection * 2, Quaternion.identity);
         }
     }
 }
