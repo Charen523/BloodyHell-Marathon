@@ -11,15 +11,27 @@ public class PhotonLobbyManager : MonoBehaviourPunCallbacks
     private List<string> enableRooms;
 
     #region MonoBehaviour Callbacks
+    private void Awake()
+    {
+        if (PhotonNetwork.InLobby)
+        {
+            PhotonNetwork.LeaveLobby();
+        }
+
+        PhotonNetwork.JoinLobby(); //방 목록 새로고침용.
+    }
+
     private void Start()
 	{
 		enableRooms = new List<string>();
 
 		if (!PhotonNetwork.IsConnected)
 		{
-			//혹시라도 연결 끊기면 실행
-			PhotonNetwork.ConnectUsingSettings();
-		}
+            //혹시라도 연결 끊기면 실행
+            CustomSceneManager.Instance.ShowLoadPanel();
+            Debug.Log("ConnectUsingSettings show load.");
+            PhotonNetwork.ConnectUsingSettings();
+        }
 	}
     #endregion
 
@@ -47,7 +59,9 @@ public class PhotonLobbyManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
 	{
 		PhotonNetwork.JoinLobby();
-	}
+        CustomSceneManager.Instance.HideLoadPanel();
+        Debug.Log("OnConnectedToMaster hide load.");
+    }
 
 	public override void OnJoinedLobby()
 	{
