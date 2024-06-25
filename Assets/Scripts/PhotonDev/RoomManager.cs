@@ -1,17 +1,17 @@
+using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
-using Photon.Realtime;
+using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public static class PlayerProperties
-{
+{//방 나가면 자동 삭제.
     public const string indexKey = "myIndex";
     public const string readyKey = "IsReady";
 }
 
 public static class RoomProperties
-{
+{//수동 삭제.
     public const string playerSlotKey = "PlayerSlots";
 }
 
@@ -21,6 +21,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
 	#region Private Field
 	private Coroutine gameStartCoroutine;
+    private int myIndex; //씬 바뀌는 순간 사라질 데이터.
     #endregion
 
     #region Monobehaviour Callbacks
@@ -28,15 +29,20 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            InitRoom(); 
+            InitRoom();
 
             //SetCustomProperties가 비동기이기 때문.
             yield return new WaitForSeconds(0.5f);
-            AddPlayerToData(PhotonNetwork.LocalPlayer, AssignPlayerSlot()); //Master의 PlayerData 추가.
-
-            yield return new WaitForSeconds(0.5f);
+            myIndex = ClosePlayerSlot();
+            SetPlayerIndex(myIndex);
+            AddPlayerToData(PhotonNetwork.LocalPlayer, myIndex); //Master의 PlayerData 추가.
             InitMaster(); //방장 권한.
         }
+    }
+
+    private void Update()
+    {
+        
     }
     #endregion
 
@@ -44,51 +50,33 @@ public class RoomManager : MonoBehaviourPunCallbacks
     private void InitRoom()
     {
         /*방에 존재하는 플레이어 감지 프로퍼티 초기화.*/
-        bool[] playerSlots = new bool[5];
-        ExitGames.Client.Photon.Hashtable newPlayerSlots 
-            = new ExitGames.Client.Photon.Hashtable { { RoomProperties.playerSlotKey, playerSlots } };
-        PhotonNetwork.CurrentRoom.SetCustomProperties(newPlayerSlots);
+        if (!PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomProperties.playerSlotKey, out object slotValue))
+        {
+            bool[] playerSlots = new bool[5];
+            ExitGames.Client.Photon.Hashtable newPlayerSlots
+                = new ExitGames.Client.Photon.Hashtable { { RoomProperties.playerSlotKey, playerSlots } };
+            PhotonNetwork.CurrentRoom.SetCustomProperties(newPlayerSlots);
+            Debug.Log("Player Slots Created Normally.");
+        }
     }
 
     private void InitMaster()
-    {
+    {//처음 방에 입장할 때 + 방장 바뀔 때
         roomUIManager.MapDropdown.onValueChanged.AddListener(OnMapChanged);
         roomUIManager.MapDropdown.interactable = true;
-        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(PlayerProperties.indexKey, out object index))
-        {
-            int playerIndex = (int)index;   
-            roomUIManager.ChangeMasterPlayer(playerIndex);
-        }
-        else
-        {
-            Debug.LogError("LocalPlayer doesnt have indexKey CustomProperties.");
-        }
+        roomUIManager.skipBtn.SetActive(true);
+        photonView.RPC("ChangeMasterUI", RpcTarget.AllBuffered, myIndex);
     }
     #endregion
 
-    #region Player Datas
+    #region Player Data & Index
     private void AddPlayerToData(Photon.Realtime.Player newPlayer, int index)
-    {// 마스터가 처리하는 플레이어 추가
-        PhotonPlayerData.Instance.AddPlayer(newPlayer.UserId, index);
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("AddPlayerUI", RpcTarget.AllBuffered, newPlayer.UserId, index);
-        }
+    {//마스터 전용 메서드.
+        Debug.Log($"New Player Added: index {index}");
+        photonView.RPC("AddPlayerUI", RpcTarget.AllBuffered, newPlayer.UserId, index);
     }
-
-    private void RemovePlayerFromData(Photon.Realtime.Player otherPlayer)
-    {// 마스터가 처리하는 플레이어 제거
-        if (PhotonNetwork.IsMasterClient)
-        {
-            int playerInGameId = PhotonPlayerData.Instance.PlayerIdDict[otherPlayer.UserId];
-            PhotonPlayerData.Instance.PlayerIdDict.Remove(otherPlayer.UserId);
-            photonView.RPC("RemovePlayerUI", RpcTarget.AllBuffered, playerInGameId);
-        }
-    }
-
-    private int AssignPlayerSlot()
-    {
+    private int ClosePlayerSlot()
+    {//AddPlayerToData 보조함수.
         if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomProperties.playerSlotKey, out object value))
         {
             bool[] playerSlots = (bool[])value;
@@ -103,7 +91,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
                         = new ExitGames.Client.Photon.Hashtable() { { RoomProperties.playerSlotKey, playerSlots } };
                     PhotonNetwork.CurrentRoom.SetCustomProperties(newPlayerSlots);
 
-                    SetPlayerIndex(i);
                     return i;
                 }
             }
@@ -113,16 +100,47 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Debug.LogError("Cant find playerSlotKey in CurrentRoom CustomProperties.");
         return -1;
     }
+    
+    private void RemovePlayerFromData(Photon.Realtime.Player otherPlayer)
+    {//마스터 전용 메서드.
+        int playerIndex;
+        if (otherPlayer.CustomProperties.TryGetValue(PlayerProperties.indexKey, out object value)) 
+        {
+            playerIndex = (int)value;
+            OpenPlayerSlot(playerIndex);
+            photonView.RPC("RemovePlayerUI", RpcTarget.AllBuffered, playerIndex);
+        }
+        else
+        {
+            Debug.Log("Cant found LocalPlayer PlayerProperties indexKey");
+        }
+    }
+    private void OpenPlayerSlot(int index)
+    {//RemovePlayerFromData 보조함수.
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomProperties.playerSlotKey, out object value))
+        {
+            bool[] playerSlots = (bool[])value;
 
-    private void SetPlayerIndex(int index)
-    {
-        ExitGames.Client.Photon.Hashtable newPlayerIndex
-                                = new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.indexKey, index } };
-        PhotonNetwork.LocalPlayer.SetCustomProperties(newPlayerIndex);
+            try
+            {
+                playerSlots[index] = false;
+
+            }catch (IndexOutOfRangeException)
+            {
+                Debug.LogError("PlayerSlot out of index.");
+            }
+        }
+        Debug.LogError("Cant find playerSlotKey in CurrentRoom CustomProperties.");
     }
     #endregion
 
     #region AllBuffered PunRPC 
+    [PunRPC]
+    private void ChangeMasterUI(int index)
+    {
+        roomUIManager.ChangeMasterPlayer(index);
+    }
+
     [PunRPC]
     private void AddPlayerUI(string userId, int index)
     {//들어온 사람 정보 표시.
@@ -142,6 +160,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
+    private void UpdateReadyUI(int index, bool isReady)
+    {
+        roomUIManager.ChangeReadyUI(index, isReady);
+    }
+
+    [PunRPC]
     private void StartCountDown()
     {// 마스터가 인원 확인하고 시작 카운트 다운
         roomUIManager.ShowStartCounter();
@@ -154,6 +178,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
+            PhotonNetwork.CurrentRoom.IsVisible = false;    
+            PhotonNetwork.CurrentRoom.IsOpen = false;
             roomUIManager.SkipBtnInteractable(true);
         }
 
@@ -175,10 +201,49 @@ public class RoomManager : MonoBehaviourPunCallbacks
             StopCoroutine(gameStartCoroutine);
             roomUIManager.HideStartCounter();
         }
+
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        if (PhotonNetwork.CurrentRoom.PlayerCount < PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            PhotonNetwork.CurrentRoom.IsVisible = true;
+            PhotonNetwork.CurrentRoom.IsOpen = true;
+        }
+    }
+
+    [PunRPC]
+    private void LoadGameScene()
+    {
+        OnReadyButtonClicked();
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            switch (roomUIManager.MapDropdown.value)
+            {
+                case 0:
+                    CustomSceneManager.Instance.PhotonLoadLevel("CharacterAnimeTestScene COPY");
+                    break;
+                case 1:
+                    CustomSceneManager.Instance.PhotonLoadLevel("GameScene");
+                    break;
+                case 2:
+                    CustomSceneManager.Instance.PhotonLoadLevel("ItemTest");
+                    break;
+                default:
+                    Debug.LogError("Selected Map Option is out of index.");
+                    break;
+            }
+        }
     }
     #endregion
 
-    #region Master PunRPC
+    #region Individual PunRPC
+    [PunRPC]
+    private void RequestChangeReadyUI(int index, bool isReady)
+    {
+        photonView.RPC("UpdateReadyUI", RpcTarget.AllBuffered, index, isReady);
+    }
+
     [PunRPC]
     private void RequestCheckReady()
     {//모든 사람이 준비완료 되었는지 확인.
@@ -208,31 +273,30 @@ public class RoomManager : MonoBehaviourPunCallbacks
         roomUIManager.SkipBtnInteractable(false);
         photonView.RPC("StopCountDown", RpcTarget.AllBuffered);
     }
+
+    [PunRPC]
+    private void GivePlayerIndex(int index)
+    {
+        myIndex = index;
+        Debug.Log($"My Index: {myIndex}");
+        myIndex = index;
+        SetPlayerIndex(myIndex);
+    }
+
+    private void SetPlayerIndex(int index)
+    {//GivePlayerIndex 보조함수.
+        ExitGames.Client.Photon.Hashtable newPlayerIndex
+                                = new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.indexKey, index } };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(newPlayerIndex);
+    }
     #endregion
 
     #region UI Interacts
-    public void LoadGameScene()
-    {//skipBtn or 자동시작.
-        if (PhotonNetwork.IsMasterClient)
-        {
-            switch (roomUIManager.MapDropdown.value)
-            {
-                case 0:
-                    CustomSceneManager.Instance.PhotonLoadLevel("CharacterAnimeTestScene COPY");
-                    break;
-                case 1:
-                    CustomSceneManager.Instance.PhotonLoadLevel("GameScene");
-                    break;
-                case 2:
-                    CustomSceneManager.Instance.PhotonLoadLevel("ItemTest");
-                    break;
-                default:
-                    Debug.LogError("Selected Map Option is out of index.");
-                    break;
-            }
-        }
+    public void OnSkipBtn()
+    {
+        photonView.RPC("LoadGameScene", RpcTarget.AllBuffered);
     }
-
+    
     private void OnMapChanged(int value)
     {//MapDropdown
         if (!PhotonNetwork.IsMasterClient) //비상용. 팀원과 테스트해보고 삭제할것.
@@ -260,13 +324,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
             = new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.readyKey, isReady } };
         PhotonNetwork.LocalPlayer.SetCustomProperties(newReadyKey);
 
+        //내 버튼UI 바꾸라고 마스터에게 알리기.
+        photonView.RPC("RequestChangeReadyUI", RpcTarget.MasterClient, myIndex, isReady);
+        
         StartCoroutine(ReadyStateDelay(isReady));
     }
 
     private IEnumerator ReadyStateDelay(bool isReady)
     {
-        yield return new WaitForSeconds(0.3f);
-
+        yield return new WaitForSeconds(0.5f);
         // 마스터에게 상태 확인 요청
         if (isReady)
         {
@@ -288,12 +354,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     // 게스트 플레이어가 추가되면 해당 플레이어의 id를 표시하고 인원수가 다 차면 게임 10초 뒤에 시작
     {
-        if (!PhotonNetwork.IsMasterClient) { return; }
-
-        AddPlayerToData(newPlayer, AssignPlayerSlot());
-        if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
+        if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.CurrentRoom.IsVisible = false;
+            int currentIndex = ClosePlayerSlot();
+            AddPlayerToData(newPlayer, currentIndex);
+            photonView.RPC("GivePlayerIndex", newPlayer, currentIndex);
+            if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
+            {
+                PhotonNetwork.CurrentRoom.IsVisible = false;
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+            }
         }
     }
 
@@ -306,9 +376,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsMasterClient) { return; }
 
         roomUIManager.SkipBtnInteractable(false);
-        if (PhotonNetwork.CurrentRoom.PlayerCount != PhotonNetwork.CurrentRoom.MaxPlayers)
+        if (PhotonNetwork.CurrentRoom.PlayerCount <= PhotonNetwork.CurrentRoom.MaxPlayers)
         {
             PhotonNetwork.CurrentRoom.IsVisible = true;
+            PhotonNetwork.CurrentRoom.IsOpen = true;
         }
     }
 
@@ -321,7 +392,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsMasterClient) { return; }
 
-        base.OnMasterClientSwitched(newMasterClient);
         InitMaster();
     }
     #endregion
