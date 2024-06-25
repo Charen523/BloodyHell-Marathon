@@ -211,9 +211,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void LoadGameScene()
     {
-        //자꾸 이상한 RPC 유발.
-        OnReadyButtonClicked();
-
         if (PhotonNetwork.IsMasterClient)
         {
             switch (roomUIManager.MapDropdown.value)
