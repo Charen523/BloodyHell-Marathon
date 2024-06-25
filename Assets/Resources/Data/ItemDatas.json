@@ -2,9 +2,9 @@
 "ItemDatas":[
  {
   "Rcode": "ITE00001",
-  "Type": "Manual",
-  "Name": "바나나",
-  "Description": "밟으면 미끄러집니다."
+  "Type": "Auto",
+  "Name": "초록공",
+  "Description": "플레이어 뒤에 초록색공이 소환됩니다."
  },
  {
   "Rcode": "ITE00002",

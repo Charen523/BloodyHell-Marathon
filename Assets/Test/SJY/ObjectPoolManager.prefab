@@ -47,6 +47,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDontDestroyOnLoad: 1
   Pools:
+  - Prefab: {fileID: 6097003032191326894, guid: 25671217e2cfe5947bb9e410f75f386e, type: 3}
+    MinSize: 3
+    MaxSize: 10
   - Prefab: {fileID: 6097003032191326894, guid: 7ff5f976101675542acf8fdd19938e9c, type: 3}
     MinSize: 3
     MaxSize: 10
