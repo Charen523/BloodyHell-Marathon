@@ -10,6 +10,7 @@ public class NetworkPlayerData : MonoBehaviour
 	#endregion
 	#region Private Field
 	private static NetworkPlayerData instance;
+	public bool IsViewCondition;
 	private Player myPlayer;
 	#endregion
 	#region Public Elements
