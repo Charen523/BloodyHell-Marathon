@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6870780311046909643}
   - component: {fileID: 8187793468300167509}
+  - component: {fileID: 3765753236550739829}
   m_Layer: 0
   m_Name: ObjectPoolManager
   m_TagString: Untagged
@@ -44,8 +45,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044619024b0d4004fa3a728711ceb841, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDestroyOnLoad: 1
+  isDontDestroyOnLoad: 1
   Pools:
   - Prefab: {fileID: 6097003032191326894, guid: 7ff5f976101675542acf8fdd19938e9c, type: 3}
     MinSize: 3
     MaxSize: 10
+  - Prefab: {fileID: 6097003032191326894, guid: 66cebcf188baea84f9eb2d9ddb1a8caa, type: 3}
+    MinSize: 3
+    MaxSize: 10
+--- !u!114 &3765753236550739829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247850818602455965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

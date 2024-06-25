@@ -4,13 +4,19 @@
   "Rcode": "ITE00001",
   "Type": "Manual",
   "Name": "바나나",
-  "Description": "바나나를 밟으면 미끄러집니다."
+  "Description": "밟으면 미끄러집니다."
  },
  {
   "Rcode": "ITE00002",
   "Type": "Auto",
   "Name": "부스터",
-  "Description": "플레이어의 속력이 일정시간 빨라집니다."
+  "Description": "순간적인 힘으로 플레이어가 발사됩니다."
+ },
+ {
+  "Rcode": "ITE00003",
+  "Type": "Auto",
+  "Name": "슬로우",
+  "Description": "3초동안 느려집니다."
  }
 ]
 }
