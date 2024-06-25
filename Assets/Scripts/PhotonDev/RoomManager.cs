@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,7 +31,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             InitRoom(); 
 
             //SetCustomProperties가 비동기이기 때문.
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.5f);
             AddPlayerToData(PhotonNetwork.LocalPlayer, AssignPlayerSlot()); //Master의 PlayerData 추가.
 
             yield return new WaitForSeconds(0.5f);
@@ -80,8 +81,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {// 마스터가 처리하는 플레이어 제거
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonPlayerData.Instance.PlayerIdDict.Remove(otherPlayer.UserId);
             int playerInGameId = PhotonPlayerData.Instance.PlayerIdDict[otherPlayer.UserId];
+            PhotonPlayerData.Instance.PlayerIdDict.Remove(otherPlayer.UserId);
             photonView.RPC("RemovePlayerUI", RpcTarget.AllBuffered, playerInGameId);
         }
     }
@@ -217,13 +218,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
             switch (roomUIManager.MapDropdown.value)
             {
                 case 0:
-                    PhotonNetwork.LoadLevel("CharacterAnimeTestScene COPY");
+                    CustomSceneManager.Instance.PhotonLoadLevel("CharacterAnimeTestScene COPY");
                     break;
                 case 1:
-                    PhotonNetwork.LoadLevel("GameScene");
+                    CustomSceneManager.Instance.PhotonLoadLevel("GameScene");
                     break;
                 case 2:
-                    PhotonNetwork.LoadLevel("ItemTest");
+                    CustomSceneManager.Instance.PhotonLoadLevel("ItemTest");
                     break;
                 default:
                     Debug.LogError("Selected Map Option is out of index.");
@@ -289,10 +290,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsMasterClient) { return; }
 
-        base.OnPlayerEnteredRoom(newPlayer);
-
         AddPlayerToData(newPlayer, AssignPlayerSlot());
-
+        if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            PhotonNetwork.CurrentRoom.IsVisible = false;
+        }
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
@@ -304,11 +306,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsMasterClient) { return; }
 
         roomUIManager.SkipBtnInteractable(false);
-	}
+        if (PhotonNetwork.CurrentRoom.PlayerCount != PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            PhotonNetwork.CurrentRoom.IsVisible = true;
+        }
+    }
 
     public override void OnLeftRoom()
     {//나가는 사람용.
-        SceneManager.LoadScene(0); //StartScene으로 이동.
+        CustomSceneManager.Instance.LoadScene("StartScene");
     }
 
     public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)

@@ -1,6 +1,5 @@
 using Photon.Pun;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -12,6 +11,7 @@ public class Pool
     public int MaxSize;
 }
 
+[RequireComponent(typeof(PhotonView))]
 public class ObjectPoolManager : Singleton<ObjectPoolManager>
 {
     public List<Pool> Pools;
@@ -21,32 +21,23 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     {
         base.Awake();
         poolDic = new Dictionary<string, ObjectPool<GameObject>>();
-        if (PhotonNetwork.IsMasterClient)
+        foreach (var pool in Pools)
         {
-            foreach (var pool in Pools)
-            {
-                ObjectPool<GameObject> objectPool = new ObjectPool<GameObject>(
-                    createFunc: () => {
-                        var newObj = PhotonNetwork.Instantiate("Items/"+pool.Prefab.name, Vector2.zero, Quaternion.identity);
-                        newObj.SetActive(false);
-                        return newObj;
-                    },
-                    actionOnGet: (obj) => {
-                        obj.SetActive(true);
-                    },
-                    actionOnRelease: (obj) => {
-                        obj.SetActive(false);
-                    },
-                    actionOnDestroy: (obj) => {
-                        Destroy(obj);
-                    },
-                    collectionCheck: false,
-                    defaultCapacity: pool.MinSize,
-                    maxSize: pool.MaxSize
-                );
-
-                poolDic.Add(pool.Prefab.name, objectPool);
-            }
+            ObjectPool<GameObject> objectPool = new ObjectPool<GameObject>(
+                createFunc: () =>
+                {
+                    GameObject newObj = PhotonNetwork.Instantiate("Items/"+pool.Prefab.name, Vector3.zero, Quaternion.identity);
+                    newObj.SetActive(false);
+                    return newObj;
+                },
+                actionOnGet: (obj) => obj.SetActive(true),
+                actionOnRelease: (obj) => obj.SetActive(false),
+                actionOnDestroy: (obj) => PhotonNetwork.Destroy(obj),
+                collectionCheck: false,
+                defaultCapacity: pool.MinSize,
+                maxSize: pool.MaxSize
+            );
+            poolDic.Add(pool.Prefab.name, objectPool);
         }
     }
 
@@ -56,19 +47,19 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         {
             return poolDic[rcode].Get();
         }
-        Debug.LogWarning("No pool with rcode: " + rcode);
+        Debug.LogWarning("No pool with prefab name: " + rcode);
         return null;
     }
 
     public void ReleaseObject(string rcode, GameObject obj)
     {
-        if (poolDic.ContainsKey(rcode))
+        if (poolDic.ContainsKey(rcode) && obj != null)
         {
             poolDic[rcode].Release(obj);
         }
         else
         {
-            Debug.LogWarning("No pool with rcode: " + rcode);
+            Debug.LogWarning("No pool with prefab name: " + rcode);
         }
     }
 }
