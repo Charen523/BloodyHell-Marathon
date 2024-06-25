@@ -38,7 +38,6 @@ public abstract class ItemPickUp : MonoBehaviourPunCallbacks
             {
                 PickUp(collision);
             }
-            this.gameObject.SetActive(false);
             photonView.RPC("OnPickedUp", RpcTarget.MasterClient);
         }
     }
