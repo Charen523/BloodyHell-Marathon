@@ -11,6 +11,7 @@ using System.Xml;
 using ExitGames.Client.Photon;
 using Photon.Pun.Demo.PunBasics;
 using System.Runtime.InteropServices;
+using UnityEngine.InputSystem;
 
 public class RaceManager : Singleton<RaceManager>, IPunObservable
 {
@@ -56,7 +57,7 @@ public class RaceManager : Singleton<RaceManager>, IPunObservable
         pv = GetComponent<PhotonView>();
         if (pv.ViewID == 0)
         {
-            pv.ViewID = 999;
+            //pv.ViewID = 999;
         }
     }
 
@@ -76,14 +77,15 @@ public class RaceManager : Singleton<RaceManager>, IPunObservable
 
     public void InitData()
     {
-        Dictionary<string, int>  dicPlayerId = PhotonPlayerData.Instance.PlayerIdDict;
-        var keys = dicPlayerId.Keys;
-        foreach (string key in keys)
+        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
         {
-            dicPlayer.Add(key, new PlayerLap());
-            dicPlayer[key].playerCode = key;
-            dicPlayer[key].color = dicPlayerId[key];
-            racers.Add(dicPlayer[key]);
+            if (player.CustomProperties.TryGetValue(PlayerProperties.indexKey, out object value))
+            {
+                dicPlayer.Add(player.UserId, new PlayerLap());
+                dicPlayer[player.UserId].playerCode = player.UserId;
+                dicPlayer[player.UserId].color = (int)value;
+                racers.Add(dicPlayer[player.UserId]);
+            }
         }
     }
 
@@ -129,21 +131,21 @@ public class RaceManager : Singleton<RaceManager>, IPunObservable
         dicRank[rankIndex].retire = false;
 
         // GoalIn 메서드를 RPC로 호출
-        pv.RPC("RPC_GoalIn", RpcTarget.OthersBuffered, player.playerCode);
+        //pv.RPC("RPC_GoalIn", RpcTarget.OthersBuffered, player.playerCode);
     }
 
-    [PunRPC]
-    private void RPC_GoalIn(string playerCode)
-    {
-        if (dicPlayer.ContainsKey(playerCode))
-        {
-            PlayerLap player = dicPlayer[playerCode];
-            racers.Remove(player);
-            dicRank.Add(++rankIndex, player);
-            dicRank[rankIndex].playerRank = rankIndex;
-            dicRank[rankIndex].retire = false;
-        }
-    }
+    //[PunRPC]
+    //private void RPC_GoalIn(string playerCode)
+    //{
+    //    if (dicPlayer.ContainsKey(playerCode))
+    //    {
+    //        PlayerLap player = dicPlayer[playerCode];
+    //        racers.Remove(player);
+    //        dicRank.Add(++rankIndex, player);
+    //        dicRank[rankIndex].playerRank = rankIndex;
+    //        dicRank[rankIndex].retire = false;
+    //    }
+    //}
 
     [PunRPC]
     private void StartCounting()
@@ -169,6 +171,7 @@ public class RaceManager : Singleton<RaceManager>, IPunObservable
         SetRetireUser();
         rankPopUp.SetActive(true);
         OnShowRank?.Invoke(dicRank);
+        Debug.Log(dicRank.Count);
     }    
 
     private void SetRetireUser()
@@ -203,7 +206,7 @@ public class RaceManager : Singleton<RaceManager>, IPunObservable
         {
             int count = (int)stream.ReceiveNext();
             dicRank.Clear();
-            for (int i = 0; i < count; i++)
+            for (int i = 1; i < count + 1; i++)
             {
                 int key = (int)stream.ReceiveNext();
                 string code = (string)stream.ReceiveNext();
@@ -211,6 +214,7 @@ public class RaceManager : Singleton<RaceManager>, IPunObservable
                 int score = (int)stream.ReceiveNext();
                 int rank = (int)stream.ReceiveNext();
                 bool retire = (bool)stream.ReceiveNext();
+                dicRank.Add(key, new PlayerLap());
                 dicRank[key].playerCode = code;
                 dicRank[key].color = color;
                 dicRank[key].playerScore = score;
