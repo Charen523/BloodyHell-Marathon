@@ -34,6 +34,7 @@ public class NetworkMasterManager : MonoBehaviourPunCallbacks
 				Debug.Log("플레이어 생성");
 				pv = newPlayer.GetComponent<PhotonView>();
 				pv.TransferOwnership(player.ActorNumber);
+				newPlayer.GetComponent<Player>().playerlap.playerCode = player.UserId;
 				Debug.Log("플레이어 초기화 끝");
 
 				i++;

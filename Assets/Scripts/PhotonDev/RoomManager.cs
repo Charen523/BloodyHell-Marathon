@@ -1,4 +1,3 @@
-using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using System;
 using System.Collections;
@@ -212,6 +211,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void LoadGameScene()
     {
+        //자꾸 이상한 RPC 유발.
         OnReadyButtonClicked();
 
         if (PhotonNetwork.IsMasterClient)
@@ -388,11 +388,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.IsVisible = true;
             PhotonNetwork.CurrentRoom.IsOpen = true;
         }
-    }
-
-    public override void OnLeftRoom()
-    {//나가는 사람용.
-        CustomSceneManager.Instance.LoadScene("StartScene");
+        RequestCheckReady();
     }
 
     public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
@@ -407,6 +403,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
             {
                 int index = (int)value;
                 photonView.RPC("AddPlayerUI", RpcTarget.AllBuffered, player.UserId, index);
+
+                bool isReady;
+                if (player.CustomProperties.TryGetValue(PlayerProperties.readyKey, out object value2))
+                {
+                    isReady = (bool)value2;
+                    photonView.RPC("UpdateReadyUI", RpcTarget.AllBuffered, index, isReady);
+                }
+                else
+                {
+                    isReady = false;
+                    photonView.RPC("UpdateReadyUI", RpcTarget.AllBuffered, index, isReady);
+                }
             }
         }
     }
