@@ -169,6 +169,7 @@ public class RaceManager : Singleton<RaceManager>, IPunObservable
         countdownBar.fillAmount = 0;        
         yield return null;
         SetRetireUser();
+        yield return new WaitForSeconds(1.0f);
         rankPopUp.SetActive(true);
         OnShowRank?.Invoke(dicRank);
         Debug.Log(dicRank.Count);
