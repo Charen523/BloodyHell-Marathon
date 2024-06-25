@@ -4,8 +4,7 @@ public class PlayerPushHandler
 {
     private PlayerStateMachine _stateMachine;
 
-    private float _outerRadius = 3f;
-    private float _innerRadius = 1f;
+    private float _outerRadius = 1.5f;
 
     private LayerMask _playerLayerMask;
 
@@ -23,8 +22,7 @@ public class PlayerPushHandler
 
         foreach (Collider2D hit in hits)
         {
-            float distance = Vector2.Distance(playerPosition, hit.transform.position);
-            if (distance >= _innerRadius && hit != null)
+            if (hit != null)
             {
                 ForceReceiver temp = hit.GetComponent<ForceReceiver>();
                 if (temp != null)
