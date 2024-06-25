@@ -3,7 +3,7 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ConditionGauge : MonoBehaviourPunCallbacks
+public class ConditionGauge : MonoBehaviour
 {
   [SerializeField] private GameObject _object;
   [SerializeField] private ConditionType _type;
@@ -16,6 +16,22 @@ public class ConditionGauge : MonoBehaviourPunCallbacks
 
   private void Awake()
   {
+    // if (_object.GetComponent<Player>().photonView.IsMine)
+    // {
+    //   gameObject.SetActive(false);
+    //   return;
+    // }
+  }
+
+  private void Start()
+  {
+    if (NetworkPlayerData.Instance.IsViewCondition || !_object.GetComponent<Player>().photonView.IsMine)
+    {
+      gameObject.SetActive(false);
+      return;
+    }
+
+    NetworkPlayerData.Instance.IsViewCondition = true;
     _meterImg.color = _color;
     ICondition[] conditions = _object.GetComponents<ICondition>();
     foreach (ICondition condition in conditions)
@@ -36,21 +52,21 @@ public class ConditionGauge : MonoBehaviourPunCallbacks
   private void UpdateUI(int current, int max)
   {
 
-    // if (_lerpCoroutine != null)
-    //   StopCoroutine(_lerpCoroutine);
-
-    // _lerpCoroutine = StartCoroutine(LerpFillAmount((float)current / max));
-    photonView.RPC(nameof(UpdateUIRPC), RpcTarget.All, current, max);
-  }
-
-  [PunRPC]
-  public void UpdateUIRPC(int current, int max)
-  {
     if (_lerpCoroutine != null)
       StopCoroutine(_lerpCoroutine);
 
     _lerpCoroutine = StartCoroutine(LerpFillAmount((float)current / max));
+    // photonView.RPC(nameof(UpdateUIRPC), RpcTarget.All, current, max);
   }
+
+  // [PunRPC]
+  // public void UpdateUIRPC(int current, int max)
+  // {
+  //   if (_lerpCoroutine != null)
+  //     StopCoroutine(_lerpCoroutine);
+
+  //   _lerpCoroutine = StartCoroutine(LerpFillAmount((float)current / max));
+  // }
 
   private IEnumerator LerpFillAmount(float targetFillAmount)
   {
