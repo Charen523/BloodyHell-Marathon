@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +10,10 @@ public class CheckPoint : MonoBehaviour
     private int pointIndex;
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!PhotonNetwork.IsMasterClient) return;
         if (collision.TryGetComponent(out player))
         {
+            player.playerlap = RaceManager.Instance.dicPlayer[player.playerlap.playerCode];
             if(player.playerlap.currentPoint == pointIndex - 1)
             {
                 RaceManager.Instance.PassedCheckPoint(pointIndex, player.playerlap);
