@@ -14,6 +14,8 @@ public class PlayerAnimeData
 
     [SerializeField] string _isGroggyParameterName = "IsGroggy";
 
+    [SerializeField] string _pushParameterName = "Push";
+
     public int GroundParameterHash { get; private set; }
     public int IsIdleParameterHash { get; private set; }
     public int IsWalkParameterHash { get; private set; }
@@ -23,6 +25,7 @@ public class PlayerAnimeData
     public int IsHoldParameterHash { get; private set; }
 
     public int IsGroggyParameterHash { get; private set; }
+    public int PushParameterHash { get; private set; }
 
     public void Initialize()
     {
@@ -35,5 +38,7 @@ public class PlayerAnimeData
         IsHoldParameterHash = Animator.StringToHash(_isHoldParameterName);
 
         IsGroggyParameterHash = Animator.StringToHash(_isGroggyParameterName);
+
+        PushParameterHash = Animator.StringToHash(_pushParameterName);
     }
 }

@@ -11,6 +11,7 @@ public class PlayerGroundState : PlayerState
         if (_inputHandler != null)
         {
             _inputHandler.OnMoveCanceledEvent += OnMovementCanceled;
+            _inputHandler.OnPushStartedEvent += OnPushStarted;
         }
         _animeHandler.StartAnimation(_stateMachine.Player.AnimeData.GroundParameterHash);
     }
@@ -21,14 +22,23 @@ public class PlayerGroundState : PlayerState
         if (_inputHandler != null)
         {
             _inputHandler.OnMoveCanceledEvent -= OnMovementCanceled;
+            _inputHandler.OnPushStartedEvent -= OnPushStarted;
         }
         _animeHandler.StopAnimation(_stateMachine.Player.AnimeData.GroundParameterHash);
     }
 
-    private void OnMovementCanceled(InputAction.CallbackContext context)
+    protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
     {
         if (_stateMachine.MovementDir == Vector2.zero) return;
 
         _stateMachine.ChangeState(_stateMachine.IdleState);
+    }
+
+    protected virtual void OnPushStarted(InputAction.CallbackContext context)
+    {
+        if (_stateMachine.Player.Stamina.Modify(-20))
+        {
+            _stateMachine.ChangeState(_stateMachine.PushState);
+        }
     }
 }

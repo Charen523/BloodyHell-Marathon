@@ -29,7 +29,7 @@ public class StatHandler : MonoBehaviour
                     CurrentStat.Add(stat);
                     break;
                 case StatType.Multiple:
-                    CurrentStat.Add(stat);
+                    CurrentStat.Multiply(stat);
                     break;
                 case StatType.Override:
                     CurrentStat = stat.DeepCopy();
@@ -43,5 +43,10 @@ public class StatHandler : MonoBehaviour
     public void AddStat(CharacterStatSO stat)
     {
         _statModifiers.Add(stat);
+    }
+
+    public void RemoveStat(CharacterStatSO stat)
+    {
+        _statModifiers.Remove(stat);
     }
 }

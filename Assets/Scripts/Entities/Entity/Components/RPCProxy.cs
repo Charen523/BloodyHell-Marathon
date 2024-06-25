@@ -12,10 +12,18 @@ public class RPCProxy : MonoBehaviourPunCallbacks
     [PunRPC]
     public void CallFlipSprite(bool isFaceRight)
     {
-        Debug.Log(_stateMachine);
         PlayerMovementHandler handler = (_stateMachine.GetState() as PlayerState).MovementHandler;
         if (handler == null) return;
 
         handler.FlipSprite(isFaceRight);
+    }
+
+    [PunRPC]
+    public void CallPush()
+    {
+        PlayerPushHandler handler = (_stateMachine.GetState() as PlayerState).PushHandler;
+        if (handler == null) return;
+
+        handler.Push();
     }
 }
