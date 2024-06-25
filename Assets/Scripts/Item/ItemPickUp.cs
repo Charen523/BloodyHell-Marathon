@@ -38,22 +38,19 @@ public abstract class ItemPickUp : MonoBehaviourPunCallbacks
             {
                 PickUp(collision);
             }
-            photonView.RPC("OnPickedUp", RpcTarget.All);
+            this.gameObject.SetActive(false);
+            photonView.RPC("OnPickedUp", RpcTarget.MasterClient);
         }
     }
 
     [PunRPC]
     public void OnPickedUp()
     {
-        if (photonView.IsMine || PhotonNetwork.IsMasterClient)
-        {
-            ObjectPoolManager.Instance.ReleaseObject(Item.Rcode, gameObject);
+        ObjectPoolManager.Instance.ReleaseObject(Item.Rcode, gameObject);
 
-            if (PhotonNetwork.IsMasterClient && Spawner != null)
-            {
-                Spawner.photonView.RPC("SpawnItem", RpcTarget.MasterClient);
-                PhotonNetwork.SendAllOutgoingCommands(); // 즉시 메시지 전송
-            }
+        if (PhotonNetwork.IsMasterClient && Spawner != null)
+        {
+            Spawner.photonView.RPC("SpawnItem", RpcTarget.MasterClient);           
         }
     }
 
