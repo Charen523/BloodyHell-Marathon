@@ -4,25 +4,24 @@ using UnityEngine;
 
 public class Slower : ItemPickUp
 {
-    public float MassIncrease = 10.0f; // 질량 증가량
-    public float Duration = 3.0f; // 슬로우 효과 지속 시간
+    public float ReduceSpeed = 0.1f; 
+    public float Duration = 5.0f; // 슬로우 효과 지속 시간
 
     public override void PickUp(Collider2D collision)
     {
-        Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            StartCoroutine(ApplySlowEffect(rb));
-        }
+        StatHandler stat = collision.gameObject.GetComponent<StatHandler>();
+        CoroutineRunner.Instance.RunCoroutine(ApplySlowEffect(stat));
     }
 
-    private IEnumerator ApplySlowEffect(Rigidbody2D rb)
+    private IEnumerator ApplySlowEffect(StatHandler stat)
     {
-        float originalMass = rb.mass;
-        rb.mass += MassIncrease;
+        var statData = new CharacterStatSO { Type = StatType.Multiple, Condition = new StatData {MoveSpeed = ReduceSpeed } };
+        stat.AddStat(statData);
+        stat.UpdateStat();
 
         yield return new WaitForSeconds(Duration);
 
-        rb.mass = originalMass;
+        stat.RemoveStat(statData);
+        stat.UpdateStat();
     }
 }
