@@ -47924,6 +47924,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7573240088174586436, guid: 9b0f58e5770d0f3458534808e078d453, type: 3}
+      propertyPath: lobbyBtn
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7685333106346087438, guid: 9b0f58e5770d0f3458534808e078d453, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7685333106346087438, guid: 9b0f58e5770d0f3458534808e078d453, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -48437,23 +48449,23 @@ PrefabInstance:
       objectReference: {fileID: 2122265578}
     - target: {fileID: 5828130276783999612, guid: 7547ccf386b141946ae8b9bf58e63fef, type: 3}
       propertyPath: track.checkPointScore.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5828130276783999612, guid: 7547ccf386b141946ae8b9bf58e63fef, type: 3}
-      propertyPath: track.checkPointScore.Array.data[0]
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5828130276783999612, guid: 7547ccf386b141946ae8b9bf58e63fef, type: 3}
+      propertyPath: track.checkPointScore.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5828130276783999612, guid: 7547ccf386b141946ae8b9bf58e63fef, type: 3}
       propertyPath: track.checkPointScore.Array.data[1]
-      value: 15
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5828130276783999612, guid: 7547ccf386b141946ae8b9bf58e63fef, type: 3}
       propertyPath: track.checkPointScore.Array.data[2]
-      value: 30
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5828130276783999612, guid: 7547ccf386b141946ae8b9bf58e63fef, type: 3}
       propertyPath: track.checkPointScore.Array.data[3]
-      value: 50
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6316867185555440819, guid: 7547ccf386b141946ae8b9bf58e63fef, type: 3}
       propertyPath: sceneViewId
