@@ -603,7 +603,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TestScene
+  m_text: "\uC5EC\uB984\uC5D4 \uC5BC\uC74C\uC218\uBC15"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aed9c21948733e142af610d36893a00a, type: 2}
   m_sharedMaterial: {fileID: -2750371811150166589, guid: aed9c21948733e142af610d36893a00a, type: 2}
@@ -1960,7 +1960,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1079957762}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2734,11 +2734,9 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: TestScene
+    - m_Text: "\uC5EC\uB984\uC5D4 \uC5BC\uC74C\uC218\uBC15"
       m_Image: {fileID: 0}
-    - m_Text: GameScene1
-      m_Image: {fileID: 0}
-    - m_Text: GemenScene
+    - m_Text: "\uC6B8\uD241\uBD88\uD241 \uAE38"
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
